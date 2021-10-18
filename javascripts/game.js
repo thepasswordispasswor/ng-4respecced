@@ -496,13 +496,38 @@ function getInfinitied() {return Math.max(player.infinitied + player.infinitiedB
 
 
 
-
-
+function getGalaxyCostScalingStart4() {
+    var n = 40
+    return n
+}
 
 function getGalaxyCostScalingStart() {
-    var n = 100 + ECTimesCompleted("eterc5")*5
+	if (player.currentEternityChall == "eterc5")return 0
+    var n = 10 + ECTimesCompleted("eterc5")*5
     if (player.timestudy.studies.includes(223)) n += 7
     if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
+	
+    if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
+        n -= Math.ceil((player.galaxies-getGalaxyCostScalingStart4()+1) * 1)
+    }
+    return n
+}
+
+function getGalaxyCostScalingStart2() {
+    var n = 20
+
+    if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
+        n -= Math.ceil((player.galaxies-getGalaxyCostScalingStart4()+1) * 1)
+    }
+    return n
+}
+
+function getGalaxyCostScalingStart3() {
+    var n = 30
+
+    if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
+        n -= Math.ceil((player.galaxies-getGalaxyCostScalingStart4()+1) * 1)
+    }
     return n
 }
 
@@ -532,24 +557,21 @@ function getGalaxyRequirement() {
     if (player.currentChallenge == "challenge4") amount = 99 + base;
 
     let galaxyCostScalingStart = getGalaxyCostScalingStart()
-    if (player.currentEternityChall == "eterc5") {
-        amount += Math.pow(player.galaxies, 2) + player.galaxies
+    let galaxyCostScalingStart2 = getGalaxyCostScalingStart2()
+    let galaxyCostScalingStart3 = getGalaxyCostScalingStart3()
+    let galaxyCostScalingStart4 = getGalaxyCostScalingStart4()
+
+    if (player.galaxies >= galaxyCostScalingStart) { // distant
+        amount += (player.galaxies - galaxyCostScalingStart) * (player.galaxies - galaxyCostScalingStart+1)
+    }
+	
+    if (player.galaxies >= galaxyCostScalingStart2) { // further
+        amount += (player.galaxies - galaxyCostScalingStart2) * (player.galaxies - galaxyCostScalingStart2+1) * 4
     }
 
-
-    if ((player.galaxies) >= getGalaxyCostScalingStart()) {
-        amount += Math.pow((player.galaxies) - (galaxyCostScalingStart - 1), 1.5) + (player.galaxies) - (galaxyCostScalingStart - 1)
+    if (player.galaxies >= galaxyCostScalingStart3) { // remote
+        amount = Math.floor(amount * Math.pow(1.05, (player.galaxies-galaxyCostScalingStart3+1)))
     }
-
-    if ((player.galaxies) >= getGalaxyCostScalingStart() * 2.5) {
-        // 5 times worse scaling
-        amount += 4 * (Math.pow((player.galaxies) - (galaxyCostScalingStart * 2.5 - 1), 1.5) + (player.galaxies) - (galaxyCostScalingStart * 2.5 - 1))
-    }
-
-    if (player.galaxies >= 800) {
-        amount = Math.floor(amount * Math.pow(1.001, (player.galaxies-799)))
-    }
-
 
     if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
     if (player.challenges.includes("postc7")) amount -= 1;
@@ -657,7 +679,7 @@ function updateDimensions() {
         }
         else document.getElementById("timeBoostLabel").textContent = 'Time Dimension Boost ('+ player.tdBoosts +'): requires ' + timeShiftRequirement.amount + " " + DISPLAY_NAMES[timeShiftRequirement.tier] + " Time Dimensions"
 
-        document.getElementById("tickspeedResetLabel").textContent = 'Tickspeed Boost ('+ player.tickspeedBoosts +'): requires ' + tickspeedShiftRequirement.amount + " " + DISPLAY_NAMES[tickspeedShiftRequirement.tier] + " Dimensions"
+        document.getElementById("tickspeedResetLabel").textContent = tickspeedShiftRequirement.prefix + 'Tickspeed Boost ('+ player.tickspeedBoosts +'): requires ' + tickspeedShiftRequirement.amount + " " + DISPLAY_NAMES[tickspeedShiftRequirement.tier] + " Dimensions"
 
         if (player.currentChallenge == "challenge4" ? player.resets > 2 : player.resets > 3) {
             document.getElementById("softReset").textContent = "Reset the game for a Boost"
@@ -673,8 +695,13 @@ function updateDimensions() {
         if (player.timestudy.studies.includes(225)) extraGals += Math.floor(player.replicanti.amount.e / 1000)
         if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 15)
         var galString = ""
-        if (player.galaxies >= 800) galString += "Remote Antimatter Galaxies (";
-        else if (player.galaxies >= getGalaxyCostScalingStart() || player.currentEternityChall === "eterc5") galString += "Distant Antimatter Galaxies (";
+        if (player.galaxies >= Infinity) galString += "Cosmic Galaxies (";
+        else if (player.galaxies >= Infinity) galString += "Etheral Galaxies (";
+        else if (player.galaxies >= Infinity) galString += "Ghostly Galaxies (";
+        else if (player.galaxies >= getGalaxyCostScalingStart4()) galString += "Dark Matter Galaxies (";
+        else if (player.galaxies >= getGalaxyCostScalingStart3()) galString += "Remote Antimatter Galaxies (";
+        else if (player.galaxies >= getGalaxyCostScalingStart2()) galString += "Further Antimatter Galaxies (";
+        else if (player.galaxies >= getGalaxyCostScalingStart()) galString += "Distant Antimatter Galaxies (";
         else galString += "Antimatter Galaxies (";
         galString += player.galaxies;
         if (extraGals > 0) galString += " + "+extraGals;
@@ -877,7 +904,9 @@ function updateCosts() {
     for (var i=1; i<=8; i++) {
 		var dim = player["timeDimension"+i]
 		dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[i], dim.boughtAntimatter).times(timeDimStartCostsAntimatter[i])
-		
+  if (dim.costAntimatter.gte(Number.MAX_VALUE)) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[i]*1.5, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[i])
+  }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
         document.getElementById("timeMax"+i+"Antimatter").textContent = "Cost: " + shortenDimensions(player["timeDimension"+i].costAntimatter)
     }
@@ -6638,4 +6667,14 @@ setInterval( function() {
 	
 	document.getElementById("scND").innerHTML = "Normal dimension multipliers and tickspeed are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart2()))+". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart3()))+".";
 	
+	
+        var timeShiftRequirement = getTimeShiftRequirement(0);
+        var tickspeedShiftRequirement = getTickspeedShiftRequirement(0);
+        if (player.tdBoosts < 7) {
+            document.getElementById("timeBoostLabel").textContent = 'Time Dimension Shift ('+ player.tdBoosts +'): requires ' + timeShiftRequirement.amount + " " + DISPLAY_NAMES[timeShiftRequirement.tier] + " Time Dimensions"
+        }
+        else document.getElementById("timeBoostLabel").textContent = 'Time Dimension Boost ('+ player.tdBoosts +'): requires ' + timeShiftRequirement.amount + " " + DISPLAY_NAMES[timeShiftRequirement.tier] + " Time Dimensions"
+
+        document.getElementById("tickspeedResetLabel").textContent = tickspeedShiftRequirement.prefix + 'Tickspeed Boost ('+ player.tickspeedBoosts +'): requires ' + tickspeedShiftRequirement.amount + " " + DISPLAY_NAMES[tickspeedShiftRequirement.tier] + " Dimensions"
+
 }, 100)

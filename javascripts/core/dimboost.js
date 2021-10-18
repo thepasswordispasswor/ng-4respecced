@@ -523,17 +523,22 @@ function getShiftRequirement(bulk) {
 
 function getTimeShiftRequirement(bulk) {
   let amount = 10;
-  tier = Math.min(player.tdBoosts + 1, 8)
+  tier = Math.min(player.tdBoosts + bulk + 1, 8)
 
-  if(player.tdBoosts>=7)amount+=(player.tdBoosts-7)*2;
+  if(player.tdBoosts>=7)amount+=(player.tdBoosts+bulk -7)*2;
   return { tier: tier, amount: Math.ceil(amount) };
 }
 
 
 function getTickspeedShiftRequirement(bulk) {
   let amount = 30+10*player.tickspeedBoosts;
+  let prefix = ""
   
-  return { tier: 8, amount: Math.ceil(amount) };
+  if(player.tickspeedBoosts>=20){
+	  prefix = "Distant ";
+	  amount += (player.tickspeedBoosts-20)*(player.tickspeedBoosts-19);
+  }
+  return { tier: 8, amount: Math.ceil(amount), prefix: prefix };
 }
 
 document.getElementById("softReset").onclick = function () {

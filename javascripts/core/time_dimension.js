@@ -157,6 +157,9 @@ if (player.firstBought < 1) {
 	}
   var dim = player["timeDimension"+tier]
   dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  if (dim.costAntimatter.gte(Number.MAX_VALUE)) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*1.5, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   if (player.money.lt(dim.costAntimatter)) return false
 
@@ -164,6 +167,9 @@ if (player.firstBought < 1) {
   dim.amount = dim.amount.plus(1);
   dim.boughtAntimatter += 1
   dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  if (dim.costAntimatter.gte(Number.MAX_VALUE)) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*1.5, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   dim.power = dim.power.times(Math.sqrt(1.5))
   updateEternityUpgrades()

@@ -37,8 +37,9 @@ function getFinalGalaxies(offset) {
 
 function getTickSpeedMultiplier() {
   // if (player.currentEternityChall === "eterc1") return 1;
-  if (player.challenges.includes("postc3")) return Math.pow(.998, getFinalGalaxies(0))
-  if (player.currentChallenge === "postc3") return Math.pow(.998, getFinalGalaxies(0))
+  //if (player.challenges.includes("postc3")) return Math.pow(.998, getFinalGalaxies(0))
+  //if (player.currentChallenge === "postc3") return Math.pow(.998, getFinalGalaxies(0))
+  //if (player.break) return .9999;
   return 1;
 }
 
