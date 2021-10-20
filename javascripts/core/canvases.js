@@ -154,6 +154,7 @@ function drawStudyTree() {
     if (document.getElementById("secretstudy").style.opacity != "0") drawTreeBranch("11", "secretstudy");
     drawTreeBranch("11", "21");
     drawTreeBranch("11", "22");
+    drawTreeBranch("11", "23");
     drawTreeBranch("21", "31");
     drawTreeBranch("21", "33");
     drawTreeBranch("22", "32");

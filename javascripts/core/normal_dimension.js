@@ -4,14 +4,21 @@ function getDimensionPreDilationMultiplier(tier) {
 
   let multiplier = new Decimal(player[name + 'Pow']);
 
-  if (player.currentEternityChall == "eterc11") return player.infinityPower.pow(7).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1))
+  let infpow = player.infinityPower;
+  
+  dilationstart = getDilationStart();
+    if(infpow.log10()>=dilationstart){
+	  infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+    }
 
   multiplier = multiplier.times(player.achPow);
   multiplier = multiplier.times(kongDimMult)
   multiplier = multiplier.times(kongAllDimMult)
-  let y = Math.max(7, Math.pow(player.galaxies, .7));
+  let y = 7;//= Math.max(7, Math.pow(player.galaxies, .7));
   if (player.currentEternityChall == "eterc9") multiplier = multiplier;
-  else multiplier = multiplier.times(player.infinityPower.pow(y).max(1))
+  else multiplier = multiplier.times(infpow.pow(y).max(1))
+  if (player.currentEternityChall == "eterc11") return infpow.pow(y).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1))
 
   if (player.infinityUpgrades.includes("totalMult")) multiplier = multiplier.times(totalMult)
   if (player.infinityUpgrades.includes("currentMult")) multiplier = multiplier.times(currentMult)
@@ -66,6 +73,12 @@ function getDimensionPreDilationMultiplier(tier) {
   if (player.galacticSacrifice.upgrades.includes(13)) {
     multiplier = multiplier.times(galUpgrade13())
   }
+  if (player.galacticSacrifice.upgrades.includes(15)) {
+    multiplier = multiplier.times(galUpgrade15())
+  }
+  if (player.galacticSacrifice.upgrades.includes(24)) {
+    multiplier = multiplier.times(galUpgrade24())
+  }
 
   if (player.challenges.includes("postc6")) multiplier = multiplier.pow(1.05);
   if (player.galacticSacrifice.upgrades.includes(31)) multiplier = multiplier.pow(galUpgrade31());
@@ -84,18 +97,23 @@ function getDimensionFinalMultiplier(tier) {
   multiplier = getDimensionPreDilationMultiplier(tier);
   dilationstart = getDilationStart();
     if(multiplier.log10()>=dilationstart){
-	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
-	  if (player.dilation.active)multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
+	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
     }
 
   dilationstart2 = getDilationStart2();
     if(multiplier.log10()>=dilationstart2){
-	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart2, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart2)
+	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart2, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart2)
     }
 
   dilationstart3 = getDilationStart3();
     if(multiplier.log10()>=dilationstart3){
-	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart3, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart3)
+	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart3, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart3)
+    }
+
+  dilationstart4 = getDilationStart4();
+    if(multiplier.log10()>=dilationstart4){
+	  multiplier = Decimal.pow(10, Math.pow(multiplier.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
     }
   if (player.achievements.includes("r56") && player.thisInfinityTime < 1800) multiplier = multiplier.times(3600/(player.thisInfinityTime+1800));
   if (player.achievements.includes("r78") && player.thisInfinityTime < 3) multiplier = multiplier.times(3.3/(player.thisInfinityTime+0.3));
@@ -238,7 +256,7 @@ function hasInfinityMult(tier) {
     }
 
     function getDimensionPowerMultiplier(tier) {
-        if (player.currentChallenge === 'challenge13' || player.currentChallenge === "postc4") {
+        if (player.currentChallenge === 'challenge13' || player.currentChallenge === "postc4" || player.currentChallenge === "postcngm3_1") {
             return 1;
         }
         let dimMult = 2;
@@ -660,8 +678,11 @@ function getDimensionProductionPerSecond(tier) {
   dilationstart = getDilationStart();
   let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
     if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+    }
+    if(tick.log10()>=dilationstart4){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
     }
         tick = new Decimal(1000).dividedBy(tick)
         ret = Decimal.floor(player[TIER_NAMES[tier] + 'Amount']).times(getDimensionFinalMultiplier(tier)).times(1000).dividedBy(tick)

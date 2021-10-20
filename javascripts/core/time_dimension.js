@@ -1,12 +1,19 @@
 //time dimensions
 
+function infiniteTimeStrength(){
+	let ret=0.05;
+	if(player.galacticSacrifice.upgrades.includes(25))ret *= 1.5;
+	return ret;
+}
 function getTimeDimensionPower(tier) {
   if (player.currentEternityChall == "eterc11") return new Decimal(1)
   var dim = player["timeDimension"+tier]
   var ret = dim.power.pow(2)
 
   if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.dividedBy(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).max(Decimal.fromMantissaExponent(1, -2500)))
-  if (player.achievements.includes("r105")) ret = ret.mul(player.postC3Reward.pow(0.05))
+  if (player.achievements.includes("r105")){
+	  ret = ret.mul(player.postC3Reward.pow(infiniteTimeStrength()))
+  }
 
   ret = ret.times(kongAllDimMult)
 
@@ -47,19 +54,30 @@ function getTimeDimensionPower(tier) {
   if (player.galacticSacrifice.upgrades.includes(14)) {
     ret=ret.times(galUpgrade14())
   }
+  if (player.galacticSacrifice.upgrades.includes(15)) {
+    ret=ret.times(galUpgrade15())
+  }
+  if (player.galacticSacrifice.upgrades.includes(24)) {
+    ret=ret.times(galUpgrade24())
+  }
+
+  if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 10)).max(1))
 
  dilationstart = getDilationStart();
     if(ret.log10()>=dilationstart){
-	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
-	  if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
+	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
     }
+ dilationstart4 = getDilationStart4();
+    if(ret.log10()>=dilationstart4){
+	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+    }
+	
+	
   if (ECTimesCompleted("eterc1") !== 0) ret = ret.times(Math.pow(Math.max(player.thisEternity*10, 0.9), 1.2+(ECTimesCompleted("eterc1")*0.2)))
   if (player.eternityUpgrades.includes(4)) ret = ret.times(player.achPow)
   if (player.eternityUpgrades.includes(5)) ret = ret.times(Math.max(player.timestudy.theorem, 1))
   if (player.eternityUpgrades.includes(6)) ret = ret.times(player.totalTimePlayed / 10 / 60 / 60 / 24)
-  if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 10)).max(1))
-
-
   return ret
 
 }
@@ -71,16 +89,19 @@ function getTimeDimensionProduction(tier) {
   if (player.currentEternityChall == "eterc11") return dim.amount
   var ret = dim.amount
   ret = ret.times(getTimeDimensionPower(tier))
-  if (player.currentEternityChall == "eterc7") {
-    ret = ret.dividedBy(player.tickspeed.dividedBy(1000))
-    if (ret.lte(0)) return new Decimal(0)
-    ret = Decimal.pow(10, Math.pow(ret.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      ret = Decimal.pow(10, Math.pow(ret.log10(), 1.05))
-    }
-    return ret
-  }
   if (player.currentEternityChall == "eterc1") return new Decimal(0)
+  if (player.timestudy.studies.includes(23)){
+	  
+  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
+    if(tick.log10()>=dilationstart){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+    }
+    if(tick.log10()>=dilationstart4){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+    }
+	  ret = ret.times(tick)
+  }
   return ret
 }
 

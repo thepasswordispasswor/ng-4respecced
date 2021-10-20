@@ -28,7 +28,6 @@ function getFinalGalaxies(offset) {
     if (player.challenges.includes("postc7")) galaxies *= 1.15;
     if (player.achievements.includes("r86")) galaxies *= 1.05;
     if (player.achievements.includes("r83")) galaxies *= 1.05;
-    if (player.achievements.includes("r45")) galaxies *= 1.02;
     if (player.infinityUpgrades.includes("postinfi51")) galaxies *= 1.2;
     if (player.timestudy.studies.includes(212)) galaxies *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
     if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
@@ -36,11 +35,13 @@ function getFinalGalaxies(offset) {
 }
 
 function getTickSpeedMultiplier() {
-  // if (player.currentEternityChall === "eterc1") return 1;
+  let ret=1;
+  //if (player.currentEternityChall === "eterc1") return 1;
   //if (player.challenges.includes("postc3")) return Math.pow(.998, getFinalGalaxies(0))
   //if (player.currentChallenge === "postc3") return Math.pow(.998, getFinalGalaxies(0))
-  //if (player.break) return .9999;
-  return 1;
+  if (player.currentChallenge === "challenge7")ret /= 1.002;
+  if (player.achievements.includes("r51")) ret /= 1.001;
+  return ret;
 }
 
 function getPostC3Exp (){
@@ -62,7 +63,7 @@ function getPostC3Exp (){
 
 function getPostC3RewardMult () {
   let perGalaxy = 0.005;
-  if (player.challenges.length > 15) perGalaxy = -0.01+0.001*player.challenges.length
+  //if (player.challenges.length > 15) perGalaxy = -0.01+0.001*player.challenges.length
   let ret = 1.05+getFinalGalaxies(0)*perGalaxy;
   if (player.currentChallenge === "postc3") return 1;
   if (player.currentChallenge === 'challenge6' || player.currentChallenge === 'postc4') ret -= 0.05
@@ -155,12 +156,17 @@ function buyMaxTickSpeed() {
 function updateTickSpeed() {
   var exp = player.tickspeed.e;
   let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
+  let tickbeforedilation = tick
   dilationstart = getDilationStart();
     if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.75*1.05:0.75)*dilationstart)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
     }
-  document.getElementById("tickSpeedAmount").textContent = 'Tickrate: ' + shorten(tick) + '/s'
+  dilationstart4 = getDilationStart4();
+    if(tick.log10()>=dilationstart4){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+    }
+  document.getElementById("tickSpeedAmount").textContent = 'Tickrate: ' + shorten(tick) + '/s (' + shorten(tickbeforedilation) +' before dilation)';
   //if (exp > 1) {
   //    document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.toFixed(0);
   //} else {

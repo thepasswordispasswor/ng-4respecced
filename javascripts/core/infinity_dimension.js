@@ -52,26 +52,19 @@ function DimensionProduction(tier) {
   if (player.currentEternityChall == "eterc2")  return new Decimal(0)
   var dim = player["infinityDimension"+tier]
   var ret = dim.amount
-  if (player.currentEternityChall == "eterc11") return ret
-  if (player.currentEternityChall == "eterc7") {
-    ret = ret.dividedBy(player.tickspeed.dividedBy(1000)).max(1)
-    ret = Decimal.pow(10, Math.pow(ret.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      ret = Decimal.pow(10, Math.pow(ret.log10(), 1.05))
-    }
-  }
+  if (!player.currentEternityChall == "eterc11")ret = ret.times(DimensionPower(tier))
   if (player.challenges.includes("postc8")) {
-      let tick = new Decimal(player.tickspeed)
-//    if (player.dilation.active) {
-        tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 0.75))
-        if (player.dilation.upgrades.includes(9)) {
-          tick = Decimal.pow(10, Math.pow(Math.abs(tick.log10()), 1.05))
-        }
-//    }
-      tick = new Decimal(1).dividedBy(tick)
-      return ret.times(DimensionPower(tier)).times(tick.times(1000).pow(0.0005))
+  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
+    if(tick.log10()>=dilationstart){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+    }
+    if(tick.log10()>=dilationstart4){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+    }
+	  ret = ret.times(tick)
   }
-  else return ret.times(DimensionPower(tier))
+  return ret;
 }
 
 function DimensionPower(tier) {
@@ -83,7 +76,6 @@ function DimensionPower(tier) {
 
   mult = mult.times(kongAllDimMult)
   if (player.achievements.includes("r94") && tier == 1) mult = mult.times(2);
-  if (player.achievements.includes("r75")) mult = mult.times(player.achPow);
   if (player.achievements.includes("r66")) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
 
   if (player.timestudy.studies.includes(72) && tier == 4) {
@@ -108,14 +100,20 @@ function DimensionPower(tier) {
   if (player.currentEternityChall == "eterc2") mult = mult.times(0)
 
   if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(player.infinityPoints.pow(0.4 + ECTimesCompleted("eterc4")*0.2))
+  
+  
+  
   if (mult.lt(1)) mult = new Decimal(1)
 
-//if (player.dilation.active) {
-    mult = Decimal.pow(10, Math.pow(mult.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      mult = Decimal.pow(10, Math.pow(mult.log10(), 1.05))
+ dilationstart = getDilationStart();
+    if(mult.log10()>=dilationstart){
+	  mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  if (player.dilation.active)mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
     }
-//}
+ dilationstart4 = getDilationStart4();
+    if(mult.log10()>=dilationstart4){
+	  mult= Decimal.pow(10, Math.pow(mult.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+    }
   // post-dilation
   if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
       var replmult = getReplMult();
@@ -124,6 +122,7 @@ function DimensionPower(tier) {
   }
   // also post-dilation
   if (ECTimesCompleted("eterc9") !== 0) mult = mult.times(player.timeShards.pow(ECTimesCompleted("eterc9")*0.5).plus(1).min(new Decimal("1e4000")))
+  if (player.achievements.includes("r75")) mult = mult.times(player.achPow);
   return mult
 }
 
@@ -204,8 +203,8 @@ var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250,1e280]
 
 function getInfBuy10Mult (tier){
   if (!player.galacticSacrifice.upgrades.includes(41)) return infPowerMults[tier]
-  let mult = player.galacticSacrifice.galaxyPoints.log10()
-  return infPowerMults[tier]*Math.pow(mult,4)
+  //let mult = player.galacticSacrifice.galaxyPoints.log10()
+  return infPowerMults[tier]//*Math.pow(mult,4)
 }
 
 function getInfBuy10CostDiv (tier){

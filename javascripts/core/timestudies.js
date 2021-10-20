@@ -24,7 +24,7 @@ function buyWithIP() {
 
 function buyWithEP() {
   if (player.timeDimension1.bought < 1) {
-      alert("You need to buy at least 1 time dimension before you can purchase theorems with Eternity points.")
+      alert("You need to buy at least 1 time dimension with EP before you can purchase theorems with Eternity points.")
       return false;
   }
   if (player.eternityPoints.gte(player.timestudy.epcost)) {
@@ -133,8 +133,17 @@ function hasRow(row) {
 function canBuyStudy(name) {
   var row = Math.floor(name/10)
   var col = name%10
+  if (name == 21) {
+      if (player.timestudy.studies.includes(11) && (player.replicanti.unl || player.eternities !== 0)) return true; else return false
+  }
+  if (name == 22) {
+      if (player.timestudy.studies.includes(11) && (player.eternities !== 0)) return true; else return false
+  }
   if (name == 33) {
-      if (player.timestudy.studies.includes(21)) return true; else return false
+      if (player.timestudy.studies.includes(21) && (player.eternities !== 0)) return true; else return false
+  }
+  if (name == 61) {
+      if (player.timestudy.studies.includes(51) && (player.eternities !== 0)) return true; else return false
   }
   if (name == 62) {
       if (player.eternityChalls.eterc5 !== undefined && player.timestudy.studies.includes(42)) return true; else return false
@@ -215,8 +224,8 @@ function canBuyDilationStudy(name) {
     else return false
 }
 
-var all = [11, 21, 22, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 3, 2, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 21, 22, 23, 33, 31, 32, 41, 42, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 3, 2, 0, 2, 3, 2, 4, 6, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 function updateTimeStudyButtons() {
   for (var i=0; i<all.length; i++) {
       if (!player.timestudy.studies.includes(all[i])) {

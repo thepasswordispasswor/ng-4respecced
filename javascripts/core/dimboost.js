@@ -3,7 +3,7 @@ function getResetMult () {
 }
 
 function getDimensionBoostPower() {
-  if (player.currentChallenge == "challenge11" || player.currentChallenge == "postc4") return Decimal.fromNumber(1);
+  if (player.currentChallenge == "challenge11" || player.currentChallenge == "postc4" || player.currentChallenge == "postcngm3_1") return Decimal.fromNumber(1);
 
   var ret = 2
 
@@ -261,6 +261,7 @@ function timeSoftReset(bulk) {
   //if (bulk < 1) bulk = 1 (fixing issue 184)
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
   player.tdBoosts+=bulk;
+  if(player.infinityUpgrades.includes("skipReset3")) return;
   player.tickBoughtThisInf.pastResets.push({
     'resets': player.resets,
     'bought': player.tickBoughtThisInf.current
@@ -494,7 +495,7 @@ function getDimboostCostIncrease () {
   if (player.infinityUpgrades.includes('dimboostCost')) {
     ret -= 1;
   }
-  if (player.infinityUpgrades.includes("postinfi50")) ret -= 0.5
+  if (player.infinityUpgrades.includes("postinfi50")) ret -= 1
   return ret;
 }
 
@@ -515,7 +516,7 @@ function getShiftRequirement(bulk) {
   }
 
   if (player.infinityUpgrades.includes("resetBoost")) amount -= 9;
-  if (player.challenges.includes("postc7")) amount -= 1
+  if (player.challenges.includes("postc7")) amount -= 11
 
   return { tier: tier, amount: Math.ceil(amount) };
 }
@@ -529,14 +530,24 @@ function getTimeShiftRequirement(bulk) {
   return { tier: tier, amount: Math.ceil(amount) };
 }
 
+function getTSBScaling1(){
+	if(player.currentChallenge === "postcngm3_1")return 0;
+	let ret=20;
+	if(player.challenges.includes("postcngm3_1"))ret = ret + 1;
+	return ret;
+}
 
 function getTickspeedShiftRequirement(bulk) {
   let amount = 30+10*player.tickspeedBoosts;
+  
+  if (player.galacticSacrifice.upgrades.includes(34)) {
+    amount = 30+9*player.tickspeedBoosts;
+  }
   let prefix = ""
   
-  if(player.tickspeedBoosts>=20){
+  if(player.tickspeedBoosts>=getTSBScaling1()){
 	  prefix = "Distant ";
-	  amount += (player.tickspeedBoosts-20)*(player.tickspeedBoosts-19);
+	  amount += (player.tickspeedBoosts-getTSBScaling1())*(player.tickspeedBoosts-getTSBScaling1()+1);
   }
   return { tier: 8, amount: Math.ceil(amount), prefix: prefix };
 }
@@ -572,6 +583,7 @@ function tickspeedSoftReset(bulk) {
   //if (bulk < 1) bulk = 1 (fixing issue 184)
   if (!player.break && player.money.gt(Number.MAX_VALUE)) return;
   player.tickspeedBoosts+=bulk;
+  if(player.infinityUpgrades.includes("skipResetGalaxy")) return;
   player.tickBoughtThisInf.pastResets.push({
     'resets': player.resets,
     'bought': player.tickBoughtThisInf.current
@@ -631,7 +643,7 @@ function tickspeedSoftReset(bulk) {
       sixthPow: new Decimal(1),
       seventhPow: new Decimal(1),
       eightPow: new Decimal(1),
-      resets: 0,
+      resets: player.infinityUpgrades.includes("skipReset2") ? player.resets : player.infinityUpgrades.includes("skipReset1") ? 1 : 0,
       galaxies: player.galaxies,
       tickDecrease: player.tickDecrease,
       totalmoney: player.totalmoney,
@@ -731,11 +743,15 @@ function tickspeedSoftReset(bulk) {
 	},
 	
 	tickspeedBoosts: player.tickspeedBoosts,
-	tdBoosts: 0,
+	tdBoosts: player.infinityUpgrades.includes("skipReset1") ? player.tdBoosts : 0,
   };
   
 	resetTimeDimensions(1);
   decreaseDimCosts();
+  
+    setInitialDimensionPower();
+	
+	
   if (player.currentChallenge == "challenge10" || player.currentChallenge == "postc4") {
       player.thirdCost = new Decimal(100)
       player.fourthCost = new Decimal(500)

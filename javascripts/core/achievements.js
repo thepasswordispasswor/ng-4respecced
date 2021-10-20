@@ -188,7 +188,7 @@ function giveAchievement(name) {
 
     $.notify(name, "success");
     player.achievements.push(allAchievementNums[name]);
-    document.getElementById(name).className = "achievementunlocked"
+	document.getElementById(name).className = "achievementunlocked"
     try {
         kongregate.stats.submit('Achievements', player.achievements.length);
     } catch (err) {console.log("Couldn't load Kongregate API")}
@@ -196,6 +196,9 @@ function giveAchievement(name) {
         // handled via getIPMult() now.
         if (player.autoCrunchMode == "amount" && player.autobuyers[11].priority != undefined) player.autobuyers[11].priority = player.autobuyers[11].priority.times(4);
     }
+	if (name == "A new beginning.") {
+		player.eternityPoints = player.eternityPoints.add(1);
+	}
     updateAchievements();
 }
 
@@ -245,7 +248,10 @@ function updateAchievements() {
 
   player.achPow = Decimal.pow(5, amount)
 
-  document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Dimension: " + player.achPow.toFixed(1) + "x"
+  let temp="Normal"
+  if(player.achievements.includes("r75"))temp+="/Infinity";
+  if(player.eternityUpgrades.includes(4))temp+="/Time";
+  document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Normal Dimension (post-dilation): " + player.achPow.toFixed(1) + "x"
 
 }
 
