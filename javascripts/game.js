@@ -2353,8 +2353,9 @@ function getB60Mult(){
 
 function gainedInfinityPoints() {
     let div = 308;
-    if (player.timestudy.studies.includes(111)) div = 285;
-    else if (player.achievements.includes("r103")) div = 307.8;
+	if (player.achievements.includes("r84")) div -= 4;
+	if (player.achievements.includes("r103")) div -= 4;
+	if (player.timestudy.studies.includes(111)) div -= 15;
     div -= galIP()
     var ret = Decimal.pow(10, player.money.e/div -0.75).times(getIPMult())
 	if (player.galacticSacrifice.upgrades.includes(45))ret=ret.times(galUpgrade45());
