@@ -412,3 +412,17 @@ function studyTreeSaveButton(num) {
         $.notify("Study tree "+num+" loaded", "info")
     }
 }
+
+function timeStudy11(){
+  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
+    if(tick.log10()>=dilationstart){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
+    }
+    if(tick.log10()>=dilationstart4){
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
+    }
+	
+	let ret=tick.add(1).pow(5);
+	return ret;
+}

@@ -1,3 +1,18 @@
+var newGame4MinusRespeccedVersion = 1
+/*
+var temp=Math.log10;
+Math.log10=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
+var temp=Math.log;
+Math.log=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
+var temp=Math.log2;
+Math.log2=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
+var temp=Decimal.log10;
+Decimal.log10=(function(a){if(a.lt(0))debugger;b=this;return b(a);}).bind(temp);
+var temp=Decimal.log;
+Decimal.log=(function(a){if(a.lt(0))debugger;b=this;return b(a);}).bind(temp);
+var temp=Decimal.log2;
+Decimal.log2=(function(a){if(a.lt(0))debugger;b=this;return b(a);}).bind(temp);
+*/
 //test
 var diffMultiplier = 1
 var gameLoopIntervalId;
@@ -90,7 +105,7 @@ var player = {
     partInfinitied: 0,
     break: false,
     challengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
-    infchallengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
+    infchallengeTimes: [600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31, 600*60*24*31],
     lastTenRuns: [[600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1]],
     lastTenEternities: [[600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1], [600*60*24*31, 1]],
     infMult: new Decimal(1),
@@ -351,6 +366,7 @@ var player = {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
 	},
 	
 	tickspeedBoosts: 0,
@@ -474,17 +490,18 @@ function updateMoney() {
     var element = document.getElementById("coinAmount");
     element.textContent = formatValue(player.options.notation, player.money, 2, 1);
     var element2 = document.getElementById("matter");
-    if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4") element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
-    if (player.currentChallenge == "postc8") element2.textContent = "There is " + formatValue(player.options.notation, Decimal.pow(player.matter,20), 2, 1) + " matter."; //TODO
+    if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4" || player.currentChallenge == "postc8") element2.textContent = "There is " + formatValue(player.options.notation, player.matter, 2, 1) + " matter."
     var element3 = document.getElementById("chall13Mult");
-    if (player.currentChallenge === "challenge13" || player.currentChallenge === "postc4") element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + ' multiplier on all dimensions (product of bought).'
+    if (player.currentChallenge === "challenge13" || player.currentChallenge === "postc4" || player.currentChallenge === "postcngm3_3" || player.challenges.includes("postcngm3_3")) element3.innerHTML = formatValue(player.options.notation, productAllTotalBought(), 2, 1) + ' multiplier on all dimensions (product of bought'+(player.challenges.includes("postcngm4r_2")?'^15':'')+').';
+	
+	document.getElementById("dilationEffect1").textContent = "Dilation Effect: exponent ^"+getDilationPower().toFixed(4)
 }
 
 function updateCoinPerSec() {
     var element = document.getElementById("coinsPerSec");
     if (player.currentChallenge == "challenge3" || player.currentChallenge == "postc4") {
       element.textContent = 'You are getting ' + shortenDimensions(getDimensionProductionPerSecond(1).times(player.chall3Pow)) + ' antimatter per second.'
-    } else if (player.currentChallenge == "challenge7") {
+    } else if (player.currentChallenge == "challenge7" || player.currentChallenge == "postcngm3_3") {
       element.textContent = 'You are getting ' + (shortenDimensions(getDimensionProductionPerSecond(1).plus(getDimensionProductionPerSecond(2)))) + ' antimatter per second.'
     } else {
       element.textContent = 'You are getting ' + shortenDimensions(getDimensionProductionPerSecond(1)) + ' antimatter per second.'
@@ -506,6 +523,8 @@ function getGalaxyCostScalingStart() {
     var n = 10 + ECTimesCompleted("eterc5")*5
     if (player.timestudy.studies.includes(223)) n += 7
     if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
+	
+	if(player.challenges.includes("postc7"))n = n + 5;
 	
     if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
         n -= Math.ceil((player.galaxies-getGalaxyCostScalingStart4()+1) * 1)
@@ -538,7 +557,7 @@ function getGalaxyCostIncrease() {
     ret = 50;
   }
   if (player.currentChallenge == "challenge4") {
-    ret = 70;
+    ret = 90;
   }
   if (player.infinityUpgrades.includes("galCost")) {
     ret -= 5;
@@ -630,13 +649,12 @@ function gSacrificeConf() {
     player.options.gSacrificeConfirmation = !player.options.gSacrificeConfirmation
 }
 
-function changeToDilation(x){
+function changeToDilation(x, dilationstart){
     if (x.lte(0)) return 0
-    x = Decimal.pow(10, Math.pow(x.log10(), 0.75))
-    if (player.dilation.upgrades.includes(9)) {
-      x = Decimal.pow(10, Math.pow(x.log10(), 1.05))
+    if(x.log10()>=dilationstart){
+	  x = Decimal.pow(10, Math.pow(x.log10()/dilationstart, getDilationPower())*dilationstart)
     }
-    return x
+	return x;
 }
 
 
@@ -765,11 +783,14 @@ function updateDimensions() {
         document.getElementById("galaxybtn").style.display = "inline-block"
         if (player.galacticSacrifice.galaxyPoints.eq(1)) {
             document.getElementById("galaxyPoints").textContent = "You have 1 Galaxy point."
+            document.getElementById("galaxyPoints2").innerHTML = "You have <span class=\"GPAmount\">1</span> Galaxy point."
         } else {
             document.getElementById("galaxyPoints").innerHTML = "You have "+shortenDimensions(new Decimal(player.galacticSacrifice.galaxyPoints))+" Galaxy points."
+            document.getElementById("galaxyPoints2").innerHTML = "You have <span class=\"GPAmount\">"+shortenDimensions(new Decimal(player.galacticSacrifice.galaxyPoints))+"</span> Galaxy points."
         }
     } else {
         document.getElementById("galaxybtn").style.display = "none"
+		document.getElementById("galaxyPoints2").innerHTML = ""
     }
 
     if (document.getElementById("stats").style.display == "block" && document.getElementById("statistics").style.display == "block") {
@@ -808,7 +829,7 @@ function updateDimensions() {
             document.getElementById("postinfi03").innerHTML = "Decrease galaxy cost increase by 5<br>Currently: " + getGalaxyCostIncrease().toFixed(2) + ' -> ' + (getGalaxyCostIncrease() - 5).toFixed(2) + "<br>Cost: "+shortenCosts(5e5)+" IP"
             if (player.infinityUpgrades.includes("galCost")) document.getElementById("postinfi03").innerHTML = "Decrease galaxy cost increase by 5<br>Currently: " + getGalaxyCostIncrease().toFixed(2) + "<br>Cost: "+shortenCosts(5e5)+" IP"
             document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2) + ' -> ' + (galUpgrade31() + .02).toFixed(2) + '</br> Cost: ' + formatValue(player.options.notation, player.dimPowerIncreaseCost, 2, 2) + ' IP';
-            if (player.extraDimPowerIncrease >= 40) document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2);
+            if (player.extraDimPowerIncrease >= 50) document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2);
             document.getElementById("postinfi11").innerHTML = "Power up all dimensions based on total antimatter produced<br>Currently: "+ formatValue(player.options.notation, totalMult, 2, 2)+"x<br>Cost: "+shortenCosts(1e4)+" IP"
             document.getElementById("postinfi21").innerHTML = "Power up all dimensions based on current antimatter<br>Currently: "+ formatValue(player.options.notation, currentMult, 2, 2)+"x<br>Cost: "+shortenCosts(5e4)+" IP"
             document.getElementById("postinfi31").innerHTML = "Tickspeed cost multiplier increase <br>"+getTickSpeedCostMultiplierIncrease().toFixed(2)+"x -> "+getTickSpeedCostMultiplierIncrease(-1).toFixed(2)+"x<br>Cost: "+formatValue(player.options.notation, player.tickSpeedMultDecreaseCost, 2, 2) +" IP"
@@ -818,14 +839,14 @@ function updateDimensions() {
             document.getElementById("postinfi41").innerHTML = "Makes galaxies 70% stronger <br>Cost: "+shortenCosts(5e11)+" IP"
             document.getElementById("postinfi32").innerHTML = "Power up all dimensions based on slowest challenge run<br>Currently: "+formatValue(player.options.notation, challengeMult, 2, 2)+"x<br>Cost: "+shortenCosts(1e7)+" IP"
             document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+getDimensionCostMultiplierIncrease().toFixed(2)+"x -> "+getDimensionCostMultiplierIncrease(-1).toFixed(2)+"x<br>Cost: "+formatValue(player.options.notation, player.dimensionMultDecreaseCost, 2, 2) +" IP"
-            document.getElementById("postinfi50").innerHTML = "Decrease dimboost cost increase by 1 <br>"+ getDimboostCostIncrease()+ " -> " + (getDimboostCostIncrease()-1)+ "<br> Cost: " +shortenCosts(1e25) + " IP"
-	          if (player.infinityUpgrades.includes("postinfi50")) document.getElementById("postinfi50").innerHTML = "Deacrease dimboost cost increase by 1<br> Currently: " + getDimboostCostIncrease() + "<br> Cost: " + shortenCosts(1e25) + " IP"
-            document.getElementById("postinfi51").innerHTML = "Galaxies are 20% more effective <br> Cost: " +shortenCosts(1e29) + " IP"
-            document.getElementById("postinfi52").innerHTML = "Decrease galaxy cost increase by 3 <br>"+ getGalaxyCostIncrease().toFixed(2)+ " -> " + (getGalaxyCostIncrease()-3).toFixed(2)+ "<br> Cost: " +shortenCosts(1e33) + " IP"
-	          if (player.infinityUpgrades.includes("postinfi52")) "Decrease galaxy cost increase by 3 <br>"+ getGalaxyCostIncrease().toFixed(2)+ "<br> Cost: " +shortenCosts(1e33) + " IP"
-            document.getElementById("postinfi53").innerHTML = "Divide ID cost increases by 50 <br> Cost: " +shortenCosts(1e37) + " IP"
+            document.getElementById("postinfi50").innerHTML = "Decrease dimboost cost increase by 1 <br>"+ getDimboostCostIncrease()+ " -> " + (getDimboostCostIncrease()-1)+ "<br> Cost: " +shortenCosts(1e22) + " IP"
+	          if (player.infinityUpgrades.includes("postinfi50")) document.getElementById("postinfi50").innerHTML = "Deacrease dimboost cost increase by 1<br> Currently: " + getDimboostCostIncrease() + "<br> Cost: " + shortenCosts(1e22) + " IP"
+            document.getElementById("postinfi51").innerHTML = "Galaxies are 40% more effective <br> Cost: " +shortenCosts(1e26) + " IP"
+            document.getElementById("postinfi52").innerHTML = "Decrease galaxy cost increase by 3 <br>"+ getGalaxyCostIncrease().toFixed(2)+ " -> " + (getGalaxyCostIncrease()-3).toFixed(2)+ "<br> Cost: " +shortenCosts(1e22) + " IP"
+	          if (player.infinityUpgrades.includes("postinfi52"))document.getElementById("postinfi52").innerHTML =  "Decrease galaxy cost increase by 3 <br>Currently: "+ getGalaxyCostIncrease().toFixed(2)+ "<br> Cost: " +shortenCosts(1e22) + " IP"
+            document.getElementById("postinfi53").innerHTML = "Divide ID cost increases by 50 <br> Cost: " +shortenCosts(1e32) + " IP"
             document.getElementById("postinfi13").innerHTML = "You passively generate Infinitied stat based on your fastest infinity.<br>1 Infinity every "+timeDisplay(player.bestInfinityTime*5)+ " <br>Cost: "+shortenCosts(20e6)+" IP"
-            document.getElementById("postinfi23").innerHTML = "Option to bulk buy Dimension Boosts <br>Cost: "+shortenCosts(5e6)+" IP"
+            document.getElementById("postinfi23").innerHTML = (player.achievements.includes("r28")?"Dimension Boost Autobuyer can buy max Dimension Boosts":"Dimension Boost Autobuyer can bulk buy Dimension Boosts")+" <br>Cost: "+shortenCosts(5e6)+" IP"
             document.getElementById("postinfi33").innerHTML = "Autobuyers work twice as fast <br>Cost:"+shortenCosts(1e15)+" IP"
             if (player.dimensionMultDecrease <= 3) document.getElementById("postinfi42").innerHTML = "Dimension cost multiplier increase <br>"+getDimensionCostMultiplierIncrease().toFixed(2)+"x"
             document.getElementById("offlineProd").innerHTML = "Generates "+player.offlineProd+"% > "+Math.max(Math.max(5, player.offlineProd + 5), Math.min(50, player.offlineProd + 5))+"% of your best IP/min from last 10 infinities, works offline<br>Currently: "+shortenMoney(bestRunIppm.times(player.offlineProd/100)) +"IP/min<br> Cost: "+
@@ -834,27 +855,26 @@ function updateDimensions() {
 
 			      document.getElementById("postinfir5").style.display = (player.infinityDimension3.amount.gt(0)||player.eternities > 0)?"":"none"
 
-            if (player.eternities > 0)   document.getElementById("postinfi60").innerHTML = "You gain more IP based on galaxies<br>(3^(galaxies-95)) <br>Currently: "+formatValue(player.options.notation,getB60Mult(),2,0)+"x <br>Cost: "+formatValue(player.options.notation,1e50,0,0)+" IP"
-	          else document.getElementById("postinfi60").innerHTML = "You gain more IP based on galaxies<br>(2.5^(galaxies-95)) <br>Currently: "+formatValue(player.options.notation,getB60Mult(),2,0)+"x <br>Cost: "+formatValue(player.options.notation,1e50,0,0)+" IP"
+            document.getElementById("postinfi60").innerHTML = "You gain more IP based on galaxies<br>(2^galaxies) <br>Currently: "+formatValue(player.options.notation,getB60Mult(),2,0)+"x <br>Cost: "+formatValue(player.options.notation,1e50,0,0)+" IP"
             document.getElementById("postinfir6").style.display = (player.infinityDimension4.amount.gt(0)||player.eternities > 0)?"":"none"
-	          document.getElementById("postinfi61").innerHTML = "Make g11 better <br> Cost: " + formatValue(player.options.notation,new Decimal("1e450"), 2,0) + " IP"
+	          document.getElementById("postinfi61").innerHTML = "Make g11 better <br> Cost: " + formatValue(player.options.notation,1e69,0,0) + " IP"
             document.getElementById("postinfi62").innerHTML = "Make g13 better based on dimboosts <br> Cost: " + formatValue(player.options.notation,new Decimal("1e700"), 2,0) + " IP"
             document.getElementById("postinfi63").innerHTML = "Unlock two new rows of galaxy upgrades <br> Cost: " + formatValue(player.options.notation,new Decimal("1e2000"), 2,0) + " IP"
         }
     }
 
-    document.getElementById("newgalrow1").style.display = ""
+    document.getElementById("newgalrow1").style.display = (player.eternitied>0 || player.challenges.includes("postc1"))?"":"none"
     document.getElementById("newgalrow2").style.display = (player.infinityUpgrades.includes("postinfi63"))?"":"none"
 
     galacticUpgradeSpanDisplay();
 
     if (document.getElementById("eternityupgrades").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("eter1").innerHTML = "Infinity Dimensions multiplier based on unspent EP (x+1)<br>Currently: "+shortenMoney(player.eternityPoints.plus(1))+"x<br>Cost: 5 EP"
-        document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on eternities ((x/200)^log4(2x))<br>Currently: "+shortenMoney(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))+"x<br>Cost: 10 EP"
+        document.getElementById("eter2").innerHTML = "Infinity Dimension multiplier based on eternities<br>Currently: "+shortenMoney(Decimal.pow(Math.min(player.eternities, 100000)/200 + 1, Math.log(Math.min(player.eternities, 100000)*2+1)/Math.log(4)).times(new Decimal((player.eternities-100000)/200 + 1).times(Math.log((player.eternities- 100000)*2+1)/Math.log(4)).max(1)))+"x<br>Cost: 10 EP"
         document.getElementById("eter3").innerHTML = "Infinity Dimensions multiplier based on sum of Infinity Challenge times<br>Currently: "+shortenMoney(Decimal.pow(2,300/Math.max(infchallengeTimes, player.achievements.includes("r112") ? 6.1 : 7.5)))+"x<br>Cost: "+shortenCosts(50e3)+" EP"
-        document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions"+"<br>Cost: "+shortenCosts(1e16)+" EP"
-        document.getElementById("eter5").innerHTML = "Time Dimensions are multiplied by your unspent time theorems"+"<br>Cost: "+shortenCosts(1e40)+" EP"
-        document.getElementById("eter6").innerHTML = "Time Dimensions are multiplied by days played"+"<br>Cost: "+shortenCosts(1e50)+" EP"
+        document.getElementById("eter4").innerHTML = "Your achievement bonus affects Time Dimensions (post-dilation)"+"<br>Cost: "+shortenCosts(1e16)+" EP"
+        document.getElementById("eter5").innerHTML = "Time Dimensions are multiplied by your unspent time theorems (post-dilation)"+"<br>Cost: "+shortenCosts(1e40)+" EP"
+        document.getElementById("eter6").innerHTML = "Time Dimensions are multiplied by days played (post-dilation)"+"<br>Cost: "+shortenCosts(1e50)+" EP"
     }
 
     if (document.getElementById("dilation").style.display == "block") {
@@ -907,6 +927,12 @@ function updateCosts() {
   if (dim.costAntimatter.gte(Number.MAX_VALUE)) {
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[i]*1.5, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[i])
   }
+  if (dim.costAntimatter.gte("1e5000")) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[i]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[i])
+  }
+  if (player.currentChallenge == "postcngm3_1"){
+	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[i], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[i])
+  }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
         document.getElementById("timeMax"+i+"Antimatter").textContent = "Cost: " + shortenDimensions(player["timeDimension"+i].costAntimatter)
     }
@@ -953,7 +979,7 @@ function updateChallenges() {
             document.getElementById(player.currentChallenge).textContent = "Running"
         }
 
-        if (player.money.gte(new Decimal("1e700")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
+        if (player.break || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
         for (var i=1; i<11; i++) {
             if (player.postChallUnlocked >= i) document.getElementById("postc"+i+"div").style.display = "inline-block"
             else document.getElementById("postc"+i+"div").style.display = "none"
@@ -1103,11 +1129,10 @@ document.getElementById("maxall").onclick = function () {
             }
             if (player.money.lt(player[name + "Cost"].times(10))) continue
 
-            if ((player.dimensionMultDecrease > 3 || player.currentChallenge == "postc7" || player.currentChallenge == "challenge5")) {
+            if ((player.dimensionMultDecrease > 3 || player.currentChallenge == "challenge5")) {
                 while ((player.money.gte(player[name + "Cost"].times(10)) && player.money.lte(Number.MAX_VALUE)) || (player.money.gte(player[name + "Cost"].times(10)) && player.currentChallenge != "challenge5")) {
                         player.money = player.money.minus(player[name + "Cost"].times(10))
-                        if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc7") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                        else if (player.currentChallenge == "postc7") multiplyPC5Costs(player[name + 'Cost'], tier)
+                        if (player.currentChallenge != "challenge5") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
                         else multiplySameCosts(player[name + 'Cost'])
                         player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10))
                         recordBought(name, 10);
@@ -1119,8 +1144,7 @@ document.getElementById("maxall").onclick = function () {
                 if (!costIncreaseActive(player[name + "Cost"])) {
                     while (player.money.gte(player[name + "Cost"].times(10)) && !costIncreaseActive(player[name + "Cost"])) {
                         player.money = player.money.minus(player[name + "Cost"].times(10))
-                        if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc7") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
-                        else if (player.currentChallenge == "postc7") multiplyPC5Costs(player[name + 'Cost'], tier)
+                        if (player.currentChallenge != "challenge5") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
                         else multiplySameCosts(player[name + 'Cost'])
                         player[name + "Amount"] = Decimal.round(player[name + "Amount"].plus(10))
                         recordBought(name, 10);
@@ -1341,13 +1365,13 @@ document.getElementById("postinfi03").onclick = function() {
 }
 
 document.getElementById("postinfi04").onclick = function() {
-    if (player.infinityPoints.gte(player.dimPowerIncreaseCost) && player.extraDimPowerIncrease < 40) {
+    if (player.infinityPoints.gte(player.dimPowerIncreaseCost) && player.extraDimPowerIncrease < 50) {
         player.infinityPoints = player.infinityPoints.minus(player.dimPowerIncreaseCost)
-        player.dimPowerIncreaseCost = new Decimal(1e3).times(Decimal.pow(1e99,Math.min(player.extraDimPowerIncrease,15)+1));
+        player.dimPowerIncreaseCost = new Decimal(1e13).times(Decimal.pow(10,Math.min(player.extraDimPowerIncrease,50)+1));
         player.extraDimPowerIncrease += 1;
-        if (player.extraDimPowerIncrease > 15) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4,5),player.extraDimPowerIncrease-15))
+        if (player.extraDimPowerIncrease > 50) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4,5),player.extraDimPowerIncrease-50))
         document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2) + ' -> ' + (galUpgrade31() + .02).toFixed(2) + '</br> Cost: ' + formatValue(player.options.notation, player.dimPowerIncreaseCost, 2, 2) + ' IP';
-        if (player.extraDimPowerIncrease >= 40) document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2);
+        if (player.extraDimPowerIncrease >= 50) document.getElementById("postinfi04").innerHTML = "Dimension multipliers are further increased by g31 <br>x^" + galUpgrade31().toFixed(2);
     }
 }
 
@@ -1408,19 +1432,19 @@ document.getElementById("postinfi42").onclick = function() {
 }
 
 document.getElementById("postinfi50").onclick = function() {
-    buyInfinityUpgrade("postinfi50",1e25);
+    buyInfinityUpgrade("postinfi50",1e22);
 }
 
 document.getElementById("postinfi51").onclick = function() {
-    buyInfinityUpgrade("postinfi51",1e29);
+    buyInfinityUpgrade("postinfi51",1e26);
 }
 
 document.getElementById("postinfi52").onclick = function() {
-    buyInfinityUpgrade("postinfi52",1e33);
+    buyInfinityUpgrade("postinfi52",1e22);
 }
 
 document.getElementById("postinfi53").onclick = function() {
-    buyInfinityUpgrade("postinfi53",1e37);
+    buyInfinityUpgrade("postinfi53",1e32);
 }
 
 document.getElementById("postinfi60").onclick = function() {
@@ -1428,7 +1452,7 @@ document.getElementById("postinfi60").onclick = function() {
 }
 
 document.getElementById("postinfi61").onclick = function() {
-    buyInfinityUpgrade("postinfi61",new Decimal("1e450"));
+    buyInfinityUpgrade("postinfi61",1e69);
 }
 
 document.getElementById("postinfi62").onclick = function() {
@@ -1466,7 +1490,7 @@ function updateInfCosts() {
             if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
             else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
         }
-        document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: "+shortenCosts(1e80)+" IP"
+        document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: "+shortenCosts(1e75)+" IP"
         let extraGals = 0
         if (player.timestudy.studies.includes(225)) extraGals += Math.floor(player.replicanti.amount.e / 1000)
         if (player.timestudy.studies.includes(226)) extraGals += Math.floor(player.replicanti.gal / 15)
@@ -1477,11 +1501,11 @@ function updateInfCosts() {
         document.getElementById("replicantiinterval").className = (player.infinityPoints.gte(player.replicanti.intervalCost) && ((player.replicanti.interval !== 50) || player.timestudy.studies.includes(22)) && (player.replicanti.interval !== 1)) ? "storebtn" : "unavailablebtn"
         document.getElementById("replicantimax").className = (player.infinityPoints.gte(player.replicanti.galCost)) ? "storebtn" : "unavailablebtn"
         document.getElementById("replicantireset").className = ((player.replicanti.galaxies < player.replicanti.gal && player.replicanti.amount.gte(Number.MAX_VALUE)) || (player.replicanti.galaxies < Math.floor(player.replicanti.gal * 1.5) && player.replicanti.amount.gte(Number.MAX_VALUE) && player.timestudy.studies.includes(131))) ? "storebtn" : "unavailablebtn"
-        document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e80)) ? "storebtn" : "unavailablebtn"
+        document.getElementById("replicantiunlock").className = (player.infinityPoints.gte(1e75)) ? "storebtn" : "unavailablebtn"
     }
 
     if (document.getElementById("timestudies").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
-        document.getElementById("11desc").textContent = "Currently: "+shortenMoney(Decimal.fromMantissaExponent(10 -player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).mantissa, Math.abs(player.tickspeed.dividedBy(1000).pow(0.005).times(0.95).plus(player.tickspeed.dividedBy(1000).pow(0.0003).times(0.05)).e)).min("1e2500").max(1))+"x"
+        document.getElementById("11desc").textContent = "Currently: "+shortenMoney(timeStudy11())+"x"
         document.getElementById("32desc").textContent = "You gain "+Math.max(player.resets, 1)+"x more infinitied stat (based on dimension boosts)"
         document.getElementById("51desc").textContent = "You gain "+shortenCosts(1e15)+"x more IP"
         document.getElementById("71desc").textContent = "Currently: "+shortenMoney(calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000"))+"x"
@@ -1538,12 +1562,14 @@ function updateInfCosts() {
 // Replicanti stuff
 
 function unlockReplicantis() {
-    if (player.infinityPoints.gte(1e80)) {
+    if (player.infinityPoints.gte(1e75)) {
+		alert('Sorry, this is current endgame in NG-4R.');
+		return;
         document.getElementById("replicantidiv").style.display="inline-block"
         document.getElementById("replicantiunlock").style.display="none"
         player.replicanti.unl = true
         player.replicanti.amount = new Decimal(1)
-        player.infinityPoints = player.infinityPoints.minus(1e80)
+        player.infinityPoints = player.infinityPoints.minus(1e75)
     }
 }
 
@@ -1603,7 +1629,7 @@ function replicantiGalaxy() {
 
 
 function updateMilestones() {
-    var milestoneRequirements = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100]
+    var milestoneRequirements = [1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15, 16, 17, 18, 20, 25, 30, 40, 50, 60, 80, 100]
     for (i=0; i<milestoneRequirements.length; i++) {
         var name = "reward" + i;
         if (player.eternities >= milestoneRequirements[i]) {
@@ -1851,7 +1877,7 @@ document.getElementById("toggleBtnTickSpeed").onclick = function () {
 
 document.getElementById("secondSoftReset").onclick = function() {
     if (player.currentEternityChall == "eterc6") return
-    var bool = player.currentChallenge != "challenge11" && player.currentChallenge != "postc4" && player.currentChallenge != "postc9" && (player.break || player.money.lte(Number.MAX_VALUE))
+    var bool = player.currentChallenge != "challenge11" && player.currentChallenge != "postc4" && player.currentChallenge != "postc7" && player.currentChallenge != "postc9" && (player.break || player.money.lte(Number.MAX_VALUE))
     if (player.currentChallenge == "challenge4" ? player.sixthAmount >= getGalaxyRequirement() && bool : player.eightAmount >= getGalaxyRequirement() && bool) {
         if (player.eternities >= 9 && !shiftDown) maxBuyGalaxies(true);
         else galaxyReset();
@@ -1862,13 +1888,6 @@ function getIPMult () {
     let mult = player.infMult.times(kongIPMult);
     if (player.achievements.includes("r85")) mult = mult.times(4);
     if (player.achievements.includes("r93")) mult = mult.times(4);
-    if (player.achievements.includes("r43")) mult = mult.times(1.25);
-    if (player.achievements.includes("r55")) mult = mult.times(Math.max(Math.log10(6000/player.bestInfinityTime), 1));
-    if (player.achievements.includes("r41")) mult = mult.times(Math.pow(Math.log10(player.spreadingCancer), .05)).times(2);
-    if (player.achievements.includes("r51")) {
-        let galaxies = player.galaxies
-      	mult = mult.times(galaxies+1)
-    }
     return mult;
 }
 
@@ -2051,6 +2070,8 @@ function galaxyReset() {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: 0,
@@ -2252,8 +2273,8 @@ document.getElementById("importbtn").onclick = function () {
 
 document.getElementById("reset").onclick = function () {
     if (forceHardReset) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
+        if (window.location.href.split("//")[1].length > 20) set_save('ngm4rep', currentSave, defaultStart);
+        else set_save('ngm4rep', currentSave, defaultStart);
         player = defaultStart
         infDimPow = 1;
         save_game();
@@ -2278,8 +2299,8 @@ document.getElementById("reset").onclick = function () {
         updateChallenges();
         updateAutobuyers();
     } else if (confirm("Do you really want to erase all your progress?")) {
-        if (window.location.href.split("//")[1].length > 20) set_save('dimensionTestSave', currentSave, defaultStart);
-        else set_save('dimensionSave', currentSave, defaultStart);
+        if (window.location.href.split("//")[1].length > 20) set_save('ngm4rep', currentSave, defaultStart);
+        else set_save('ngm4rep', currentSave, defaultStart);
         player = defaultStart
         infDimPow = 1;
         save_game();
@@ -2327,9 +2348,7 @@ function galIP(){
 
 function getB60Mult(){
     let g = player.galaxies;
-    if (g<95) return 1
-    if (player.eternities > 0) return Math.pow(3,g-95)
-    return Math.pow(2.5,g-95)
+    return Math.pow(2,g)
 }
 
 function gainedInfinityPoints() {
@@ -2338,6 +2357,7 @@ function gainedInfinityPoints() {
     else if (player.achievements.includes("r103")) div = 307.8;
     div -= galIP()
     var ret = Decimal.pow(10, player.money.e/div -0.75).times(getIPMult())
+	if (player.galacticSacrifice.upgrades.includes(45))ret=ret.times(galUpgrade45());
     if (player.timestudy.studies.includes(41)) ret = ret.times(Decimal.pow(1.2, player.galaxies + player.replicanti.galaxies))
     if (player.timestudy.studies.includes(51)) ret = ret.times(1e15)
     if (player.timestudy.studies.includes(141)) ret = ret.times(new Decimal(1e45).dividedBy(Decimal.pow(15, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.125))).max(1))
@@ -2347,20 +2367,47 @@ function gainedInfinityPoints() {
     if (player.achievements.includes("r125")) ret = ret.times(Decimal.pow(2, Math.log(player.thisInfinityTime+1)*Math.pow(player.thisInfinityTime+1, 0.11)))
     if (player.dilation.upgrades.includes(7)) ret = ret.times(player.dilation.dilatedTime.pow(1000))
     if (player.infinityUpgrades.includes("postinfi60")) ret = ret.times(getB60Mult())
+    if (player.achievements.includes("r43")) ret = ret.times(100);
+    if (player.achievements.includes("r55")) ret = ret.times(Math.max(Math.log10(6000/player.bestInfinityTime), 1));
+    if (player.achievements.includes("r41")) ret = ret.times(Math.pow(Math.log10(player.spreadingCancer), .05)).times(2);
+    if (player.achievements.includes("r51")) {
+        let galaxies = player.galaxies
+      	ret = ret.times(galaxies+1)
+    }
     return ret.floor()
 }
 
 function gainedEternityPoints() {
     var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+	ret = ret.times(3)
+    if (player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galUpgrade51())
+	
+  dilationstart = getDilationStart();
+    if(ret.log10()>=dilationstart){
+	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+    }
+	
     if (player.timestudy.studies.includes(61)) ret = ret.times(10)
     if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
-    else if (player.timestudy.studies.includes(122)) ret = ret.times(35)
-    else if (player.timestudy.studies.includes(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
-    if (player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galUpgrade51())
-
+    if (player.timestudy.studies.includes(122)) ret = ret.times(35)
+    if (player.timestudy.studies.includes(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
+	
     return ret.floor()
 }
 
+function gainedEternityPointsBeforeDilation() {
+    var ret = Decimal.pow(5, player.infinityPoints.plus(gainedInfinityPoints()).e/308 -0.7).times(player.epmult).times(kongEPMult)
+	ret = ret.times(3)
+    if (player.galacticSacrifice.upgrades.includes(51)) ret = ret.times(galUpgrade51())
+	
+    if (player.timestudy.studies.includes(61)) ret = ret.times(10)
+    if (player.timestudy.studies.includes(121)) ret = ret.times(((253 - averageEp.dividedBy(player.epmult).dividedBy(10).min(248).max(3))/5)) //x300 if tryhard, ~x60 if not
+    if (player.timestudy.studies.includes(122)) ret = ret.times(35)
+    if (player.timestudy.studies.includes(123)) ret = ret.times(Math.sqrt(1.39*player.thisEternity/10))
+	
+    return ret.floor()
+}
 
 function setAchieveTooltip() {
     var apocAchieve = document.getElementById("Antimatter Apocalypse");
@@ -2394,17 +2441,17 @@ function setAchieveTooltip() {
     let thisis = document.getElementById("This is what I have to do to get rid of you.")
 
     apocAchieve.setAttribute('ach-tooltip', "Get over " + formatValue(player.options.notation, 1e80, 0, 0) + " antimatter.");
-    noPointAchieve.setAttribute('ach-tooltip', "Buy a single First Dimension when you have over " + formatValue(player.options.notation, 1e150, 0, 0) + " of them. Reward: First Dimensions are 10% stronger.");
+    noPointAchieve.setAttribute('ach-tooltip', "Buy a single First Dimension when you have over " + formatValue(player.options.notation, 1e150, 0, 0) + " of them. Reward: First Dimensions are 10% stronger and you can max buy Dimension and Tickspeed Boosts.");
     forgotAchieve.setAttribute('ach-tooltip', "Get any Dimension multiplier over " + formatValue(player.options.notation, 1e31, 0, 0) + ". Reward: First Dimensions are 5% stronger and multiplier to ND based on product of all dims.");
     sanic.setAttribute('ach-tooltip', "Have antimatter/sec exceed your current antimatter above " + formatValue(player.options.notation, 1e63, 0, 0));
     potato.setAttribute('ach-tooltip', "Get more than " + formatValue(player.options.notation, 1e29, 0, 0) + " ticks per second. Reward: Reduces starting tick interval by 2%.");
-    potato2.setAttribute('ach-tooltip', "Get more than " + formatValue(player.options.notation, 1e58, 0, 0) + " ticks per second. Reward: Reduces starting tick interval by 2%.");
+    potato2.setAttribute('ach-tooltip', "Get more than " + formatValue(player.options.notation, 1e58, 0, 0) + " ticks per second. Reward: Reduces starting tick interval by 2%, and Tickspeed boost Infinity Dimensions at a very reduced rate.");
     potato3.setAttribute('ach-tooltip', "Get more than "+shortenCosts(new Decimal("1e8296262"))+" ticks per second.")
     dimensional.setAttribute('ach-tooltip', "Reach " + formatValue(player.options.notation, 1e12, 0, 0) + " of all dimensions except 8th. Reward: Multipler to ND based on log of dimensions.");
     IPBelongs.setAttribute('ach-tooltip', "Big Crunch for "+shortenCosts(1e150)+" IP. Reward: Additional 4x multiplier to IP.")
     reference.setAttribute('ach-tooltip', "Get a x"+shortenDimensions(Number.MAX_VALUE)+" multiplier in a single sacrifice. Reward: Sacrifices are stronger.")
     blink.setAttribute('ach-tooltip', "Get to Infinity in under 200 milliseconds. Reward: Start with " + formatValue(player.options.notation, 1e25, 0, 0) + " antimatter and all dimensions are stronger in first 300ms of Infinity.");
-    spare.setAttribute('ach-tooltip', "Reach " +formatValue(player.options.notation, new Decimal("1e35000"), 0, 0)+" antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.");
+    spare.setAttribute('ach-tooltip', "Reach " +formatValue(player.options.notation, new Decimal("1e9500"), 0, 0)+" antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have, and IP gain formula is better.");
     //exist.setAttribute('ach-tooltip', "Reach " + formatValue(player.options.notation, 9.9999e9999, 0, 0) + " antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have."); (i like the 9 9s thing and no one will see it with a formatted value)
     //exist2.setAttribute('ach-tooltip', "Reach " + formatValue(player.options.notation, 1e35000, 0, 0) + " antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have.")
     speed.setAttribute('ach-tooltip', "Big Crunch for "+shortenCosts(1e200)+" IP in 2 seconds or less. Reward: All dimensions are significantly stronger in first 5 seconds of infinity.")
@@ -2416,11 +2463,11 @@ function setAchieveTooltip() {
     dawg.setAttribute('ach-tooltip', "Have all your past 10 infinities be at least "+shortenMoney(Number.MAX_VALUE)+" times higher IP than the previous one. Reward: Your antimatter doesn't reset on dimboost/galaxy.")
     eatass.setAttribute('ach-tooltip', "Reach "+shortenCosts(1e100)+" IP without any infinities or first dimensions. Reward: IP multiplier based on time spent this infinity.")
     layer.setAttribute('ach-tooltip', "Reach "+shortenMoney(Number.MAX_VALUE)+" EP.")
-    fkoff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Time dimensions are multiplied by the number of studies you have.")
+    fkoff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e22000"))+" IP without any time studies. Reward: Time dimensions are multiplied by the number of studies you have (post-dilation).")
     minaj.setAttribute('ach-tooltip', "Have 180 times more non-bonus replicanti galaxies than normal galaxies. Reward: Replicanti galaxies divide your replicanti by "+shortenMoney(Number.MAX_VALUE)+" instead of resetting them to 1.")
     infstuff.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal("1e140000"))+" IP without buying IDs or IP multipliers. Reward: You start eternities with all Infinity Challenges unlocked and completed.")
     when.setAttribute('ach-tooltip', "Reach "+shortenCosts( new Decimal("1e20000"))+" replicanti. Reward: You gain replicanti 2 times faster under "+shortenMoney(Number.MAX_VALUE)+" replicanti.")
-    thinking.setAttribute('ach-tooltip', "Eternity for "+shortenCosts( new Decimal("1e600"))+" EP in 1 minute or less while dilated.")
+    thinking.setAttribute('ach-tooltip', "Eternity for "+shortenCosts( new Decimal("1e600"))+" EP in 1 minute or less while dilated. Reward: Achievement Power affects DT Production at a reduced rate (pre-dilation).")
     thisis.setAttribute('ach-tooltip', "Reach "+shortenCosts(new Decimal('1e20000'))+" IP without any time studies while dilated.")
 }
 
@@ -2539,13 +2586,14 @@ function sacrifice(auto = false) {
     if (player.eightAmount == 0) return false;
     if (player.resets < 5) return false
     if (player.currentEternityChall == "eterc3") return false
+    if (player.currentChallenge == "postcngm4r_1") return false
     if (player.currentChallenge == "challenge11" && (calcTotalSacrificeBoost().gte(new Decimal('1e8888')) || player.chall11Pow.gte(new Decimal('1e8888')))) return false
     if (!auto) floatText("eightD", "x" + shortenMoney(calcSacrificeBoost()))
     if (calcSacrificeBoost().gte(Number.MAX_VALUE) && player.currentChallenge !== 'challenge11') giveAchievement("Yet another infinity reference");
     player.eightPow = player.eightPow.times(calcSacrificeBoost())
     player.sacrificed = player.sacrificed.plus(player.firstAmount);
     if (player.currentChallenge != "challenge11") {
-        if (player.currentChallenge == "challenge7" && !player.achievements.includes("r118")) clearDimensions(6);
+        if ((player.currentChallenge == "challenge7" || player.currentChallenge == "postcngm3_3") && !player.achievements.includes("r118")) clearDimensions(6);
         else if (!player.achievements.includes("r118")) clearDimensions(7);
     } else {
         player.chall11Pow = player.chall11Pow.times(calcSacrificeBoost())
@@ -2572,6 +2620,18 @@ document.getElementById("sacrifice").onclick = function () {
 }
 
 document.getElementById("gSacrifice").onclick = function () {
+    if (getGSAmount().lt(1)) return false
+    if (!document.getElementById("gConfirmation").checked) {
+        if (!confirm("Galactic Sacrifice will do a galaxy reset, and then remove all of your galaxies, in exchange of galaxy points which can be use to buy many overpowered upgrades, but it will take a lot of time to recover, are you sure you wanna do this?")) {
+            return false;
+        }
+    }
+
+    return galacticSacrifice();
+}
+
+
+document.getElementById("sacrificebtn").onclick = function () {
     if (getGSAmount().lt(1)) return false
     if (!document.getElementById("gConfirmation").checked) {
         if (!confirm("Galactic Sacrifice will do a galaxy reset, and then remove all of your galaxies, in exchange of galaxy points which can be use to buy many overpowered upgrades, but it will take a lot of time to recover, are you sure you wanna do this?")) {
@@ -2929,7 +2989,7 @@ function updatePriorities() {
     player.autobuyers[9].priority = parseInt(document.getElementById("priority10").value)
     player.autobuyers[10].priority = parseInt(document.getElementById("priority11").value)
     player.autobuyers[11].priority = fromValue(document.getElementById("priority12").value)
-    if (player.eternities < 10) {
+    if (!player.achievements.includes("r28")) {
         var bulk = Math.floor(Math.max(parseFloat(document.getElementById("bulkDimboost").value), 1))
     } else {
         var bulk = Math.max(parseFloat(document.getElementById("bulkDimboost").value), 0.05)
@@ -3026,6 +3086,16 @@ document.getElementById("challengetime2").textContent = "Challenge  " + 2 + " ti
     }
     document.getElementById("infchallengetimengm3_1").textContent = "Infinity Challenge NG-3-1 time record: " + timeDisplayShort(player.infchallengeTimes[10])
     temp += player.infchallengeTimes[10]
+    document.getElementById("infchallengetimengm3_2").textContent = "Infinity Challenge NG-3-2 time record: " + timeDisplayShort(player.infchallengeTimes[11])
+    temp += player.infchallengeTimes[11]
+    document.getElementById("infchallengetimengm3_3").textContent = "Infinity Challenge NG-3-3 time record: " + timeDisplayShort(player.infchallengeTimes[12])
+    temp += player.infchallengeTimes[12]
+    document.getElementById("infchallengetimengm3_4").textContent = "Infinity Challenge NG-3-4 time record: " + timeDisplayShort(player.infchallengeTimes[13])
+    temp += player.infchallengeTimes[13]
+    document.getElementById("infchallengetimengm4r_1").textContent = "Infinity Challenge NG-4R-1 time record: " + timeDisplayShort(player.infchallengeTimes[14])
+    temp += player.infchallengeTimes[14]
+    document.getElementById("infchallengetimengm4r_2").textContent = "Infinity Challenge NG-4R-2 time record: " + timeDisplayShort(player.infchallengeTimes[15])
+    temp += player.infchallengeTimes[15]
     document.getElementById("infchallengetimesum").textContent = "Sum of infinity challenge time records is " + timeDisplayShort(temp)
     updateWorstChallengeTime();
 }
@@ -3113,7 +3183,7 @@ function checkForEndMe() {
     if (temp <= 1800) giveAchievement("Not-so-challenging")
     if (temp <= 50) giveAchievement("End me")
     var temp2 = 0
-    for (var i=0; i<11;i++) {
+    for (var i=0; i<16;i++) {
         temp2 += player.infchallengeTimes[i]
     }
     infchallengeTimes = temp2
@@ -3125,6 +3195,14 @@ document.getElementById("bigcrunch").onclick = function () {
     var challNumber = parseInt(player.currentChallenge.replace(/[a-z]/g, ''))
     if(player.currentChallenge=="postcngm3_1")challNumber = 11
     if(player.currentChallenge=="postcngm3_2")challNumber = 12
+    if(player.currentChallenge=="postcngm3_3")challNumber = 13
+    if(player.currentChallenge=="postcngm3_4")challNumber = 14
+    if(player.currentChallenge=="postcngm4r_1")challNumber = 15
+    if(player.currentChallenge=="postcngm4r_2")challNumber = 16
+    if(player.currentChallenge=="postcngm4r_3")challNumber = 17
+    if(player.currentChallenge=="postcngm4r_4")challNumber = 18
+    if(player.currentChallenge=="postcngm4r_5")challNumber = 19
+    if(player.currentChallenge=="postcngm4r_6")challNumber = 20
     if ((player.money.gte(Number.MAX_VALUE) && !player.currentChallenge.includes("post")) || (player.currentChallenge !== "" && player.money.gte(player.challengeTarget))) {
         if ((player.bestInfinityTime > 600 && !player.break) && player.eternities === 0 && implosionCheck === 0 && player.options.animations.bigCrunch) {
             implosionCheck = 1;
@@ -3352,6 +3430,8 @@ document.getElementById("bigcrunch").onclick = function () {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: 0,
@@ -3389,7 +3469,7 @@ document.getElementById("bigcrunch").onclick = function () {
         if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4" || player.currentChallenge == "postc8") document.getElementById("matter").style.display = "block";
         else document.getElementById("matter").style.display = "none";
 
-        if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4") document.getElementById("chall13Mult").style.display = "block";
+        if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4" || player.currentChallenge === "postcngm3_3" || player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "block";
         else document.getElementById("chall13Mult").style.display = "none";
 
         document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
@@ -3413,7 +3493,8 @@ document.getElementById("bigcrunch").onclick = function () {
             document.getElementById("eightRow").style.display = "none";
         }
         document.getElementById("matter").style.display = "none";
-        document.getElementById("chall13Mult").style.display = "none";
+        if (player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "block";
+        else document.getElementById("chall13Mult").style.display = "none";
         document.getElementById("quickReset").style.display = "none";
 
         checkForEndMe()
@@ -3426,12 +3507,6 @@ document.getElementById("bigcrunch").onclick = function () {
 
         if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
         if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
-
-        if (player.achievements.includes('r33')) {
-            let newPoints = Math.floor(Math.pow(player.infinitied, 2) / 100);
-            player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.max(newPoints);
-            player.galacticSacrifice.times = Math.max(player.galacticSacrifice.times, 1);
-        }
 
 
         updateAutobuyers();
@@ -3493,7 +3568,7 @@ function getKeptChallenges () {
 
   // additional challenges
 
-  "postcngm3_1",
+  "postcngm3_1","postcngm3_2","postcngm3_3","postcngm3_4","postcngm4r_1","postcngm4r_2",
 ] :
   (player.eternities > 6) ?
   ["challenge1", "challenge2", "challenge3",
@@ -3504,7 +3579,7 @@ function getKeptChallenges () {
 
   // additional challenges
 
-  "postcngm3_1",
+  "postcngm3_1","postcngm3_2","postcngm3_3","postcngm3_4","postcngm4r_1","postcngm4r_2",
 ] :
   (player.eternities > 0) ?
   ["challenge1", "challenge2", "challenge3",
@@ -3536,8 +3611,8 @@ function eternity(force, auto) {
             if (player.bestEternity <= 0.01) giveAchievement("Less than or equal to 0.001");
         }
         if (player.thisEternity < 2) giveAchievement("Eternities are the new infinity")
-        if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = parseFloat((player.dimensionMultDecrease - 0.2).toFixed(1))
-        if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = parseFloat((player.tickSpeedMultDecrease - 0.07).toFixed(2))
+        if (player.currentEternityChall == "eterc6" && ECTimesCompleted("eterc6") < 5) player.dimensionMultDecrease = (3 - 0.2 * (ECTimesCompleted("eterc6")+1))
+        if (player.currentEternityChall == "eterc11" && ECTimesCompleted("eterc11") < 5) player.tickSpeedMultDecrease = (2 - 0.07 * (ECTimesCompleted("eterc11")+1))
         if (player.infinitied < 10 && !force) giveAchievement("Do you really need a guide for this?");
         if (Decimal.round(player.replicanti.amount) == 9) giveAchievement("We could afford 9");
         if (player.dimlife && !force) giveAchievement("8 nobody got time for that")
@@ -3548,6 +3623,7 @@ function eternity(force, auto) {
         player.eternityPoints = player.eternityPoints.plus(gainedEternityPoints())
         addEternityTime(player.thisEternity, gainedEternityPoints())
         if (player.currentEternityChall !== "") {
+            player.lastTenEternities[0][2]=player.eternityChallUnlocked
             if (player.eternityChalls[player.currentEternityChall] === undefined) {
                 player.eternityChalls[player.currentEternityChall] = 1
             } else if (player.eternityChalls[player.currentEternityChall] < 5) player.eternityChalls[player.currentEternityChall] += 1
@@ -3573,6 +3649,8 @@ function eternity(force, auto) {
             let tachyonGain = Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0)
             player.dilation.totalTachyonParticles = player.dilation.totalTachyonParticles.plus(tachyonGain)
             player.dilation.tachyonParticles = player.dilation.tachyonParticles.plus(tachyonGain)
+            player.lastTenEternities[0][1]=tachyonGain
+            player.lastTenEternities[0][2]="d2"
         }
         player.challenges = temp
         player = {
@@ -3792,7 +3870,7 @@ function eternity(force, auto) {
                 rebuyables: player.dilation.rebuyables
             },
             why: player.why,
-	          galacticSacrifice: player.eternities>=6?player.galacticSacrifice:{
+	          galacticSacrifice: player.eternities>=5?player.galacticSacrifice:{
               galaxyPoints: new Decimal(0),
               last: Date.now(),
               times: 0,
@@ -3805,6 +3883,8 @@ function eternity(force, auto) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: 0,
@@ -3836,7 +3916,8 @@ function eternity(force, auto) {
             document.getElementById("eightRow").style.display = "none";
         }
         document.getElementById("matter").style.display = "none";
-        document.getElementById("chall13Mult").style.display = "none";
+        if (player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "block";
+        else document.getElementById("chall13Mult").style.display = "none";
         document.getElementById("quickReset").style.display = "none";
         if (player.infinitied >= 1 && !player.challenges.includes("challenge1")) player.challenges.push("challenge1");
         var autobuyers = document.getElementsByClassName('autoBuyerDiv')
@@ -3892,7 +3973,7 @@ function eternity(force, auto) {
 		if (player.achievements.includes("r105"))document.getElementById("totaltickgained").textContent += " 'Infinite Time' multiplier: "+shorten(player.postC3Reward.pow(infiniteTimeStrength()));
         updateTickSpeed();
         playerInfinityUpgradesOnEternity()
-        document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+        document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")+"<br>Eternity point gain is dilated after "+shorten(Decimal.pow(10,getDilationStart()))+".";
         updateEternityChallenges()
         if (player.eternities <= 1) {
             showTab("dimensions")
@@ -3918,7 +3999,7 @@ function exitChallenge() {
 
 function inQuickResetChallenge () {
   return (player.currentChallenge == "challenge12" || player.currentChallenge == "challenge9" || player.currentChallenge == "challenge5" || player.currentChallenge == "challenge14" ||
-      player.currentChallenge == "postc4" || player.currentChallenge == "postc6" || player.currentChallenge == "postc7" || player.currentChallenge == "postc8" || player.currentChallenge == "postc10");
+      player.currentChallenge == "postc4" || player.currentChallenge == "postc6" || player.currentChallenge == "postc8" || player.currentChallenge == "postc10");
 }
 
 function startChallenge(name, target) {
@@ -4078,6 +4159,8 @@ function startChallenge(name, target) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: 0,
@@ -4131,7 +4214,7 @@ function startChallenge(name, target) {
     if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4" || player.currentChallenge == "postc8") document.getElementById("matter").style.display = "block";
     else document.getElementById("matter").style.display = "none";
 
-    if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4") document.getElementById("chall13Mult").style.display = "block";
+    if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4" || player.currentChallenge === "postcngm3_3" || player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "block";
     else document.getElementById("chall13Mult").style.display = "none";
 
     if (inQuickResetChallenge()) document.getElementById("quickReset").style.display = "inline-block";
@@ -4151,12 +4234,6 @@ function startChallenge(name, target) {
     } catch (err) {console.log("Couldn't load Kongregate API")}
 
     if (player.infinitied >= 10) giveAchievement("That's a lot of infinites");
-
-    if (player.achievements.includes('r33')) {
-        let newPoints = Math.floor(Math.pow(player.infinitied, 2) / 100);
-        player.galacticSacrifice.galaxyPoints = player.galacticSacrifice.galaxyPoints.max(newPoints);
-        player.galacticSacrifice.times = Math.max(player.galacticSacrifice.times, 1);
-    }
 
     document.getElementById("replicantireset").innerHTML = "Reset replicanti amount, but get a free galaxy<br>"+player.replicanti.galaxies + " replicated galaxies created."
 
@@ -4685,6 +4762,8 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: 0,
@@ -4710,7 +4789,8 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
         document.getElementById("seventhRow").style.display = "none";
         document.getElementById("eightRow").style.display = "none";
         document.getElementById("matter").style.display = "none";
-        document.getElementById("chall13Mult").style.display = "none";
+        if (player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "block";
+        else document.getElementById("chall13Mult").style.display = "none";
         document.getElementById("quickReset").style.display = "none";
         var autobuyers = document.getElementsByClassName('autoBuyerDiv')
         if (player.eternities < 2) {
@@ -4757,10 +4837,10 @@ function startEternityChallenge(name, startgoal, goalIncrease) {
         document.getElementById("infiMult").innerHTML = "Multiply infinity points from all sources by 2 <br>currently: "+shorten(getIPMult()) +"x<br>Cost: "+shortenCosts(getIPMult())+" IP"
         updateEternityUpgrades()
         document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
-		if (player.achievements.includes("r105"))document.getElementById("totaltickgained").textContent += " 'Infinite Time' multiplier: "+shorten(player.postC3Reward.pow(0.05));
+		if (player.achievements.includes("r105"))document.getElementById("totaltickgained").textContent += " 'Infinite Time' multiplier: "+shorten(player.postC3Reward.pow(infiniteTimeStrength()));
         updateTickSpeed();
         playerInfinityUpgradesOnEternity()
-        document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+        document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")+"<br>Eternity point gain is dilated after "+shorten(Decimal.pow(10,getDilationStart()))+".";
         updateEternityChallenges()
         Marathon2 = 0;
 
@@ -4785,7 +4865,10 @@ function startDilatedEternity() {
         }, 250)
         return
     }
-    if (!confirm("Dilating time will start a new eternity, and all of your Dimension/Infinity Dimension/Time Dimension multiplier's exponents and tickspeed multiplier's exponent will be reduced to ^ 0.75. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
+    var add=""
+    if(player.dilation.tachyonParticles!=0)add+="/DT Gain";
+    if(player.dilation.studies.includes(6))add+="/MD Mult";
+    if (!confirm("Dilating time will start a new eternity, and all first dilation effects (ND Mult/ID Mult/TD Mult/Tickspeed/Infinity Power/Timeshards/EP Gain"+add+") are applied twice. If you can eternity while dilated, you'll be rewarded with tachyon particles based on your antimatter and tachyon particles.")) {
         setTimeout(function() {
             gameLoopIntervalId = setInterval(gameLoop, player.options.updateRate);
         }, 250)
@@ -4878,6 +4961,8 @@ function updateDilationUpgradeButtons() {
         }
     }
     document.getElementById("dil7desc").textContent = "Currently: "+shortenMoney(player.dilation.dilatedTime.pow(1000).max(1))+"x"
+    document.getElementById("dil9desc").textContent = "Currently: exponent ^"+getDilationPower().toFixed(4)+" -> exponent ^"+(getDilationPower()*1.05).toFixed(4)
+	if(player.dilation.upgrades.includes(9))document.getElementById("dil9desc").textContent = "Currently: exponent ^"+getDilationPower().toFixed(4)
     document.getElementById("dil10desc").textContent = "Currently: "+shortenMoney(Math.floor(player.dilation.tachyonParticles.div(20000).max(1)))+"/s"
 }
 
@@ -4930,13 +5015,16 @@ function updateInfPower() {
   
   dilationstart = getDilationStart();
     if(infpow.log10()>=dilationstart){
-	  infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, getDilationPower())*dilationstart)
     }
 
 
     document.getElementById("infPowAmountAfterDilation").textContent = shortenMoney(infpow)
     let y = 7;
+  if(player.currentChallenge == "postcngm3_2" || player.challenges.includes("postcngm3_2")){
+	  y = Math.max(7, Math.pow(player.galaxies + player.tickspeedBoosts / 5, .8)+1);
+  }
     document.getElementById("infDimExponent").innerHTML = (Math.round(y) === y) ? y : y.toFixed(2);
     if (player.currentEternityChall == "eterc9"){
 		document.getElementById("infDimMultAmount").textContent = shortenMoney((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 4)).max(1))
@@ -4961,24 +5049,24 @@ function updateTimeShards() {
 		
 		 dilationstart = getDilationStart();
     if(ts.log10()>=dilationstart){
-	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, getDilationPower())*dilationstart)
     }
 		dilationstart4 = getDilationStart4();
     if(ts.log10()>=dilationstart4){
-	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
         document.getElementById("timeShardAmountAfterDilation").textContent = shortenMoney(ts)
         document.getElementById("tickThreshold").textContent = shortenMoney(player.tickThreshold)
 		
 		let ts1=new Decimal(player.timeShards).add(getTimeDimensionProduction(1));
     if(ts1.log10()>=dilationstart){
-	  ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart, getDilationPower())*dilationstart)
     }
 		dilationstart4 = getDilationStart4();
     if(ts1.log10()>=dilationstart4){
-	  ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  ts1 = Decimal.pow(10, Math.pow(ts1.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
         if (player.currentEternityChall == "eterc7"){
 			document.getElementById("timeShardsPerSec").textContent = "You are getting "+shortenDimensions(getTimeDimensionProduction(1))+" Eighth Infinity Dimensions per second."
@@ -4992,11 +5080,21 @@ function updateTimeShards() {
     }
 }
 
+function dilatedTimePerSecond(){
+    let ret=player.dilation.tachyonParticles.times(Decimal.pow(2, player.dilation.rebuyables[1]));
+	if(player.achievements.includes("r137"))ret=ret.times(player.achPow.pow(0.2));
+    if(ret.log10()>=dilationstart){
+	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+    }
+    return ret;
+}
+
 function updateDilation() {
     if (document.getElementById("dilation").style.display == "block" && document.getElementById("eternitystore").style.display == "block") {
         document.getElementById("tachyonParticleAmount").textContent = shortenMoney(player.dilation.tachyonParticles)
         document.getElementById("dilatedTimeAmount").textContent = shortenMoney(player.dilation.dilatedTime)
-        document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(player.dilation.tachyonParticles.times(Decimal.pow(2, player.dilation.rebuyables[1]))) + "/s"
+        document.getElementById("dilatedTimePerSecond").textContent = "+" + shortenMoney(dilatedTimePerSecond()) + "/s"
         document.getElementById("galaxyThreshold").textContent = shortenMoney(player.dilation.nextThreshold)
         document.getElementById("dilatedGalaxies").textContent = player.dilation.freeGalaxies
     }
@@ -5004,14 +5102,14 @@ function updateDilation() {
 
 
 function getNewInfReq() {
-    if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1100")
-    else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1500")
-    else if (!player.infDimensionsUnlocked[2]) return new Decimal("1e2400")
-    else if (!player.infDimensionsUnlocked[3]) return new Decimal("1e9600")
-    else if (!player.infDimensionsUnlocked[4]) return new Decimal("1e30000")
-    else if (!player.infDimensionsUnlocked[5]) return new Decimal("1e45000")
-    else if (!player.infDimensionsUnlocked[6]) return new Decimal("1e54000")
-    else return new Decimal("1e60000")
+    if (!player.infDimensionsUnlocked[0]) return new Decimal("1e1000")
+    else if (!player.infDimensionsUnlocked[1]) return new Decimal("1e1450")
+    else if (!player.infDimensionsUnlocked[2]) return new Decimal("1e1900")
+    else if (!player.infDimensionsUnlocked[3]) return new Decimal("1e2000")
+    else if (!player.infDimensionsUnlocked[4]) return new Decimal("1e5000")
+    else if (!player.infDimensionsUnlocked[5]) return new Decimal("1e10000")
+    else if (!player.infDimensionsUnlocked[6]) return new Decimal("1e20000")
+    else return new Decimal("1e40000")
 }
 
 
@@ -5055,17 +5153,10 @@ setInterval(function() {
 
 
 
-setInterval(function() {
-    try {
-        kongregate.stats.submit('Log10 of total antimatter', player.totalmoney.e);
-        kongregate.stats.submit('Log10 of Infinity Points', player.infinityPoints.e);
-        kongregate.stats.submit('Log10 of Eternity Points', player.eternityPoints.e);
-    } catch (err) {console.log("Couldn't load Kongregate API")}
-}, 10000)
 
-var nextAt = [new Decimal("1e750"), new Decimal("1e1350"), new Decimal("1e2000"), new Decimal("1e3000"), new Decimal("1e5000"), new Decimal("1e14000"), new Decimal("1e18000"), new Decimal("1e20000"), new Decimal("1e23000"), new Decimal("1e28000")]
+var nextAt = [new Decimal("1e650"), new Decimal("1e750"), new Decimal("1e1000"), new Decimal("1e1500"), new Decimal("1e3000"), new Decimal("1e4000"), new Decimal("1e5000"), new Decimal("1e8000"), new Decimal("1e9000"), new Decimal("1e10000")]
 
-var goals = [new Decimal("1e550"), new Decimal("1e950"), new Decimal("1e1200"), new Decimal("1e650"), new Decimal("1e10500"), new Decimal("1e13000"), new Decimal("1e11111"), new Decimal("2e22222"), new Decimal("1e15000"), new Decimal("1e27000")]
+var goals = [new Decimal("1e650"), new Decimal("1e650"), new Decimal("1e610"), new Decimal(Number.MAX_VALUE), new Decimal("1e3000"), new Decimal("1e2300"), new Decimal("1e2200"), new Decimal("1e5000"), new Decimal("1e3200"), new Decimal("1e7500")]
 setInterval(function() {
     if (getDimensionFinalMultiplier(1).gte(new Decimal("1e308")) &&
         getDimensionFinalMultiplier(2).gte(new Decimal("1e308")) &&
@@ -5107,16 +5198,16 @@ setInterval(function() {
         }
         infDimPow = temp
     } else {
-        document.getElementById("infchallengesbtn").style.display = "none"
+        document.getElementById("infchallengesbtn").style.display = "inline-block"
     }
 
-    if (player.money.gte(new Decimal("1e2000")) || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
+    if (player.break || Object.keys(player.eternityChalls).length > 0 || player.eternityChallUnlocked !== 0) document.getElementById("challTabButtons").style.display = "table"
 
     document.getElementById("kongip").textContent = "Double your IP gain from all sources (additive). Forever. Currently: x"+kongIPMult+", next: x"+(kongIPMult==1? 2: kongIPMult+2)
     document.getElementById("kongep").textContent = "Triple your EP gain from all sources (additive). Forever. Currently: x"+kongEPMult+", next: x"+(kongEPMult==1? 3: kongEPMult+3)
     document.getElementById("kongdim").textContent = "Double all your normal dimension multipliers (multiplicative). Forever. Currently: x"+kongDimMult+", next: x"+(kongDimMult*2)
     document.getElementById("kongalldim").textContent = "Double ALL the dimension multipliers (Normal, Infinity, Time) (multiplicative until 32x). Forever. Currently: x"+kongAllDimMult+", next: x"+((kongAllDimMult < 32) ? kongAllDimMult * 2 : kongAllDimMult + 32)
-    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")
+    document.getElementById("eternityPoints2").innerHTML = "You have <span class=\"EPAmount2\">"+shortenDimensions(player.eternityPoints)+"</span> Eternity point"+((player.eternityPoints.eq(1)) ? "." : "s.")+"<br>Eternity point gain is dilated after "+shorten(Decimal.pow(10,getDilationStart()))+".";
 
     document.getElementById("eternitybtn").style.display = (player.infinityPoints.gte(player.eternityChallGoal) && player.infDimensionsUnlocked[7]) ? "inline-block" : "none"
 
@@ -5127,7 +5218,12 @@ setInterval(function() {
     }
 
     // additional infinity challenges
-    document.getElementById("postcngm3_1goal").textContent = "Goal: "+shortenCosts(new Decimal("1e99999999"))
+    document.getElementById("postcngm3_1goal").textContent = "Goal: "+shortenCosts(new Decimal("1e590"))
+    document.getElementById("postcngm3_2goal").textContent = "Goal: "+shortenCosts(new Decimal("1e500"))
+    document.getElementById("postcngm3_3goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1500"))
+    document.getElementById("postcngm3_4goal").textContent = "Goal: "+shortenCosts(new Decimal("1e7500"))
+    document.getElementById("postcngm4r_1goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1200"))
+    document.getElementById("postcngm4r_2goal").textContent = "Goal: "+shortenCosts(new Decimal("1e1000"))
 
     if (player.replicanti.galaxybuyer !== undefined) document.getElementById("replicantiresettoggle").style.display = "inline-block"
     else document.getElementById("replicantiresettoggle").style.display = "none"
@@ -5148,7 +5244,7 @@ setInterval(function() {
 
     if (getTickSpeedMultiplier() < 0.01) giveAchievement("Do you even bend time bro?")
 
-    if (player.eternities > 9) document.getElementById("bulklabel").textContent = "Buy max dimboosts every X seconds:"
+    if (player.achievements.includes("r28")) document.getElementById("bulklabel").textContent = "Buy max dimboosts every X seconds:"
     else document.getElementById("bulklabel").textContent = "Bulk DimBoost Amount:"
 
     if (player.eternities > 10) {
@@ -5275,8 +5371,8 @@ setInterval(function() {
     if (player.infinityPoints.gte('9.99999e999')) giveAchievement("This achievement doesn't exist II");
     if (player.infinityPoints.gte('1e30008')) giveAchievement("Can you get infinite IP?");
     if (player.infinitied > 2e6) giveAchievement("2 Million Infinities")
-    if (player.money.gte("9.9999e9999")) giveAchievement("This achievement doesn't exist")
-    if (player.money.gte("1e35000")) giveAchievement("I got a few to spare")
+    if (player.postC3Reward.gte("9.9999e9999")) giveAchievement("This achievement doesn't exist")
+    if (player.money.gte("1e9500")) giveAchievement("I got a few to spare")
     if (player.infinityPower.gt(1)) giveAchievement("A new beginning.");
     if (player.infinityPower.gt(1e6)) giveAchievement("1 million is a lot"); //TBD
     if (player.infinityPower.gt(1e260)) giveAchievement("Minute of infinity"); //TBD
@@ -5337,6 +5433,7 @@ function gameLoop(diff) {
     if (player.bestInfinityTime < -10) player.bestInfinityTime = Infinity
     if (diff > player.autoTime && !player.break) player.infinityPoints = player.infinityPoints.plus(player.autoIP.times(diff/player.autoTime))
     player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff));
+    if (player.currentChallenge == "postc4" || player.currentChallenge == "postc8")player.matter = player.matter.times(Decimal.pow((1.03 + player.resets/200 + player.galaxies/100), diff*24));
     if (player.matter.gt(player.money) && (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4")) {
         if (player.resets > 0) player.resets--;
         softReset(0);
@@ -5369,7 +5466,7 @@ function gameLoop(diff) {
     if (player.infinityUpgrades.includes("infinitiedGeneration") && player.currentEternityChall !== "eterc4") player.partInfinitied += diff / player.bestInfinityTime;
     if (player.partInfinitied >= 50) {
         player.infinitied += Math.floor(player.partInfinitied/5)
-        player.partInfinitied = 0;
+        player.partInfinitied = player.partInfinitied - Math.floor(player.partInfinitied/5);
     }
 
     if (player.partInfinitied >= 5) {
@@ -5381,7 +5478,7 @@ function gameLoop(diff) {
 
     if (player.money.lte(Number.MAX_VALUE) || (player.break && player.currentChallenge == "") || (player.currentChallenge != "" && player.money.lte(player.challengeTarget))) {
 
-        if (player.currentChallenge != "challenge7" && player.currentEternityChall != "eterc3") {
+        if (player.currentChallenge != "challenge7" &&  player.currentChallenge != "postcngm3_3"&&  player.currentChallenge != "postcngm4r_1"&& player.currentEternityChall != "eterc3") {
             for (let tier = 7; tier >= 1; --tier) {
                 var name = TIER_NAMES[tier];
 
@@ -5408,7 +5505,7 @@ function gameLoop(diff) {
             player.money = player.money.plus(getDimensionProductionPerSecond(1).times(diff/10));
             player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(1).times(diff/10));
         }
-        if (player.currentChallenge == "challenge7") {
+        if (player.currentChallenge == "challenge7" || player.currentChallenge == "postcngm3_3") {
             player.money = player.money.plus(getDimensionProductionPerSecond(2).times(diff/10));
             player.totalmoney = player.totalmoney.plus(getDimensionProductionPerSecond(2).times(diff/10))
         }
@@ -5437,7 +5534,8 @@ function gameLoop(diff) {
             document.getElementById("idtabbtn").style.display = "inline-block"
         }
 
-        if (tier <8) player["timeDimension"+tier].amount = player["timeDimension"+tier].amount.plus(getTimeDimensionProduction(tier+1).times(diff/100))
+       if(player.currentChallenge == "postcngm4r_1" && tier<7) player["timeDimension"+tier].amount = player["timeDimension"+tier].amount.plus(getTimeDimensionProduction(tier+2).times(diff/100))
+        else if (tier <8) player["timeDimension"+tier].amount = player["timeDimension"+tier].amount.plus(getTimeDimensionProduction(tier+1).times(diff/100))
     }
 
     if (player.infinitied > 0 && player.eternities < 1) {
@@ -5466,23 +5564,28 @@ function gameLoop(diff) {
 		
 		 dilationstart = getDilationStart();
     if(ts.log10()>=dilationstart){
-	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart, getDilationPower())*dilationstart)
     }
 		dilationstart4 = getDilationStart4();
     if(ts.log10()>=dilationstart4){
-	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  ts = Decimal.pow(10, Math.pow(ts.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
-		
-        player.tickThreshold = new Decimal(1).times(tsMult).pow(player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100)
-        gain = Math.ceil(Math.max(new Decimal(ts).dividedBy(player.tickThreshold).log10() / Math.log10(tsMult),0))
+		let temp=player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100;
+		if(player.challenges.includes("postcngm3_3"))temp = player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100*Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1)
+        if(temp>0)player.tickThreshold = new Decimal(1).times(tsMult).pow(temp)
+		else new Decimal(1).div(tsMult).pow(-temp)
+		gain = Math.ceil(Math.max(new Decimal(ts).dividedBy(player.tickThreshold).log10() / Math.log10(tsMult),0))
 		if(gain<0)gain=0;
         player.totalTickGained += gain
         player.tickspeed = player.tickspeed.times(Decimal.pow(getTickSpeedMultiplier(), gain))
         player.postC3Reward = player.postC3Reward.times(Decimal.pow(getPostC3RewardMult(), gain))
-        player.tickThreshold = new Decimal(1).times(tsMult).pow(player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100)
-        document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
-		if (player.achievements.includes("r105"))document.getElementById("totaltickgained").textContent += " 'Infinite Time' multiplier: "+shorten(player.postC3Reward.pow(0.05));
+        temp=player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100;
+		if(player.challenges.includes("postcngm3_3"))temp = player.totalTickGained - Math.pow(player.tickspeedBoosts,0.9)*100*Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1)
+        if(temp>0)player.tickThreshold = new Decimal(1).times(tsMult).pow(temp)
+		else new Decimal(1).div(tsMult).pow(-temp)
+	    document.getElementById("totaltickgained").textContent = "You've gained "+player.totalTickGained.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+" tickspeed upgrades."
+		if (player.achievements.includes("r105"))document.getElementById("totaltickgained").textContent += " 'Infinite Time' multiplier: "+shorten(player.postC3Reward.pow(infiniteTimeStrength()));
         updateTickSpeed();
     }
 
@@ -5604,9 +5707,15 @@ function gameLoop(diff) {
 
     var currentEPmin = gainedEternityPoints().dividedBy(player.thisEternity/600)
     if (currentEPmin.gt(EPminpeak) && player.infinityPoints.gte(Number.MAX_VALUE)) EPminpeak = currentEPmin
-    document.getElementById("eternitybtn").innerHTML = (player.eternities == 0) ? "Other times await.. I need to become Eternal" : "<b>I need to become Eternal.</b><br>"+"Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
-    if (gainedEternityPoints().gte(1e6)) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+shortenDimensions(currentEPmin)+ " EP/min<br>Peaked at "+shortenDimensions(EPminpeak)+" EP/min"
-    if (player.dilation.active) document.getElementById("eternitybtn").innerHTML = "Gain <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>"+"+"+shortenMoney(Math.round(Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0) * 10)/10) +" Tachyon particles."
+    document.getElementById("eternitybtn").innerHTML = "Eternity for <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>("+shortenDimensions(gainedEternityPointsBeforeDilation())+" before dilation)<br>"+shortenDimensions(currentEPmin)+ " EP/min"
+    if (gainedEternityPoints().gte("1e1000"))document.getElementById("eternitybtn").innerHTML = "Eternity for <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>("+shortenDimensions(gainedEternityPointsBeforeDilation())+" before dilation)"
+    if (player.dilation.active){
+            if (Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles <= 0) {
+                document.getElementById("eternitybtn").innerHTML = "Eternity for <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points.<br>Reach <b>" + shortenMoney(Decimal.pow(10, Math.pow(player.dilation.tachyonParticles * Math.pow(400, 1.5) / Math.pow(3, player.dilation.rebuyables[3]), 2/3))) + "</b> antimatter to gain more Tachyon Particles."
+            } else {
+                document.getElementById("eternitybtn").innerHTML = "Eternity for <b>"+shortenDimensions(gainedEternityPoints())+"</b> Eternity points and <b>"+shortenMoney(Math.round(Math.max(Math.pow(Decimal.log10(player.money) / 400, 1.5) * (Math.pow(3, player.dilation.rebuyables[3])) - player.dilation.totalTachyonParticles, 0) * 10)/10) +"</b> Tachyon Particles."
+            }
+    }
     if (player.currentEternityChall !== "") document.getElementById("eternitybtn").textContent = "Other challenges await.. I need to become Eternal"
     updateMoney();
     updateCoinPerSec();
@@ -5664,13 +5773,17 @@ function gameLoop(diff) {
     for (var tier = 1; tier < 9; tier++) {
         if (player.eternityPoints.gte(player["timeDimension"+tier].cost)) document.getElementById("timeMax"+tier).className = "storebtn"
         else document.getElementById("timeMax"+tier).className = "unavailablebtn"
-		if(!player.achievements.includes("r63"))document.getElementById("timeMax"+tier).style.display="none";else document.getElementById("timeMax"+tier).style.display="inline-block";
+		if(!player.achievements.includes("r63") || tier > Math.min(player.eternities,3) + 1)document.getElementById("timeMax"+tier).style.display="none";else document.getElementById("timeMax"+tier).style.display="";
         if (player.money.gte(player["timeDimension"+tier].costAntimatter)) document.getElementById("timeMax"+tier+"Antimatter").className = "storebtn"
         else document.getElementById("timeMax"+tier+"Antimatter").className = "unavailablebtn"
     }
 
-    if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(player.dilation.tachyonParticles*Math.pow(2, player.dilation.rebuyables[1])*diff/10)
-
+    if (player.dilation.studies.includes(1)) player.dilation.dilatedTime = player.dilation.dilatedTime.plus(dilatedTimePerSecond().mul(diff/10))
+    if (player.dilation.studies.includes(2))document.getElementById("timeMax5").style.display="";
+    if (player.dilation.studies.includes(3))document.getElementById("timeMax6").style.display="";
+    if (player.dilation.studies.includes(4))document.getElementById("timeMax7").style.display="";
+    if (player.dilation.studies.includes(5))document.getElementById("timeMax8").style.display="";
+	
     if (player.dilation.nextThreshold.lte(player.dilation.dilatedTime)) {
         let thresholdMult = 1.35 + 3.65 * Math.pow(0.8, player.dilation.rebuyables[2])
         // for (var i = 0; i < player.dilation.rebuyables[2]; i++) {
@@ -5773,22 +5886,22 @@ function gameLoop(diff) {
         if (player.infinityPoints.gte(1e15)) document.getElementById("postinfi33").className = "infinistorebtn1"
         else document.getElementById("postinfi33").className = "infinistorebtnlocked"
 
-        if (player.infinityPoints.gte(1e25)) document.getElementById("postinfi50").className = "infinistorebtn1"
+        if (player.infinityPoints.gte(1e22)) document.getElementById("postinfi50").className = "infinistorebtn1"
         else document.getElementById("postinfi50").className = "infinistorebtnlocked"
 
-        if (player.infinityPoints.gte(1e29)) document.getElementById("postinfi51").className = "infinistorebtn1"
+        if (player.infinityPoints.gte(1e26)) document.getElementById("postinfi51").className = "infinistorebtn1"
         else document.getElementById("postinfi51").className = "infinistorebtnlocked"
 
-        if (player.infinityPoints.gte(1e33)) document.getElementById("postinfi52").className = "infinistorebtn1"
+        if (player.infinityPoints.gte(1e22)) document.getElementById("postinfi52").className = "infinistorebtn1"
         else document.getElementById("postinfi52").className = "infinistorebtnlocked"
 
-        if (player.infinityPoints.gte(1e37)) document.getElementById("postinfi53").className = "infinistorebtn1"
+        if (player.infinityPoints.gte(1e32)) document.getElementById("postinfi53").className = "infinistorebtn1"
         else document.getElementById("postinfi53").className = "infinistorebtnlocked"
 
         if (player.infinityPoints.gte(1e50)) document.getElementById("postinfi60").className = "infinistorebtn1"
         else document.getElementById("postinfi60").className = "infinistorebtnlocked"
 
-	if (player.infinityPoints.gte(new Decimal("1e450"))) document.getElementById("postinfi61").className = "infinistorebtn1"
+	if (player.infinityPoints.gte(1e69)) document.getElementById("postinfi61").className = "infinistorebtn1"
         else document.getElementById("postinfi61").className = "infinistorebtnlocked"
 
 	if (player.infinityPoints.gte(new Decimal("1e700"))) document.getElementById("postinfi62").className = "infinistorebtn1"
@@ -5834,19 +5947,27 @@ function gameLoop(diff) {
         document.getElementById("confirmation").style.display = "none";
         document.getElementById("sacrifice").style.display = "none";
     }
-
+	document.getElementById("sacrificebtn").style.display = "none"
+	document.getElementById("quantumBlock").style.display = "none"
+	document.getElementById("galaxyPoints2").className = player.break ? "QK" : "EP";
 	if (player.galaxies + player.replicanti.galaxies + player.dilation.freeGalaxies > 0) {
     document.getElementById("gConfirmation").style.display = "inline-block";
 		document.getElementById("gSacrifice").style.display = "inline-block"
 		document.getElementById("gSacrifice").innerHTML = "Galactic Sacrifice (" + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP)"
-		if (getGSAmount().gt(0)) document.getElementById("gSacrifice").className = "storebtn"
+		if (getGSAmount().gt(0)){
+			document.getElementById("gSacrifice").className = "storebtn"
+			document.getElementById("sacrificebtn").style.display = ""
+			document.getElementById("sacpos").className = player.break ? "quantumpos" : "eterpos";
+			document.getElementById("sacrificebtn").innerHTML = "<b>Galactic Sacrifice for " + shortenDimensions(getGSAmount()) + " Galaxy points.</b>"
+		}
 		else document.getElementById("gSacrifice").className = "unavailablebtn"
 		document.getElementById("gSacrifice").setAttribute('ach-tooltip', "Gain " + formatValue(player.options.notation, getGSAmount(), 2, 0) + " GP")
 	} else {
     document.getElementById("gConfirmation").style.display = "none";
 		document.getElementById("gSacrifice").style.display = "none"
 	}
-
+	if (player.break)document.getElementById("quantumBlock").style.display = ""
+	
     if (player.infinitied > 0) document.getElementById("sacrifice").style.display = "inline-block";
 
     if (player.eightAmount > 0 && player.resets > 4 && player.currentEternityChall !== "eterc3") document.getElementById("sacrifice").className = "storebtn"
@@ -5915,7 +6036,7 @@ function gameLoop(diff) {
     if (player.infinityUpgrades.includes("galPointMult")) document.getElementById("postinfi01").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("dimboostCost")) document.getElementById("postinfi02").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("galCost")) document.getElementById("postinfi03").className = "infinistorebtnbought"
-    if (player.extraDimPowerIncrease >= 40) document.getElementById("postinfi04").className = "infinistorebtnbought"
+    if (player.extraDimPowerIncrease >= 50) document.getElementById("postinfi04").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("totalMult")) document.getElementById("postinfi11").className = "infinistorebtnbought"
     if (player.infinityUpgrades.includes("currentMult")) document.getElementById("postinfi21").className = "infinistorebtnbought"
     if (player.tickSpeedMultDecrease <= 2) document.getElementById("postinfi31").className = "infinistorebtnbought"
@@ -5963,7 +6084,7 @@ function gameLoop(diff) {
         document.getElementById("challengesbtn").style.display = "inline-block";
     }
 
-    document.getElementById("ec1reward").textContent = "Reward: "+shortenMoney(Math.pow(Math.max(player.thisEternity*10, 1), 1.2+(ECTimesCompleted("eterc1")*0.2)))+"x post-dilation on all Time Dimensions (based on time spent this Eternity)"
+    document.getElementById("ec1reward").textContent = "Reward: "+shortenMoney(Math.pow(Math.max(player.thisEternity*10, 1), 1.2+(ECTimesCompleted("eterc1")*0.2)))+"x post-dilation multiplier on all Time Dimensions (based on time spent this Eternity)"
     document.getElementById("ec2reward").textContent = "Reward: Infinity power affects 1st Infinity Dimension with reduced effect, Currently: "+shortenMoney(new Decimal(player.infinityPower.plus(10).log10()).pow(1000).times(player.infinityPower.pow(4.5/(700 - ECTimesCompleted("eterc2")*100))).max(1))+"x"
     document.getElementById("ec3reward").textContent = "Reward: Increase the multiplier for buying 10 dimensions, Currently: "+getDimensionPowerMultiplier().toFixed(2)+"x"
     document.getElementById("ec4reward").textContent = "Reward: Infinity Dimension multiplier from unspent IP, Currently: "+shortenMoney(player.infinityPoints.pow(0.4 + ECTimesCompleted("eterc4")*0.2))+"x"
@@ -6158,8 +6279,8 @@ function dimBoolean() {
     var name = TIER_NAMES[getShiftRequirement(0).tier]
     if (!player.autobuyers[9].isOn) return false
     if (player.autobuyers[9].ticks*100 < player.autobuyers[9].interval) return false
-    if (player[name + "Amount"] > getShiftRequirement(0)) return true
-    if (player.eternities < 10 && player[name + "Amount"] < getShiftRequirement(player.autobuyers[9].bulk-1).amount) return false
+	if (player[name + "Amount"] < getShiftRequirement(0).amount) return false
+    if (!player.achievements.includes("r28") && player[name + "Amount"] < getShiftRequirement(player.autobuyers[9].bulk-1).amount) return false
     if (player.overXGalaxies <= player.galaxies) return true
     if ((player.currentChallenge =="challenge4" || player.currentChallenge == "postc4") && player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 6) return false
     if (player.autobuyers[9].priority < getShiftRequirement(0).amount && getShiftRequirement(0).tier == 8) return false
@@ -6168,7 +6289,7 @@ function dimBoolean() {
 
 
 function maxBuyGalaxies(manual) {
-    if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc4" || player.currentChallenge == "postc9") return
+    if (player.currentEternityChall == "eterc6" || player.currentChallenge == "challenge11" || player.currentChallenge == "postc4" || player.currentChallenge == "postc9"|| player.currentChallenge == "postc7" ) return
     if (player.autobuyers[10].priority > player.galaxies || manual) {
         while(player.eightAmount >= getGalaxyRequirement() && (player.autobuyers[10].priority > player.galaxies || manual)) {
             if (player.options.notation == "Emojis") player.spreadingCancer+=1;
@@ -6238,10 +6359,10 @@ function autoBuyerTick() {
 
     if (player.autobuyers[9]%1 !== 0) {
         if (dimBoolean()) {
-            if (player.resets < 4) {
+            if (player.resets < 4 || !player.infinityUpgrades.includes("bulkBoost")) {
                 softReset(1);
                 player.autobuyers[9].ticks = 0
-            } else if (player.eternities < 10) {
+            } else if (!player.achievements.includes("r28")) {
                 softReset(player.autobuyers[9].bulk);
                 player.autobuyers[9].ticks = 0
             } else if ((Math.round(timer * 100))%(Math.round(player.autobuyers[9].bulk * 100)) == 0 && player.eightAmount >= getShiftRequirement(0).amount) {
@@ -6281,13 +6402,14 @@ function autoBuyerTick() {
                     }
                 } else {
                     if (priority[i].target > 10) {
-
                         if (player.options.bulkOn) buyManyDimensionAutobuyer(priority[i].target-10, priority[i].bulk)
                         else buyManyDimensionAutobuyer(priority[i].target-10, 1)
                     }
                     else {
                         buyOneDimension(priority[i].target)
                     }
+					if(player.achievements.includes("r52"))if (player.options.bulkOn)autobuyerBuyTimeDimensions(priority[i].target%10, priority[i].bulk)
+					else autobuyerBuyTimeDimensions(priority[i].target%10, 1)
                 }
                 priority[i].ticks = 0;
             }
@@ -6650,7 +6772,7 @@ window.addEventListener('keydown', function(event) {
         case 77: // M
             document.getElementById("maxall").onclick()
             
-  for(var i=1; i<9; i++) while(buyTimeDimensionAntimatter(i)) continue
+  for(var i=1; i<9; i++) while(buyTimeDimensionAntimatter(i,1)) continue
         break;
 
         case 83: // S
@@ -6722,7 +6844,8 @@ setInterval( function() {
 	
 	document.getElementById("scND").innerHTML = "Normal dimension multipliers and tickspeed are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart2()))+". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart3()))+". <br>Normal dimension multipliers and tickspeed are dilated again after "+ shorten(Decimal.pow(10,getDilationStart4()))+".";
 	document.getElementById("scID").innerHTML = "Infinity dimension multipliers and Infinity Power are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +". <br>Infinity dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart4()))+".";
-	
+	document.getElementById("scDT").innerHTML = "Dilated Time gain is dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +".";
+	//document.getElementById("scMD").innerHTML = "Meta dimension multipliers are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +".";
 	
         var timeShiftRequirement = getTimeShiftRequirement(0);
         var tickspeedShiftRequirement = getTickspeedShiftRequirement(0);
@@ -6733,14 +6856,17 @@ setInterval( function() {
 
         document.getElementById("tickspeedResetLabel").textContent = tickspeedShiftRequirement.prefix + 'Tickspeed Boost ('+ player.tickspeedBoosts +'): requires ' + tickspeedShiftRequirement.amount + " " + DISPLAY_NAMES[tickspeedShiftRequirement.tier] + " Dimensions"
 
-document.getElementById("Limit Break").setAttribute('ach-tooltip', "Break Infinity. Reward: Multiplier to IP gain based on galaxies (galaxies + 1)^1, each tickspeed upgrade multiply your tickrate by 1.001 (this isn't affected by galaxies), third dilation threshold is multiplied by "+shortenCosts(1e10)+", and unlock Eternity tab.")
+document.getElementById("Limit Break").setAttribute('ach-tooltip', "Break Infinity. Reward: Multiplier to IP gain based on galaxies (galaxies + 1)^1, each tickspeed upgrade multiply your tickrate by 1.001 (this isn't affected by galaxies), third dilation threshold is multiplied by "+shortenCosts(1e15)+", and unlock Eternity tab.")
     
 	
-	
+	while(player.tdBoosts < Math.min(player.eternities,5)*4){
+		player.tdBoosts++;
+	}
 	while(player.infinityUpgrades.includes("skipReset3") && player["timeDimension"+getTimeShiftRequirement(0).tier].bought+player["timeDimension"+getTimeShiftRequirement(0).tier].boughtAntimatter >= getTimeShiftRequirement(0).amount){
 		player.tdBoosts++;
 	}
 	while(player.infinityUpgrades.includes("skipResetGalaxy") && player["eightAmount"] >= getTickspeedShiftRequirement(0).amount){
 		player.tickspeedBoosts++;
 	}
+	document.getElementById("postcngm4r_2div").style.display=player.challenges.includes("postcngm3_3")?"":"none";
 }, 100)

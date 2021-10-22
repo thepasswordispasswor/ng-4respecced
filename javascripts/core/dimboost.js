@@ -15,10 +15,11 @@ function getDimensionBoostPower() {
   if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
 
-  if (player.currentChallenge == "postc9" || player.timestudy.studies.includes(81)) {
+  if (player.currentChallenge == "postc9" || player.challenges.includes("postc9")){
     ret = Decimal.pow(ret, 3);
-  } else if (player.challenges.includes("postc9")) {
-    ret = Decimal.pow(ret, 2);
+  }
+  if (player.timestudy.studies.includes(81)) {
+    ret = Decimal.pow(ret, 3);
   }
 
   return Decimal.fromValue(ret)
@@ -185,6 +186,7 @@ function softReset(bulk) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
 	},
 	
 	tickspeedBoosts: player.tickspeedBoosts,
@@ -418,6 +420,8 @@ function timeSoftReset(bulk) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: player.tickspeedBoosts,
@@ -492,10 +496,10 @@ if (player.currentChallenge == "postc5") {
 function getDimboostCostIncrease () {
   if (player.currentChallenge === 'postc1') return 15;
   let ret = player.galacticSacrifice.upgrades.includes(21)?10:15
-  if (player.infinityUpgrades.includes('dimboostCost')) {
-    ret -= 1;
-  }
+  if (player.infinityUpgrades.includes('dimboostCost')) ret -= 1
   if (player.infinityUpgrades.includes("postinfi50")) ret -= 1
+  if (player.galacticSacrifice.upgrades.includes(43)) ret -= 1
+  if (player.challenges.includes("postc9")) ret -= 1
   return ret;
 }
 
@@ -533,7 +537,13 @@ function getTimeShiftRequirement(bulk) {
 function getTSBScaling1(){
 	if(player.currentChallenge === "postcngm3_1")return 0;
 	let ret=20;
-	if(player.challenges.includes("postcngm3_1"))ret = ret + 1;
+	if(player.challenges.includes("postcngm3_1"))ret = ret + 10;
+	return ret;
+}
+
+function getTSBScaling2(){
+	let ret=50;
+	if(player.challenges.includes("postc7"))ret = ret + 10;
 	return ret;
 }
 
@@ -549,6 +559,11 @@ function getTickspeedShiftRequirement(bulk) {
 	  prefix = "Distant ";
 	  amount += (player.tickspeedBoosts-getTSBScaling1())*(player.tickspeedBoosts-getTSBScaling1()+1);
   }
+  
+  if(player.tickspeedBoosts>=getTSBScaling2()){
+	  prefix = "Further ";
+	  amount += (player.tickspeedBoosts-getTSBScaling2())*(player.tickspeedBoosts-getTSBScaling2()+1)*4;
+  }
   return { tier: 8, amount: Math.ceil(amount), prefix: prefix };
 }
 
@@ -556,7 +571,7 @@ document.getElementById("softReset").onclick = function () {
   var name = TIER_NAMES[getShiftRequirement(0).tier]
   if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getShiftRequirement(0).amount) return;
   auto = false;
-  if (player.infinityUpgrades.includes("bulkBoost")) maxBuyDimBoosts(true);
+  if (player.achievements.includes("r28")) maxBuyDimBoosts(true);
   else softReset(1)
 
   for (var tier = 1; tier<9; tier++) {
@@ -575,7 +590,14 @@ document.getElementById("timeSoftReset").onclick = function () {
 
 document.getElementById("tickspeedSoftReset").onclick = function () {
   var name = TIER_NAMES[getTickspeedShiftRequirement(0).tier]
-  if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getTickspeedShiftRequirement(0).amount) return;
+  if (player.achievements.includes("r28")) {
+	  while(player[TIER_NAMES[getTickspeedShiftRequirement(0).tier] + "Amount"] >= getTickspeedShiftRequirement(0).amount){
+		  player.tickspeedBoosts++;
+	  }
+	  player.tickspeedBoosts--;
+	  tickspeedSoftReset(1)
+	  return;
+  }else if ((!player.break && player.money.gt(Number.MAX_VALUE)) || player[name + "Amount"] < getTickspeedShiftRequirement(0).amount) return;
 	tickspeedSoftReset(1)
 };
 
@@ -740,6 +762,8 @@ function tickspeedSoftReset(bulk) {
 		ngmX: 4,
 		ngmm: 3,
 		ngm4r: 1,
+		newGame4MinusRespeccedVersion: newGame4MinusRespeccedVersion
+
 	},
 	
 	tickspeedBoosts: player.tickspeedBoosts,

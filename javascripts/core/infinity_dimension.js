@@ -52,15 +52,15 @@ function DimensionProduction(tier) {
   if (player.currentEternityChall == "eterc2")  return new Decimal(0)
   var dim = player["infinityDimension"+tier]
   var ret = dim.amount
-  if (!player.currentEternityChall == "eterc11")ret = ret.times(DimensionPower(tier))
+  if (!(player.currentEternityChall == "eterc11"))ret = ret.times(DimensionPower(tier))
   if (player.challenges.includes("postc8")) {
   let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
     if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
     }
     if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
 	  ret = ret.times(tick)
   }
@@ -107,12 +107,12 @@ function DimensionPower(tier) {
 
  dilationstart = getDilationStart();
     if(mult.log10()>=dilationstart){
-	  mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)mult = Decimal.pow(10, Math.pow(mult.log10()/dilationstart, getDilationPower())*dilationstart)
     }
  dilationstart4 = getDilationStart4();
     if(mult.log10()>=dilationstart4){
-	  mult= Decimal.pow(10, Math.pow(mult.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  mult= Decimal.pow(10, Math.pow(mult.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
   // post-dilation
   if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
@@ -127,7 +127,7 @@ function DimensionPower(tier) {
 }
 
 function getReplMult () {
-  let replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), Math.pow(player.galaxies, .4))
+  let replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount,1)), Math.pow(player.galaxies, .4))
 
   if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, Math.pow(player.galaxies, .5)))
   if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
@@ -199,7 +199,7 @@ function resetInfDimensions() {
 
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 500, 300, 100, 50, 25, 10, 5, 5]
-var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e140, 1e200, 1e250,1e280]
+var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e30, 1e70, 1e250,1e280]
 
 function getInfBuy10Mult (tier){
   if (!player.galacticSacrifice.upgrades.includes(41)) return infPowerMults[tier]
@@ -210,7 +210,6 @@ function getInfBuy10Mult (tier){
 function getInfBuy10CostDiv (tier){
   let div = 1;
   if (player.infinityUpgrades.includes("postinfi53")) div = 50
-  if (player.galacticSacrifice.upgrades.includes(42)) div *= 1 + 5 * Math.log10(player.eternityPoints.plus(1).log10()+1)
   let MAX = Math.pow(infCostMults[tier],.9);
   return Math.min(div,MAX)
   

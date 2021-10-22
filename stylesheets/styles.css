@@ -1823,3 +1823,44 @@ screen and (max-width: 480px) {
     100% {transform:scale(1); filter:blur(0px)}
 }
 
+
+
+
+.infpos {
+	position: absolute;
+	left: 75%;
+	top: 40px;
+}
+
+.eterpos {
+	position: absolute;
+	right: 75%;
+	top: 40px;
+}
+
+.quantumpos {
+	position: absolute;
+	transform: translate(-50%,0);
+	top: 40px;
+}
+
+
+
+.QK {
+	position:absolute;
+	right:50%;
+	transform:translate(105px,0);
+	width:210px;
+	font-size:12px;
+}
+
+#sacrificebtn, #pSac {
+	width: 210px;
+	height: 70px;
+	font-family: Typewriter;
+	font-size: 11px
+}
+
+#galaxyPoints2 .GPAmount {
+    font-weight: bold;
+}

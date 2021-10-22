@@ -55,20 +55,19 @@ function buyStuff(id) {
     game.amounts.push(new Decimal(0))
     if (game.prestige[id] === undefined) game.prestige[id] = 1
     
-    if (id > 5) {
+    if (id > 4) {
       const pbtn = document.createElement("button")
-      const otherbtn = document.getElementById(id-5)
-      pbtn.id = id-5+"prestige"
+      const otherbtn = document.getElementById(id-4)
+      pbtn.id = id-4+"prestige"
       pbtn.className = "prestigebtn"
       pbtn.onclick = function() {prestige(parseInt(this.id));}
       insertAfter(pbtn, otherbtn)
-      for (var i=1; i<game.costs.length-5; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-i-5, game.prestige[id-1])+"x boost."
+	  var temp=i
+      for (var i=1; i<game.costs.length-4; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+formatValue(pm(Math.max(game.costs.length-i-3, game.prestige[i-1])), 2)+"x boost."
+	  i=temp
     }
-    
-
-    
   }
-  game.amounts[i] = game.amounts[i].plus(1).max(game.amounts[i].times(1.05).min(game.amounts[id].times(10000)))
+  game.amounts[i] = game.amounts[i].plus(1)
   game.depression = game.depression.minus(game.costs[i])
   game.costs[i] = game.costs[i].times(2)
   }
@@ -87,7 +86,7 @@ function hardreset() {
 
 function prestige(id) {
   console.log(id)
-  game.prestige[id-1] = Math.max(game.costs.length-id-5, game.prestige[id-1])
+  game.prestige[id-1] = Math.max(game.costs.length-id-3, game.prestige[id-1])
   for (var i=2; i<=game.costs.length; i++) {
     var btn = document.getElementById(i)
     btn.parentNode.removeChild(btn)
@@ -102,7 +101,7 @@ function prestige(id) {
     depression: new Decimal(1),
     prestige: game.prestige
   }
-  for (var i=1; i<game.costs.length-5; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-id-5, game.prestige[id-1])+"x boost."
+  for (var i=1; i<game.costs.length-4; i++) document.getElementById(i+"prestige").innerHTML = "Reset to increase bonus to "+formatValue(pm(Math.max(game.costs.length-i-3, game.prestige[i-1])), 2)+"x boost."
 }
 
 
@@ -125,10 +124,10 @@ function load() {
     insertAfter(btn, br)
     elem = btn
   }
-  for (var i=1; i<game.costs.length-5; i++) {
+  for (var i=1; i<game.costs.length-4; i++) {
     var pbtn = document.createElement("button")
     var otherbtn = document.getElementById(i)
-    pbtn.innerHTML = "Reset to increase bonus to "+Math.max(game.costs.length-i-5, game.prestige[i-1])+"x boost."
+    pbtn.innerHTML = "Reset to increase bonus to "+formatValue(pm(Math.max(game.costs.length-i-3, game.prestige[i-1])), 2)+"x boost."
     pbtn.id = i+"prestige"
     pbtn.className = "prestigebtn"
     pbtn.onclick = function() {prestige(parseInt(this.id));}
@@ -147,13 +146,27 @@ function load() {
 
 var cheat = false;
 
+function pm(n){
+	if(n<=1)return 1;
+	if(n<=6)return 1e3**(n-1);
+	return (n-2)**25;
+}
 
 setInterval(function() {
-  game.depression = game.depression.plus(game.amounts[0].times(game.prestige[0]/33))
-  document.getElementById("1").innerHTML = "Amount: "+formatValue(game.amounts[0], 2)+"<br>Power: "+formatValue(game.prestige[0], 2)+"x<br>Cost:"+formatValue(game.costs[0], 2)
+  game.depression = game.depression.plus(dilate(game.amounts[0].times(pm(game.prestige[0])/10).times(game.costs[0].pow(0.2))))
+  document.getElementById("1").innerHTML = "Amount: "+formatValue(game.amounts[0], 2)+"<br>Power: "+formatValue(Decimal.mul(pm(game.prestige[0]),game.costs[0].pow(0.2)), 2)+"x<br>Cost:"+formatValue(game.costs[0], 2)
   for (var i=2; i <= game.costs.length; i++) {
-    document.getElementById(i).innerHTML = "Amount: "+formatValue(game.amounts[i-1], 2)+"<br>Power: "+formatValue(game.prestige[i-1], 2)+"x<br>Cost:"+formatValue(game.costs[i-1], 2)
-    game.amounts[i-2] = game.amounts[i-2].plus(game.amounts[i-1].times(game.prestige[i-1]/33))
+    document.getElementById(i).innerHTML = "Amount: "+formatValue(game.amounts[i-1], 2)+"<br>Power: "+formatValue(Decimal.mul(pm(game.prestige[i-1]),game.costs[i-1].pow(0.2)), 2)+"x<br>Cost:"+formatValue(game.costs[i-1], 2)
+    game.amounts[i-2] = game.amounts[i-2].plus(dilate(game.amounts[i-1].times(pm(game.prestige[i-1])/10).times(game.costs[i-1].pow(0.2))))
+  }
+  
+  for (var i=0; i < game.costs.length; i++) {
+    if(game.prestige[i] >= 4){
+		if (game.depression.gte(game.costs[i])){
+			buyStuff(i+1);
+			game.depression = game.depression.add(game.costs[i].div(2))
+		}
+	}
   }
   
   if (cheat) {
@@ -169,3 +182,13 @@ setInterval(function() { save() }, 5000)
 
 
 load()
+
+function dilate(a){
+	dilationstart = 1;
+	dilationpower=0.75;
+	if(game.prestige[0]>=5)dilationpower+=0.00;
+    if(a.log10()>=dilationstart){
+	  a = Decimal.pow(10, Math.pow(a.log10()/dilationstart, dilationpower)*dilationstart)
+    }
+	return a;
+}

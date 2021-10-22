@@ -251,7 +251,8 @@ function updateAchievements() {
   let temp="Normal"
   if(player.achievements.includes("r75"))temp+="/Infinity";
   if(player.eternityUpgrades.includes(4))temp+="/Time";
-  document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each Normal Dimension (post-dilation): " + player.achPow.toFixed(1) + "x"
+  document.getElementById("achmultlabel").textContent = "Current achievement multiplier on each "+temp+" Dimension (post-dilation): " + player.achPow.toFixed(1) + "x";
+  if(player.achievements.includes("r137"))document.getElementById("achmultlabel").textContent += ", on Dilated Time (pre-dilation): " + player.achPow.pow(0.2).toFixed(1) + "x";
 
 }
 

@@ -145,11 +145,11 @@ if (player.options.notation === undefined) player.options.notation = "Standard";
   }
   if (player.options.notation == "Mixed") player.options.notation = "Mixed scientific"
 
-  while (player.challengeTimes.length < 13) {
+  while (player.challengeTimes.length < 20) {
       player.challengeTimes.push(600*60*24*31);
   }
 
-  while (player.infchallengeTimes.length < 10) {
+  while (player.infchallengeTimes.length < 20) {
       player.infchallengeTimes.push(600*60*24*31);
   }
 
@@ -448,7 +448,7 @@ if (player.version < 5) {
   if (player.currentChallenge == "challenge12" || player.currentChallenge == "postc4" || player.currentChallenge == "postc8") document.getElementById("matter").style.display = "inline-block";
   else document.getElementById("matter").style.display = "none";
 
-  if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4") document.getElementById("chall13Mult").style.display = "inline-block";
+  if (player.currentChallenge == "challenge13" || player.currentChallenge == "postc4" || player.currentChallenge === "postcngm3_3" || player.challenges.includes("postcngm3_3")) document.getElementById("chall13Mult").style.display = "inline-block";
   else document.getElementById("chall13Mult").style.display = "none";
 
 
@@ -616,8 +616,8 @@ if (player.version < 5) {
 
   if (!player.options.hotkeys) document.getElementById("hotkeys").textContent = "Enable hotkeys"
 
-  player.dimPowerIncreaseCost = new Decimal(1e3).times(Decimal.pow(1e99,Math.min(player.extraDimPowerIncrease,15)+1));
-  if (player.extraDimPowerIncrease > 15) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4,5),player.extraDimPowerIncrease-15))
+  player.dimPowerIncreaseCost = new Decimal(1e13).times(Decimal.pow(10,Math.min(player.extraDimPowerIncrease,50)));
+  if (player.extraDimPowerIncrease > 50) player.dimPowerIncreaseCost = player.dimPowerIncreaseCost.times(Decimal.pow(Decimal.pow(4,5),player.extraDimPowerIncrease-50))
 
   for (tier=1;tier<9;tier++) {
     let dim = player["infinityDimension"+tier]

@@ -4,7 +4,10 @@ function canSeeTickSpeed() {
 
 function canBuyTickSpeed() {
   if (player.currentEternityChall == "eterc9") return false
+  if (player.currentChallenge === "postc7") return false
+  if (player.currentChallenge === "postcngm3_3") return false
   if (player.currentChallenge === "challenge14" && player.tickBoughtThisInf.current >= 308) return false
+  if (player.firstAmount.lte(0))return false
   return canSeeTickSpeed();
 }
 
@@ -15,7 +18,7 @@ function getPurelyGalaxies (offset) {
     if (player.timestudy.studies.includes(225)) galaxies += Math.floor(player.replicanti.amount.e / 1000)
     if (player.timestudy.studies.includes(226)) galaxies += Math.floor(player.replicanti.gal / 15)
     galaxies += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.05 * ECTimesCompleted("eterc8"))-1, 0)
-    if (player.currentChallenge === 'challenge7') galaxies = Math.pow(galaxies, 2);
+    if (player.currentChallenge === 'challenge7' || player.currentChallenge == "postcngm3_3" || player.currentChallenge == "postcngm4r_1") galaxies = Math.min(galaxies + 20, Math.pow(galaxies, 2));
     return galaxies;
 }
 
@@ -28,7 +31,7 @@ function getFinalGalaxies(offset) {
     if (player.challenges.includes("postc7")) galaxies *= 1.15;
     if (player.achievements.includes("r86")) galaxies *= 1.05;
     if (player.achievements.includes("r83")) galaxies *= 1.05;
-    if (player.infinityUpgrades.includes("postinfi51")) galaxies *= 1.2;
+    if (player.infinityUpgrades.includes("postinfi51")) galaxies *= 1.4;
     if (player.timestudy.studies.includes(212)) galaxies *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
     if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
     return galaxies;
@@ -36,11 +39,11 @@ function getFinalGalaxies(offset) {
 
 function getTickSpeedMultiplier() {
   let ret=1;
-  //if (player.currentEternityChall === "eterc1") return 1;
-  //if (player.challenges.includes("postc3")) return Math.pow(.998, getFinalGalaxies(0))
-  //if (player.currentChallenge === "postc3") return Math.pow(.998, getFinalGalaxies(0))
-  if (player.currentChallenge === "challenge7")ret /= 1.002;
-  if (player.achievements.includes("r51")) ret /= 1.001;
+  if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,getFinalGalaxies(0));
+  if (player.currentChallenge === "challenge7")ret /= 1.001;
+  if (player.currentChallenge === "postcngm3_3")ret /= 1.001;
+  if (player.currentChallenge === "postcngm4r_1")ret /= 1.001;
+  if (player.achievements.includes("r51"))ret /= 1.001;
   return ret;
 }
 
@@ -94,7 +97,7 @@ function buyTickSpeed() {
 
   player.money = player.money.minus(player.tickSpeedCost);
   player.tickBoughtThisInf.current++;
-  if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc7") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
+  if (player.currentChallenge != "challenge5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
   else multiplySameCosts(player.tickSpeedCost)
   if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease());
   if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc4") player.chall2Pow = 0
@@ -119,7 +122,7 @@ function buyMaxTickSpeed() {
       while (player.money.gte(player.tickSpeedCost) && canBuyTickSpeed() && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || player.currentChallenge == "postc7")) {
           player.money = player.money.minus(player.tickSpeedCost);
           player.tickBoughtThisInf.current++;
-          if (player.currentChallenge != "challenge5" && player.currentChallenge != "postc7") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
+          if (player.currentChallenge != "challenge5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
           else multiplySameCosts(player.tickSpeedCost)
           if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease());
           player.tickspeed = player.tickspeed.times(mult);
@@ -159,12 +162,12 @@ function updateTickSpeed() {
   let tickbeforedilation = tick
   dilationstart = getDilationStart();
     if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
+	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
     }
   dilationstart4 = getDilationStart4();
     if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, player.dilation.upgrades.includes(9)?0.77:0.75)*dilationstart4)
+	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
   document.getElementById("tickSpeedAmount").textContent = 'Tickrate: ' + shorten(tick) + '/s (' + shorten(tickbeforedilation) +' before dilation)';
   //if (exp > 1) {
