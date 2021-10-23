@@ -12,7 +12,7 @@ function getDimensionPreDilationMultiplier(tier) {
 	  if (player.dilation.active)infpow = Decimal.pow(10, Math.pow(infpow.log10()/dilationstart, getDilationPower())*dilationstart)
     }
 
-  multiplier = multiplier.times(player.achPow);
+ 
   multiplier = multiplier.times(kongDimMult)
   multiplier = multiplier.times(kongAllDimMult)
   let y = 7;
@@ -153,7 +153,7 @@ function getDimensionFinalMultiplier(tier) {
   if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42)) {
     multiplier = multiplier.times(galUpgrade12())
   }
-  
+  multiplier = multiplier.times(player.achPow);
   if (multiplier.lt(1)) multiplier = new Decimal(1);
   return multiplier;
 }
