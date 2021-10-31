@@ -39,7 +39,9 @@ function getFinalGalaxies(offset) {
 
 function getTickSpeedMultiplier() {
   let ret=1;
-  if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,getFinalGalaxies(0));
+  let galaxies = getFinalGalaxies(0);
+  if(galaxies >= 1000)galaxies = Math.sqrt(galaxies*1000);
+  if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,galaxies);
   if (player.currentChallenge === "challenge7")ret /= 1.001;
   if (player.currentChallenge === "postcngm3_3")ret /= 1.001;
   if (player.currentChallenge === "postcngm4r_1")ret /= 1.001;

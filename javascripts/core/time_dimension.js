@@ -198,10 +198,14 @@ if (player.firstBought < 1) {
   if (dim.costAntimatter.gte("1e5000")) {
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
+  if (dim.costAntimatter.gte("1e50000")) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
   if (player.currentChallenge == "postcngm3_1"){
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
   }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
   if (player.money.lt(dim.costAntimatter)) return false
 
   player.money = player.money.minus(dim.costAntimatter)
@@ -214,10 +218,14 @@ if (player.firstBought < 1) {
   if (dim.costAntimatter.gte("1e5000")) {
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
+  if (dim.costAntimatter.gte("1e50000")) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
   if (player.currentChallenge == "postcngm3_1"){
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
   }
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
   dim.power = dim.power.times(Math.sqrt(1.5))
   updateEternityUpgrades()
   return true
@@ -240,8 +248,57 @@ function buyMaxTimeDimensions() {
 }
 
 function autobuyerBuyTimeDimensions(i, bulk){
-	while(bulk>0){
-		if(!buyTimeDimensionAntimatter(i,1))break;
-		bulk--;
+	let tier=i
+	if (tier > player.tdBoosts + 1)return false;
+	if (player.firstBought < 1) return false;
+	if (!buyTimeDimensionAntimatter(i,1))return false;
+	var dim = player["timeDimension"+tier]
+	if (player.money.lt(dim.costAntimatter))return false;
+	let testamount = Math.min(bulk,9e15);
+	bulk=Math.floor(bulk);
+	let realbulk = 0
+	while(testamount>=1){
+		let test=dim.boughtAntimatter + testamount + realbulk
+		let test2=Decimal.pow(timeDimCostMultsAntimatter[tier], test).times(timeDimStartCostsAntimatter[tier]) 
+		if (test2.gte(Number.MAX_VALUE)) {
+			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*1.5, test).times(timeDimStartCostsAntimatter[tier])
+		}
+		if (test2.gte("1e5000")) {
+			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, test).times(timeDimStartCostsAntimatter[tier])
+		}
+  if (test2.gte("1e50000")) {
+      test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, test).times(timeDimStartCostsAntimatter[tier])
+  }
+		if (player.currentChallenge == "postcngm3_1"){
+			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,test)-1)*100).times(timeDimStartCostsAntimatter[tier])
+		}
+  if (player.galacticSacrifice.upgrades.includes(11)) test2 =  test2.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(63)) test2 =  test2.div(galUpgrade63())
+		if (player.money.gte(test2))realbulk += testamount
+		if(testamount==1)break;
+		testamount=Math.ceil(testamount/2)
+		if(realbulk>bulk)realbulk=bulk
 	}
+	realbulk++;
+	if(realbulk>bulk)realbulk=bulk
+	//console.log(i,realbulk);
+	dim.power = dim.power.times(Decimal.pow(1.5,realbulk/2));
+	dim.boughtAntimatter += realbulk;
+	dim.amount = dim.amount.plus(realbulk);
+dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  if (dim.costAntimatter.gte(Number.MAX_VALUE)) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*1.5, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
+  if (dim.costAntimatter.gte("1e5000")) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
+  if (dim.costAntimatter.gte("1e50000")) {
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+  }
+  if (player.currentChallenge == "postcngm3_1"){
+	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
+  }
+  if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
+	updateEternityUpgrades()
 }

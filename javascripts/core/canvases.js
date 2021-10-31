@@ -160,6 +160,7 @@ function drawStudyTree() {
     drawTreeBranch("22", "32");
     drawTreeBranch("31", "41");
     drawTreeBranch("32", "42");
+    drawTreeBranch("32", "43");
     drawTreeBranch("41", "51");
     drawTreeBranch("42", "51");
     drawTreeBranch("51", "61");

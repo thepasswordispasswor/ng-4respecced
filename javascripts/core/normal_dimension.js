@@ -49,7 +49,7 @@ function getDimensionPreDilationMultiplier(tier) {
   if (player.achievements.includes("r31")) multiplier = multiplier.times(productAllTotalBought1());
   if (player.achievements.includes("r48")) multiplier = multiplier.times(1.1);
   if (player.achievements.includes("r72")) multiplier = multiplier.times(10); // tbd
-  if (player.achievements.includes("r46")) multiplier = multiplier.times(productAllDims1())
+  //if (player.achievements.includes("r46")) multiplier = multiplier.times(productAllDims1())
   if (player.achievements.includes("r74") && player.currentChallenge != "") multiplier = multiplier.times(40);
   if (player.achievements.includes("r77")) multiplier = multiplier.times(1+tier/10);
   if (player.achievements.includes("r84")) multiplier = multiplier.times(player.money.pow(0.0002).plus(1));
@@ -153,6 +153,7 @@ function getDimensionFinalMultiplier(tier) {
   if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42)) {
     multiplier = multiplier.times(galUpgrade12())
   }
+  if (player.infinityUpgrades.includes("postinfi73")&&tier == 8) multiplier = multiplier.times(calcTotalSacrificeBoost())
   multiplier = multiplier.times(player.achPow);
   if (multiplier.lt(1)) multiplier = new Decimal(1);
   return multiplier;

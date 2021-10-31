@@ -199,6 +199,9 @@ function giveAchievement(name) {
 	if (name == "A new beginning.") {
 		player.eternityPoints = player.eternityPoints.add(1);
 	}
+	if (name == "Ludicrous Speed" || name == "I brake for nobody") {
+		player.eternityPoints = player.eternityPoints.add(1);
+	}
     updateAchievements();
 }
 

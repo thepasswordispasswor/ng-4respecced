@@ -3,12 +3,17 @@ function getGSAmount() {
   let y = 1.5
   if (player.challenges.includes("postc1")) y += Math.max(0, 0.05*(galaxies - 10)) + 0.005 * Math.pow(Math.max(0, galaxies-30) , 2);
   if (player.challenges.includes("postcngm3_4")) y += Math.max(0, 0.05*galaxies) + 0.0005 * Math.pow(Math.max(0, galaxies - 50) , 3);
-  if (!player.galacticSacrifice.upgrades.includes(52)){
-    if (y>100) y = Math.pow(316.22*y,1/3)
-    else if (y>10) y = Math.pow(10*y , .5)
-  } else if (y >100){
-    y = Math.pow(1e4*y , 1/3)
+  if (player.galacticSacrifice.upgrades.includes(62)) y += Math.sqrt(player.replicanti.galaxies);
+  if (player.galacticSacrifice.upgrades.includes(54)) {
+    y *= 2;
   }
+  //if (!player.galacticSacrifice.upgrades.includes(52)){
+   // if (y>100) y = Math.pow(316.22*y,1/3)
+   //else if (y>10) y = Math.pow(10*y , .5)
+  //} else 
+  //if (y >100){
+  //  y = Math.pow(1e4*y , 1/3)
+  //}
   let z = 1
   //if (player.challenges.length >17) {
   //  z = 0.06*player.challenges.length
@@ -27,10 +32,22 @@ function getGSAmount() {
   if (player.infinityUpgrades.includes("galPointMult")) {
     ret = ret.times(getPost01Mult())
   }
+  if (player.infinityUpgrades.includes("postinfi71")) {
+    ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(0.2))
+  }
   if (player.achievements.includes('r37')) {
     ret = ret.times(thatsFastReward());
   }
   if (player.achievements.includes("r62")) ret = ret.times(Math.max(1, player.infinityPoints.log10()))
+  if (player.replicanti.unl && player.replicanti.amount.gt(1)) {
+      var replmult = getReplMult();
+
+      ret = ret.times(replmult)
+  }
+    if (player.achievements.includes("r106")) ret = ret.times(Decimal.pow(10,player.replicanti.galaxies));
+  if (player.galacticSacrifice.upgrades.includes(64)) {
+    ret = ret.times(galUpgrade64());
+  }
   return ret.floor();
 }
 
@@ -55,7 +72,7 @@ function thatsFastReward () {
 
 function getPost01Mult() {
   let ret=getInfinitied();
-  if (player.timestudy.studies.includes(31)) ret = ret.pow(4);
+  if (player.timestudy.studies.includes(31)) ret = Math.pow(ret,4);
   return ret;
 }
 
@@ -113,11 +130,7 @@ let galUpgrade13 = function () {
   let base = player.galacticSacrifice.galaxyPoints.div(5).plus(1).pow(3);
   let exp = 1;
   if (player.infinityUpgrades.includes("postinfi62")) {
-    if (player.currentEternityChall === "") {
-      exp = Math.pow(Math.log(player.resets+3),2);
-    } else {
-      exp = Math.pow(Math.log(player.resets+3),0.5);
-    }
+    exp = Math.pow(Math.log(player.resets+3),2);
   }
   return base.pow(exp);
 }
@@ -188,9 +201,37 @@ let galUpgrade45 = function () {
 
 let galUpgrade51 = function () {
 	if(player.currentChallenge == "postcngm3_4")return new Decimal(1);
+  let ret = player.galacticSacrifice.galaxyPoints.add(10).log10()
+  ret=Math.sqrt(ret);
+  return ret;
+}
+
+let galUpgrade52 = function () {
+	if(!player.replicanti.unl)return new Decimal(1);
+  let ret = player.replicanti.amount.max(1).pow(0.5)
+  if (player.galacticSacrifice.upgrades.includes(62))ret = player.replicanti.amount.max(1)
+  return ret;
+}
+
+let galUpgrade61 = function () {
+	if(player.currentChallenge == "postcngm3_4")return new Decimal(1);
   let x = player.galacticSacrifice.galaxyPoints.pow(.001)
   if (x.log10()>20) return Decimal.pow(10,Math.pow(20*x.log10(),.5))
   return x
+}
+
+let galUpgrade63 = function () {
+	let totalbought=0
+for(i = 1;i <= 8; i++){
+	totalbought=totalbought+player["timeDimension"+i].bought;
+}
+return Decimal.pow(1e200,Math.pow(totalbought,0.9));
+}
+
+let galUpgrade64 = function () {
+  let base = new Decimal(2);
+  let exp = player.tickspeedBoosts;
+  return base.pow(exp);
 }
 
 function galacticSacrifice() {
@@ -208,9 +249,9 @@ function GSUnlocked() {
 }
 
 function galacticUpgradeSpanDisplay () {
-  if(player.infinitied<=0 && player.eternities<=0)document.getElementById('galaxy11').innerHTML = "Normal and Time dimensions are 99% cheaper when buying with antimatter.<br>Cost: 1 GP";
-  else if(player.eternities<=0)document.getElementById('galaxy11').innerHTML = "Normal and Time dimensions are cheaper based on your infinitied stat when buying with antimatter.<br>Currently: "+shortenDimensions(galUpgrade11())+"x<br>Cost: 1 GP";
-  else document.getElementById('galaxy11').innerHTML = "Normal and Time dimensions are cheaper based on your infinitied stat in this eternity when buying with antimatter.<br>Currently: "+shortenDimensions(galUpgrade11())+"x<br>Cost: 1 GP";
+  if(player.infinitied<=0 && player.eternities<=0)document.getElementById('galaxy11').innerHTML = "ND and TD are 99% cheaper when buying with antimatter.<br>Cost: 1 GP";
+  else if(player.eternities<=0)document.getElementById('galaxy11').innerHTML = "Reduce ND and TD antimatter costs based on your infinitied stat.<br>Currently: /"+shortenDimensions(galUpgrade11())+"<br>Cost: 1 GP";
+  else document.getElementById('galaxy11').innerHTML = "Reduce ND and TD antimatter costs based on your infinitied stat in this eternity.<br>Currently: /"+shortenDimensions(galUpgrade11())+"<br>Cost: 1 GP";
   document.getElementById("galaxy12").innerHTML="Normal and Time Dimensions gain a multiplier based on time spent in this Galactic Sacrifice.<br>Currently: "+ galUpgrade12().toFixed(2)+"x<br>Cost: 3 GP"
   document.getElementById("galaxy13").innerHTML="Normal and Time Dimensions gain a multiplier based on your Galaxy points.<br>Currently: "+ formatValue(player.options.notation, galUpgrade13(), 2, 2)+"x<br>Cost: 20 GP"
   document.getElementById("galaxy14").innerHTML="Time Dimensions gain a multiplier based on your tickspeed boosts.<br>Currently: "+ formatValue(player.options.notation, galUpgrade14(), 2, 2)+"x<br>Cost: "+shortenCosts(galUpgradeCosts[14])+" GP"
@@ -239,10 +280,24 @@ function galacticUpgradeSpanDisplay () {
   document.getElementById("galcost44").innerHTML = shortenCosts(galUpgradeCosts[44]);
   document.getElementById("galcost45").innerHTML = shortenCosts(galUpgradeCosts[45]);
   document.getElementById("galspan51").innerHTML = formatValue(player.options.notation, galUpgrade51(), 2,2);
-  document.getElementById("galcost51").innerHTML = shortenCosts(new Decimal("1e5500"));
-  document.getElementById("galcost52").innerHTML = shortenCosts(new Decimal("1e8000"));
-  document.getElementById("galcost53").innerHTML = shortenCosts(new Decimal("1e25000"));
-
+  document.getElementById("galcost51").innerHTML = shortenCosts(galUpgradeCosts[51]);
+  document.getElementById("galspan52").innerHTML = formatValue(player.options.notation, galUpgrade52(), 2,2);
+  document.getElementById("galcost52").innerHTML = shortenCosts(galUpgradeCosts[52]);
+  document.getElementById("galcost53").innerHTML = shortenCosts(galUpgradeCosts[53]);
+  document.getElementById("galcost54").innerHTML = shortenCosts(galUpgradeCosts[54]);
+  document.getElementById("galspan55").innerHTML = "exponent ^"+getDilationPower().toFixed(4)+" -> ^"+(getDilationPower()+0.002*Math.log10(player.replicanti.amount.max(1).add(9).log10())).toFixed(4);
+  if(player.galacticSacrifice.upgrades.includes(55))document.getElementById("galspan55").innerHTML = "exponent ^"+getDilationPower().toFixed(4);
+  document.getElementById("galcost55").innerHTML = shortenCosts(galUpgradeCosts[55]);
+  document.getElementById("galspan61").innerHTML = formatValue(player.options.notation, galUpgrade61(), 2,2);
+  document.getElementById("galcost61").innerHTML = shortenCosts(galUpgradeCosts[61]);
+  if(player.galacticSacrifice.upgrades.includes(62))document.getElementById("galspan62").innerHTML = "Replicanti";else document.getElementById("galspan62").innerHTML = "sqrt(replicanti)";
+  document.getElementById("galcost62").innerHTML = shortenCosts(galUpgradeCosts[62]);
+  document.getElementById("galspan63").innerHTML = formatValue(player.options.notation, galUpgrade63(), 2,2);
+  document.getElementById("galcost63").innerHTML = shortenCosts(galUpgradeCosts[63]);
+  document.getElementById("galspan64").innerHTML = formatValue(player.options.notation, galUpgrade64(), 2,2);
+  document.getElementById("galcost64").innerHTML = shortenCosts(galUpgradeCosts[64]);
+  document.getElementById("galspan65").innerHTML = formatValue(player.options.notation, Number.MAX_VALUE, 2,2);
+  document.getElementById("galcost65").innerHTML = shortenCosts(galUpgradeCosts[65]);
 }
 
 function newGalacticDataOnInfinity () {
@@ -284,9 +339,16 @@ let galUpgradeCosts = {
   43: 1e16,
   44: 1e18,
   45: 1e25,
-  51: new Decimal("1e5500"),
-  52: new Decimal("1e8000"),
-  53: new Decimal("1e25000")
+  51: 1e70,
+  52: 1e80,
+  53: 1e90,
+  54: 1e100,
+  55: 1e110,
+  61: new Decimal(Number.MAX_VALUE),
+  62: 1e180,
+  63: new Decimal("1e400"),
+  64: new Decimal("1e500"),
+  65: new Decimal("1e550"),
 }
 
 function canBuyGalUpgrade(num) {
@@ -296,7 +358,7 @@ function canBuyGalUpgrade(num) {
 }
 
 function galacticUpgradeButtonTypeDisplay () {
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 6; i++) {
     for (let j = 1; j <= 5; j++) {
       let e = document.getElementById('galaxy' + i + j);
 	  if(!e)continue;
@@ -338,7 +400,7 @@ function buyGalaxyUpgrade (i) {
           if (name !== null) player[name+"Cost"] = player[name+"Cost"].div(100)
       })
     }
-    if (i == 41) {
+    if (i == 65) {
       for (n=1;n<9;n++) {
         var dim = player["infinityDimension"+n]
         dim.power = Decimal.pow(getInfBuy10Mult(n), dim.baseAmount/10)

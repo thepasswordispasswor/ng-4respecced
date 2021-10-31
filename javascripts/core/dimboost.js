@@ -547,6 +547,11 @@ function getTSBScaling2(){
 	return ret;
 }
 
+function getTSBScaling3(){
+	let ret=100;
+	return ret;
+}
+
 function getTickspeedShiftRequirement(bulk) {
   let amount = 30+10*player.tickspeedBoosts;
   
@@ -563,6 +568,11 @@ function getTickspeedShiftRequirement(bulk) {
   if(player.tickspeedBoosts>=getTSBScaling2()){
 	  prefix = "Further ";
 	  amount += (player.tickspeedBoosts-getTSBScaling2())*(player.tickspeedBoosts-getTSBScaling2()+1)*4;
+  }
+  
+  if(player.tickspeedBoosts>=getTSBScaling3()){
+	  prefix = "Remote ";
+	  amount = amount * Math.pow(1.002,player.tickspeedBoosts-getTSBScaling3()+1);
   }
   return { tier: 8, amount: Math.ceil(amount), prefix: prefix };
 }

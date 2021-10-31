@@ -93,6 +93,7 @@
                     <td><button class="secondarytabbtn" onclick="showEternityTab('timestudies')">Time studies</button></td>
                     <td><button class="secondarytabbtn" onclick="showEternityTab('eternityupgrades')">Eternity upgrades</button></td>
                     <td><button class="secondarytabbtn" onclick="showEternityTab('milestones')">Eternity milestones</button></td>
+                    <td><button class="secondarytabbtn" onclick="showEternityTab('timeless')" id="timelessTabbtn" style="display:none;">Timeless</button></td>
                     <td><button class="secondarytabbtn" onclick="showEternityTab('dilation')" id="dilationTabbtn" style="display:none;">Time dilation</button></td>
                 </tr>
             </table>
@@ -104,6 +105,11 @@
                     <td><button class="storebtn" onclick="respecToggle()" id="respec" style="width:150px; height: 40px; font-size: 10px; margin: auto">Respec time studies on next Eternity</button><td>
                     <td><button class="storebtn" onclick="importStudyTree()" style="width:150px; height: 40px; font-size: 10px; margin: auto">Import tree</button><td>
                 </tr>
+				<table class="table" id="forceRespecStudy">
+                <tr>
+                    <td><button class="storebtn" onclick="forceRespecStudy()" id="forceRespecStudy1" style="width:150px; height: 40px; font-size: 10px; margin: auto">Respec time studies and restart this eternity</button><td>
+                </tr>
+				</table>
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="timestudylocked" id="23" onclick="buyTimeStudy(23, 0)">Tickspeed affects Time Dimensions. Cost: 0 Time Theorems</button></td>
@@ -115,7 +121,7 @@
                 <table class="table" id="studytable">
                     <tr>
                         <td><button class="timestudy" id="21" onclick="buyTimeStudy(21, 3)">Replicanti multiplier formula is better<br>Req: Unlock Replicanti or Eternitied at least once<span>Cost: 3 Time Theorems</button></td>
-                        <td><button class="timestudy" id="22" onclick="buyTimeStudy(22, 2)">Replicanti interval limit 50ms -> 1ms<br>Req:  Eternitied at least once<span>Cost: 2 Time Theorems</button></td>
+                        <td><button class="timestudy" id="22" onclick="buyTimeStudy(22, 2)">Base replicanti interval limit 50ms -> 1ms<br>Req:  Eternitied at least once<span>Cost: 2 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
@@ -123,13 +129,15 @@
                         <td><button class="timestudy" id="33" onclick="buyTimeStudy(33, 2)">You keep half of your replicanti galaxies on infinity<br>Req:  Eternitied at least once<span>Cost: 2 Time Theorems</button></td>
                         <td><button class="timestudy" id="31" onclick="buyTimeStudy(31, 3)">Powers up infinity upgrades that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
                         <td><button class="timestudy" id="32" onclick="buyTimeStudy(32, 2)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
-                        <td style="opacity: 0;"><button class="timestudylocked"></button></td>
+                        <td><button class="timestudylocked" id="34" style="opacity: 0;">Base replicanti interval limit 1ms -> ???<span>Cost: ??? Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
+                        <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Each galaxy gives a 1.2x multiplier on IP gained. <span>Cost: 4 Time Theorems</button></td>
-                        <td><button class="timestudy" id="42" onclick="buyTimeStudy(42, 6)">Galaxy requirement base increase is multiplied by 13/15.<span>Cost: 6 Time Theorems</button></td>
+                        <td><button class="timestudy" id="42" onclick="buyTimeStudy(42, 6)">Galaxy requirement base increase is reduced by 6.<span>Cost: 6 Time Theorems</button></td>
+						<td><button class="timestudy" id="43" onclick="buyTimeStudy(43, 15)">Gain 10% of infinitied gain per second.<span>Cost: 15 Time Theorems</button></td>
                     </tr>
                 </table>
                 <br>
@@ -220,7 +228,7 @@
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="171" onclick="buyTimeStudy(171, 15)">Time shard requirement for the next tickspeed upgrade goes up slower<span>Cost: 15 Time Theorems</button></td>
+                        <td><button class="timestudy" id="171" onclick="buyTimeStudy(171, 15)">Time shard requirement for the next tickspeed upgrade goes up slower<br>Req: Unlock Timeless<span>Cost: 15 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
@@ -232,7 +240,7 @@
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="181" onclick="buyTimeStudy(181, 200)">You gain 1% of your IP gained on crunch each second.<span>Cost: 200 Time Theorems</button></td>
+                        <td><button class="timestudy" id="181" onclick="buyTimeStudy(181, 200)">You gain 1% of your GP and IP gained on crunch each second.<span>Cost: 200 Time Theorems</button></td>
                     </tr>
                     <tr>
                         <td><button class="eternitychallengestudy" id="ec10unl">Eternity Challenge 10<span>Requirement: 1e100 EP<span>Cost: 200 Time Theorems</button></td>
@@ -351,13 +359,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <div class="eternityupbtnbought" style="opacity: 0"></div>
+                            <button id="eter7" class="eternityupbtnlocked" onclick="buyEternityUpgrade(7, 1e20)">Unlock Timeless</button>
                         </td>
                         <td>
                             <button id="epmult" class="eternityupbtn" onclick="buyEPMult()">You gain 5 times more EP<p>Cost: 500 EP</button>
                         </td>
                         <td>
-                            <div class="eternityupbtnbought" style="opacity: 0"></div>
+                            <button id="eter8" class="eternityupbtnbought" style="opacity: 0"></button>
                         </td>
                     </tr>
                 </table>
@@ -1423,10 +1431,10 @@
                                 <div id="Minute of infinity" class="achievement achievementlocked" style="background-image: url(images/60.png)" ach-tooltip="Reach 1e260 infinity power. Reward: Double infinity power gain."><br></div>
                             </td>
                             <td>
-                                <div id="Is this safe?" class="achievement achievementlocked" style="background-image: url(images/61.png)" ach-tooltip="Gain Infinite replicanti in 30 minutes. Reward: Infinity doesn't reset your replicanti amount."><br></div>
+                                <div id="Is this safe?" class="achievement achievementlocked" style="background-image: url(images/61.png)" ach-tooltip="Gain Infinite replicanti in 30 minutes. Reward: Infinity doesn't reset your replicanti amount, and unlock 2 new Infinity Challenges."><br></div>
                             </td>
                             <td>
-                                <div id="Time is relative" class="achievement achievementlocked" style="background-image: url(images/62.png)" ach-tooltip="Go Eternal."><br></div>
+                                <div id="Time is relative" class="achievement achievementlocked" style="background-image: url(images/62.png)" ach-tooltip="Go Eternal. Reward: Gain more EP based on eternities, dilation effect is reduced, unlock more galaxy upgrades, multiply first dilation threshold by 10, multiply fourth dilation threshold by (EP+1), and the base of Break Infinity upgrade 'You gain more IP based on galaxies' is increased by 0.5."><br></div>
                             </td>
                             <td>
                                 <div id="Yes. This is hell." class="achievement achievementlocked" style="background-image: url(images/63.png)" ach-tooltip="Get the sum of Infinity Challenge times under 6.66 seconds."><br></div>
@@ -1446,13 +1454,13 @@
                                 <div id="This achievement doesn't exist II" class="achievement achievementlocked" style="background-image: url(images/67.png)" ach-tooltip="Reach 9.99999e999 IP. Reward: Gain more IP based on amount of antimatter you had when crunching."><br></div>
                             </td>
                             <td>
-                                <div id="That wasn't an eternity" class="achievement achievementlocked" style="background-image: url(images/68.png)" ach-tooltip="Eternity in under 30 seconds. Reward: Start eternities with 2e25 IP."><br></div>
+                                <div id="That wasn't an eternity" class="achievement achievementlocked" style="background-image: url(images/68.png)" ach-tooltip="Eternity in under 1 minute. Reward: Start eternities with 2e25 IP, and gain 2e25x more IP."><br></div>
                             </td>
                             <td>
                                 <div id="Infinite time" class="achievement achievementlocked" style="background-image: url(images/69.png)" ach-tooltip="Get 308 tickspeed upgrades (in one eternity) from time dimensions. Reward: Time dimensions are affected slightly more by tickspeed multiplier."><br></div>
                             </td>
                             <td>
-                                <div id="The swarm" class="achievement achievementlocked" style="background-image: url(images/70.png)" ach-tooltip="Get 10 replicanti galaxies in 15 seconds."><br></div>
+                                <div id="The swarm" class="achievement achievementlocked" style="background-image: url(images/70.png)" ach-tooltip="Get 10 replicanti galaxies in 15 seconds. Reward: Multiply GP and IP gain by (10^replicanti galaxies)."><br></div>
                             </td>
                             <td>
                                 <div id="Do you really need a guide for this?" class="achievement achievementlocked" style="background-image: url(images/71.png)" ach-tooltip="Eternity with the infinitied stat under 10."><br></div>
@@ -1952,6 +1960,34 @@
                             </div>
                         </td>
                     </tr>
+                    <tr id="replicantiICrow" style="display:none">
+                        <td>
+                            <div class="infchallengediv" id="postcngm4r_3div" style="height: 140px">
+                                <span>(IC NG-4R-3) Replicanti does not grow, and is set to 1. Replicanti galaxies are cleared.</span>
+                                <br>
+                                <br>
+                                <div class="outer">
+                                    <button id="postcngm4r_3" class="challengesbtn" onclick="startChallenge('postcngm4r_3', new Decimal('1e19500'))">Start</button>
+                                    <br>
+                                    <span id="postcngm4r_3goal" >Goal: 1e550</span><br>
+                                    <span>Reward: log10(replicanti+1)^5 boost IP gain.</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="infchallengediv" id="postcngm4r_4div" style="height: 140px">
+                                <span>(IC NG-4R-4) Distant, Further, Remote, and Dark Matter galaxy scaling are applied instantly.</span>
+                                <br>
+                                <br>
+                                <div class="outer">
+                                    <button id="postcngm4r_4" class="challengesbtn" onclick="startChallenge('postcngm4r_4', new Decimal('1e30000'))">Start</button>
+                                    <br>
+                                    <span id="postcngm4r_4goal" >Goal: 1e550</span><br>
+                                    <span>Reward: Remote galaxy scaling is 10% weaker.</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td>
                             <div class="infchallengediv" id="postc1div" style="height: 140px; display: none">
@@ -2357,7 +2393,7 @@
 				</tr>
 	<tr id="newgalrow1">
 				    <td>
-                <button id="galaxy41" class="infinistorebtn1" onclick="buyGalaxyUpgrade(41)">Tickspeed boosts multiply GP gain.<br>Currently: <span id='galspan41'>x</span>x<br>Cost: <span id='galcost41'>1e1650</span> GP</button>
+                <button id="galaxy41" class="infinistorebtn1" onclick="buyGalaxyUpgrade(41)">Tickspeed boosts boost GP gain.<br>Currently: <span id='galspan41'>x</span>x<br>Cost: <span id='galcost41'>1e1650</span> GP</button>
             </td>
             <td>
                 <button id="galaxy42" class="infinistorebtn2" onclick="buyGalaxyUpgrade(42)">Galaxy Upgrade 12 is boosted, and applied post-dilation.<br>Cost: <span id='galcost42'>1e2250</span> GP</button>
@@ -2374,13 +2410,36 @@
 				</tr>
 	<tr id="newgalrow2">
 				    <td>
-                <button id="galaxy51" class="infinistorebtn1" onclick="buyGalaxyUpgrade(51)">Multiplier to EP based on GP<br>Currently: <span id='galspan51'>?</span>x<br>Cost: <span id='galcost51'>1e4500</span> GP</button>
+                <button id="galaxy51" class="infinistorebtn1" onclick="buyGalaxyUpgrade(51)">GP divide replicanti interval.<br>Currently: /<span id='galspan51'>?</span><br>Cost: <span id='galcost51'>1e4500</span> GP</button>
             </td>
             <td>
-                <button id="galaxy52" class="infinistorebtn2" onclick="buyGalaxyUpgrade(52)">Reduce softcap of galaxy exponent for GP<br>Cost: <span id='galcost52'>1e5500</span> GP</button>
+                <button id="galaxy52" class="infinistorebtn2" onclick="buyGalaxyUpgrade(52)"><span id='galspan62'>?</span> multiply third dilation threshold.<br>Currently: <span id='galspan52'>?</span>x<br>Cost: <span id='galcost52'>1e5500</span> GP</button>
             </td>
             <td>
                 <button id="galaxy53" class="infinistorebtn3" onclick="buyGalaxyUpgrade(53)">Increase 2x IP mults based on GP<br>Cost: <span id='galcost53'>1e15000</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy54" class="infinistorebtn4" onclick="buyGalaxyUpgrade(54)">Galaxy exponent to GP gain is doubled.<br>Cost: <span id='galcost54'>1e15000</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy55" class="infinistorebtn4" onclick="buyGalaxyUpgrade(55)">Increase replicanti effect to dilation effect.<br>Currently: <span id='galspan55'>?</span><br>Cost: <span id='galcost55'>1e15000</span> GP</button>
+            </td>
+				</tr>
+	<tr id="newgalrow3">
+				    <td>
+                <button id="galaxy61" class="infinistorebtn1" onclick="buyGalaxyUpgrade(61)">Multiplier to EP based on GP<br>Currently: <span id='galspan61'>?</span>x<br>Cost: <span id='galcost61'>1e4500</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy62" class="infinistorebtn2" onclick="buyGalaxyUpgrade(62)">Boost the upgrade above, and boost Galaxy exponent to GP gain based on replicanti galaxies.<br>Cost: <span id='galcost62'>1e5500</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy63" class="infinistorebtn3" onclick="buyGalaxyUpgrade(63)">Reduce TD antimatter costs based on bought TDs with EP<br>Currently: /<span id='galspan63'>?</span><br>Cost: <span id='galcost63'>1e15000</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy64" class="infinistorebtn4" onclick="buyGalaxyUpgrade(64)">Tickspeed boosts multiply second dilation threshold and GP gain.<br>Currently: <span id='galspan64'>?</span>x<br>Cost: <span id='galcost64'>1e15000</span> GP</button>
+            </td>
+            <td>
+                <button id="galaxy65" class="infinistorebtn4" onclick="buyGalaxyUpgrade(65)">Effect of Break Infinity Upgrade 'The multiplier for buying Infinity Dimensions are X' is <span id='galspan65'>?</span><br>Cost: <span id='galcost65'>1e15000</span> GP</button>
             </td>
 				</tr>
 
@@ -2904,6 +2963,20 @@
 		      <button id="postinfi63" class="infinistorebtn1"> Unlock two new rows of galaxy upgrades <br> Cost: 1e2000 IP </button>
 		    </td>
                   </tr>
+                  <tr id="postinfir7">
+                    <td>
+                      <button id="postinfi70" class="infinistorebtn1"></button>
+                    </td>
+	            <td>
+		      <button id="postinfi71" class="infinistorebtn1"></button>
+		    </td>
+		    <td>
+		      <button id="postinfi72" class="infinistorebtn1"></button>
+		    </td>
+		    <td>
+		      <button id="postinfi73" class="infinistorebtn1"></button>
+		    </td>
+                  </tr>
                 </table>
                 <div>
                     <table id="footer">
@@ -2927,7 +3000,8 @@
             <button class="storebtn" id="replicantiunlock" onclick="unlockReplicantis()" style="width:200px; height: 80px">Unlock Replicantis<br>Cost: 1e140 IP</button>
             <div id="replicantidiv" style="display: none; width: 1000px">
                 <div id="eterc8repl" style="display: none;"></div>
-                <p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti. Translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x post-dilation multiplier on all infinity dimensions</p>
+                <p style="font-size: 15px">You have <span id="replicantiamount" style="font-size:23px; color: black">0</span> replicanti. Translated to <span id="replicantimult" style="font-size:23px; color: black">0</span>x post-dilation multiplier on all infinity dimensions and GP gain</p><br>
+				<span id="scREP">Replicanti affects dilation effect at a slightly reduced rate.</span>
                 <br>
                 <button class="storebtn" id="replicantichance" onclick="upgradeReplicantiChance()" style="width:180px; height: 50px; font-size: 10px">Replicate chance: 1%<br>+1% Costs: 1e6969 IP</button>
                 <button class="storebtn" id="replicantiinterval" onclick="upgradeReplicantiInterval()" style="width:180px; height: 50px; font-size: 10px">Interval: 1000ms<br>-> 900 Costs: 1e6969 IP</button>

@@ -127,9 +127,9 @@ function DimensionPower(tier) {
 }
 
 function getReplMult () {
-  let replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount,1)), Math.pow(player.galaxies, .4))
+  let replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount,1).add(1)), Math.pow(player.galaxies, .4))
 
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, Math.pow(player.galaxies, .5)))
+  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, Math.pow(player.galaxies, .5)*0.05))
   if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
   return replmult;
 }
@@ -199,12 +199,12 @@ function resetInfDimensions() {
 
 var infCostMults = [null, 1e3, 1e6, 1e8, 1e10, 1e15, 1e20, 1e25, 1e30]
 var infPowerMults = [null, 500, 300, 100, 50, 25, 10, 5, 5]
-var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e30, 1e70, 1e250,1e280]
+var infBaseCost = [null, 1e8, 1e9, 1e10, 1e20, 1e30, 1e70, 1e110, 1e150]
 
 function getInfBuy10Mult (tier){
-  if (!player.galacticSacrifice.upgrades.includes(41)) return infPowerMults[tier]
-  //let mult = player.galacticSacrifice.galaxyPoints.log10()
-  return infPowerMults[tier]//*Math.pow(mult,4)
+  if (player.infinityUpgrades.includes("postinfi72")&&player.galacticSacrifice.upgrades.includes(65)) return Number.MAX_VALUE
+  if (player.infinityUpgrades.includes("postinfi72")) return Number.MAX_VALUE**0.2
+  return infPowerMults[tier]
 }
 
 function getInfBuy10CostDiv (tier){
