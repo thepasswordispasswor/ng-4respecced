@@ -6966,6 +6966,8 @@ document.getElementById("Limit Break").setAttribute('ach-tooltip', "Break Infini
 	while(player.infinityUpgrades.includes("skipResetGalaxy") && player["eightAmount"] >= getTickspeedShiftRequirement(0).amount){
 		player.tickspeedBoosts++;
 	}
+	if(player["eightAmount"] >= getTickspeedShiftRequirement(0).amount)document.getElementById("tickspeedSoftReset").className="storebtn";else document.getElementById("tickspeedSoftReset").className="unavailablebtn";
+	if(player["timeDimension"+getTimeShiftRequirement(0).tier].bought+player["timeDimension"+getTimeShiftRequirement(0).tier].boughtAntimatter >= getTimeShiftRequirement(0).amount)document.getElementById("timeSoftReset").className="storebtn";else document.getElementById("timeSoftReset").className="unavailablebtn";
 	document.getElementById("postcngm4r_2div").style.display=player.challenges.includes("postcngm3_3")?"":"none";
 	document.getElementById("replicantiICrow").style.display=player.achievements.includes("r95")?"":"none";
 	document.getElementById("forceRespecStudy").style.display=player.eternities>0?"":"none";
