@@ -23,10 +23,13 @@ function getDilationStart2(){
 	if (player.infinityUpgrades.includes("postinfi73")){
 		ret=ret+Math.log(10+calcTotalSacrificeBoost().log10())*3;
 	}
-	if (player.currentChallenge == "postc8") ret=ret/Math.sqrt(player.matter.add(1).log10()+1);
 	if(player.galacticSacrifice.upgrades.includes(64)){
 		ret=ret+galUpgrade64().log10();
 	}
+	if(player.timeless.upgrades.includes(13)){
+		ret=ret+player.timeless.points.add(1).log10()*5;
+	}
+	if (player.currentChallenge == "postc8") ret=ret/Math.sqrt(player.matter.add(1).log10()+1);
 	return ret;
 }
 function getDilationStart3(){
@@ -35,18 +38,18 @@ function getDilationStart3(){
 	if (player.infinityUpgrades.includes("timeMult"))ret=ret+Math.log10(timeMultNum);
 	if (player.infinityUpgrades.includes("timeMult2"))ret=ret+Math.log10(timeMultNum2);
 	if (player.achievements.includes("r64"))ret = ret+6;
-	if (player.currentChallenge == "postc10"){
-		if(postc10Mult.lte(0))return 1e-4;
-		ret=ret-1e-4;
-		ret=ret*1/(1-postc10Mult.log10());
-		ret=ret+1e-4;
-	}
 	if (player.achievements.includes("r82")) {
 		for (var i=0; i < player.challenges.length; i++)if (player.challenges[i].includes("post"))ret=ret+2
 	}
 	if (player.challenges.includes("postc10"))ret=ret+10
 	if(player.galacticSacrifice.upgrades.includes(52)){
 		ret=ret+galUpgrade52().log10();
+	}
+	if (player.currentChallenge == "postc10"){
+		if(postc10Mult.lte(0))return 1e-4;
+		ret=ret-1e-4;
+		ret=ret*1/(1-postc10Mult.log10());
+		ret=ret+1e-4;
 	}
 	return ret;
 }
@@ -70,6 +73,9 @@ function getDilationPower(){
 		if(player.galacticSacrifice.upgrades.includes(55))ret=ret+0.002*Math.log10(player.replicanti.amount.max(1).add(9).log10());
 	}
 	if (player.achievements.includes("r96"))ret = ret+0.005
+	if(player.timeless.upgrades.includes(9)){
+		ret=ret+0.02*(1-Math.pow(0.95,player.timeless.shards.add(1).log10()));
+	}
 	if(player.dilation.upgrades.includes(9)){
 		ret*=1.05;
 	}

@@ -369,7 +369,16 @@ if (player.version < 5) {
           studies: [],
       }
   }
-
+  if (player.timeless === undefined) {
+      player.timeless = {
+        active: false,
+        shards: new Decimal(0),
+        points: new Decimal(0),
+        upgrades: [],
+        rebuyables: {
+        }
+    }
+  }
 
 
   if (player.eternities == 0) {
@@ -834,6 +843,9 @@ function transformSaveToDecimal() {
   player.eternityChallGoal = new Decimal(player.eternityChallGoal)
   player.replicanti.amount = new Decimal(player.replicanti.amount)
 
+  player.timeless.shards = new Decimal(player.timeless.shards)
+  player.timeless.points = new Decimal(player.timeless.points)
+  
   player.dilation.tachyonParticles = new Decimal(player.dilation.tachyonParticles)
   player.dilation.dilatedTime = new Decimal(player.dilation.dilatedTime)
   player.dilation.totalTachyonParticles = new Decimal(player.dilation.totalTachyonParticles)

@@ -127,6 +127,7 @@ const allAchievements = {
   s36 : "While you were away... Nothing happened.",
   s37 : "You followed the instructions",
   s38 : "Professional bodybuilder",
+  ngm4r1 : "Is time relative?",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",
@@ -207,7 +208,7 @@ function giveAchievement(name) {
 
 function updateAchievements() {
   var amount = 0
-  for (var i=1; i<document.getElementById("achievementtable").children[0].children.length+1; i++) {
+  for (var i=1; i<=13; i++) {
       var n = 0
       var achNum = i * 10
       for (var l=0; l<8; l++) {
@@ -227,7 +228,23 @@ function updateAchievements() {
           document.getElementById("achRow"+i).className = ""
       }
   }
-  for (var i=1; i<document.getElementById("secretachievementtable").children[0].children.length+1; i++) {
+  var n = 0;
+  for (var l=1; l<=8; l++) {
+          var name = allAchievements["ngm4r"+l]
+		  if(!name)continue;
+          if (player.achievements.includes("ngm4r"+l)) {
+              n++
+              document.getElementById(name).className = "achievementunlocked"
+          } else {
+              document.getElementById(name).className = "achievementlocked"
+          }
+      }if (n == 8) {
+          amount++
+          document.getElementById("achRowngm4r").className = "completedrow"
+      } else {
+          document.getElementById("achRowngm4r").className = ""
+      }
+  for (var i=1; i<=3; i++) {
       var n = 0
       var achNum = i * 10
       for (var l=0; l<8; l++) {

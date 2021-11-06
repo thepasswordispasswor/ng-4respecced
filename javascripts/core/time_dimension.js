@@ -18,10 +18,10 @@ function getTimeDimensionPower(tier) {
 
   ret = ret.times(kongAllDimMult)
 
-  if (player.timestudy.studies.includes(73) && tier == 3) ret = ret.times(calcTotalSacrificeBoost().pow(0.005).min(new Decimal("1e1300")))
-  if (player.timestudy.studies.includes(93)) ret = ret.times(Decimal.pow(player.totalTickGained, 0.5).max(1))
-  if (player.timestudy.studies.includes(103)) ret = ret.times(Math.max(player.replicanti.galaxies, 1))
-  if (player.timestudy.studies.includes(151)) ret = ret.times(1e4)
+  if (player.timestudy.studies.includes(73) && tier == 3) ret = ret.times(timeStudy73())
+  if (player.timestudy.studies.includes(93)) ret = ret.times(timeStudy93())
+  if (player.timestudy.studies.includes(103)) ret = ret.times(timeStudy103())
+  if (player.timestudy.studies.includes(151)) ret = ret.times(timeStudy151())
   if (player.timestudy.studies.includes(221)) ret = ret.times(Decimal.pow(1.01, player.resets))
   if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(Math.max(Math.pow(calcTotalSacrificeBoost().log10(), 100), 1))
   let ec10bonus = new Decimal(1)
@@ -68,7 +68,9 @@ function getTimeDimensionPower(tier) {
     ret=ret.times(galUpgrade35())
   }
 
-  if(player.challenges.includes("postcngm4r_1") && tier%2==1)ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
+  if(!player.timeless.active){
+	  if(player.challenges.includes("postcngm4r_1") && tier%2==1)ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
+  }
   if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 10)).max(1))
 
  dilationstart = getDilationStart();
@@ -185,6 +187,7 @@ function buyTimeDimension(tier) {
 }
 
 function buyTimeDimensionAntimatter(tier,notip) {
+	if(player.timeless.active)return false;
 	if (tier > player.tdBoosts + 1)return false;
 if (player.firstBought < 1) {
 		if(notip!==1)alert("You need to buy a first Normal Dimension to be able to buy Time Dimensions with Antimatter.")
@@ -199,7 +202,7 @@ if (player.firstBought < 1) {
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (dim.costAntimatter.gte("1e50000")) {
-      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*getTDFinalScaling(tier,dim.boughtAntimatter), dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (player.currentChallenge == "postcngm3_1"){
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
@@ -219,7 +222,7 @@ if (player.firstBought < 1) {
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (dim.costAntimatter.gte("1e50000")) {
-      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*getTDFinalScaling(tier,dim.boughtAntimatter), dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (player.currentChallenge == "postcngm3_1"){
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
@@ -232,6 +235,7 @@ if (player.firstBought < 1) {
 }
 
 function resetTimeDimensions(a) {
+	if(a && player.achievements.includes("ngm4r1"))return;
   for (var i=1; i<9; i++) {
       var dim = player["timeDimension"+i]
       dim.amount = new Decimal(dim.bought)
@@ -267,7 +271,7 @@ function autobuyerBuyTimeDimensions(i, bulk){
 			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, test).times(timeDimStartCostsAntimatter[tier])
 		}
   if (test2.gte("1e50000")) {
-      test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, test).times(timeDimStartCostsAntimatter[tier])
+      test2 = Decimal.pow(timeDimCostMultsAntimatter[tier]*getTDFinalScaling(tier,test), test).times(timeDimStartCostsAntimatter[tier])
   }
 		if (player.currentChallenge == "postcngm3_1"){
 			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,test)-1)*100).times(timeDimStartCostsAntimatter[tier])
@@ -293,7 +297,7 @@ dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAnt
       dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*2, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (dim.costAntimatter.gte("1e50000")) {
-      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*3, dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
+      dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier]*getTDFinalScaling(tier,dim.boughtAntimatter), dim.boughtAntimatter).times(timeDimStartCostsAntimatter[tier])
   }
   if (player.currentChallenge == "postcngm3_1"){
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
@@ -301,4 +305,8 @@ dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAnt
   if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
 	updateEternityUpgrades()
+}
+
+function getTDFinalScaling(tier, amount){
+	return Math.max(3,amount*amount*[1.7e-10,2.4e-10,3.1e-10,3.8e-10,6.25e-10,1.25e-9,2.5e-9,5e-9][tier-1]);
 }

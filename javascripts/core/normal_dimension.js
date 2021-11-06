@@ -23,7 +23,12 @@ function getDimensionPreDilationMultiplier(tier) {
   else multiplier = multiplier.times(infpow.pow(y).max(1))
   if(player.currentChallenge == "postcngm3_2" && player.currentEternityChall == "eterc9")return new Decimal(1);
   if(player.currentChallenge == "postcngm3_2") return infpow.pow(y).max(1);
-  if (player.currentEternityChall == "eterc11") return infpow.pow(y).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1))
+  if (player.currentEternityChall == "eterc11"){
+	  let ret=infpow.pow(y).max(1).times(getDimensionBoostPower().pow(player.resets - tier + 1).max(1))
+	  if (player.timestudy.studies.includes(83)&&player.timeless.upgrades.includes(15))ret=ret.times(timeStudy83().pow(getDimensionBoostPowerExponent()).pow(player.resets - tier + 1).max(1))
+		if (player.timestudy.studies.includes(83)&&!player.timeless.upgrades.includes(15))ret=ret.times(timeStudy83().pow(player.resets - tier + 1).max(1))
+		  return ret;
+  }
 
   if (player.infinityUpgrades.includes("totalMult")) multiplier = multiplier.times(totalMult)
   if (player.infinityUpgrades.includes("currentMult")) multiplier = multiplier.times(currentMult)
@@ -56,10 +61,12 @@ function getDimensionPreDilationMultiplier(tier) {
   else if (player.achievements.includes("r73")) multiplier = multiplier.times(player.money.pow(0.0001).plus(1));
 
 
-  if (player.timestudy.studies.includes(71) && tier !== 8) multiplier = multiplier.times(calcTotalSacrificeBoost().pow(0.25).min("1e210000"));
-  if (player.timestudy.studies.includes(91)) multiplier = multiplier.times(Decimal.pow(10, Math.min(player.thisEternity, 18000)/60));
-  if (player.timestudy.studies.includes(101)) multiplier = multiplier.times(Decimal.max(player.replicanti.amount, 1))
-  if (player.timestudy.studies.includes(161)) multiplier = multiplier.times(new Decimal("1e6660"))
+  if (player.timestudy.studies.includes(71) && tier !== 8) multiplier = multiplier.times(timeStudy71());
+if (player.timestudy.studies.includes(83)&&player.timeless.upgrades.includes(15))multiplier = multiplier.times(timeStudy83().pow(getDimensionBoostPowerExponent()).pow(player.resets - tier + 1).max(1));
+  if (player.timestudy.studies.includes(83)&&!player.timeless.upgrades.includes(15))multiplier = multiplier.times(timeStudy83().pow(player.resets - tier + 1).max(1));
+  if (player.timestudy.studies.includes(91)) multiplier = multiplier.times(timeStudy91());
+  if (player.timestudy.studies.includes(101)) multiplier = multiplier.times(timeStudy101())
+  if (player.timestudy.studies.includes(161)) multiplier = multiplier.times(timeStudy161())
   if (player.timestudy.studies.includes(234) && tier == 1) multiplier = multiplier.times(calcTotalSacrificeBoost())
 
   multiplier = multiplier.times(player.postC3Reward)
@@ -87,7 +94,10 @@ function getDimensionPreDilationMultiplier(tier) {
     multiplier = multiplier.times(galUpgrade35())
   }
 
-  if(player.challenges.includes("postcngm4r_1") && tier%2==1)multiplier = multiplier.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
+  
+  if(!player.timeless.active){
+	  if(player.challenges.includes("postcngm4r_1") && tier%2==1)multiplier = multiplier.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
+  }
   if (player.challenges.includes("postc6")) multiplier = multiplier.pow(1.05);
   if (player.galacticSacrifice.upgrades.includes(31)) multiplier = multiplier.pow(galUpgrade31());
 

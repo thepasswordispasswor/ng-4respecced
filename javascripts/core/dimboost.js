@@ -12,17 +12,25 @@ function getDimensionBoostPower() {
   }
   if (player.infinityUpgrades.includes("resetMult")) ret *= getResetMult();
   if (player.achievements.includes("r101")) ret = ret*1.01
-  if (player.timestudy.studies.includes(83)) ret = Decimal.pow(1.0004, player.totalTickGained).times(ret);
   if (player.timestudy.studies.includes(231)) ret = Decimal.pow(player.resets, 0.3).times(ret)
 
-  if (player.currentChallenge == "postc9" || player.challenges.includes("postc9")){
-    ret = Decimal.pow(ret, 3);
-  }
-  if (player.timestudy.studies.includes(81)) {
-    ret = Decimal.pow(ret, 3);
-  }
+  ret = Decimal.pow(ret, getDimensionBoostPowerExponent());
 
   return Decimal.fromValue(ret)
+}
+
+function getDimensionBoostPowerExponent() {
+	if (player.currentChallenge == "challenge11" || player.currentChallenge == "postc4" || player.currentChallenge == "postcngm3_1")return 0;
+  var ret = 1
+
+  if (player.currentChallenge == "postc9" || player.challenges.includes("postc9")){
+    ret = ret*3;
+  }
+  if (player.timestudy.studies.includes(81)) {
+    ret = ret*timeStudy81();
+  }
+
+  return ret
 }
 
 function softReset(bulk) {
@@ -191,6 +199,8 @@ function softReset(bulk) {
 	
 	tickspeedBoosts: player.tickspeedBoosts,
 	tdBoosts: player.tdBoosts,
+
+    timeless: player.timeless,
   };
   
 	resetTimeDimensions(1);
@@ -426,6 +436,8 @@ function timeSoftReset(bulk) {
 	
 	tickspeedBoosts: player.tickspeedBoosts,
 	tdBoosts: player.tdBoosts,
+
+    timeless: player.timeless,
   };
   
 	resetTimeDimensions(1);
@@ -778,6 +790,8 @@ function tickspeedSoftReset(bulk) {
 	
 	tickspeedBoosts: player.tickspeedBoosts,
 	tdBoosts: player.infinityUpgrades.includes("skipReset1") ? player.tdBoosts : 0,
+
+    timeless: player.timeless,
   };
   
 	resetTimeDimensions(1);

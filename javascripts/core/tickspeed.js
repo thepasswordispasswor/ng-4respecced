@@ -8,6 +8,7 @@ function canBuyTickSpeed() {
   if (player.currentChallenge === "postcngm3_3") return false
   if (player.currentChallenge === "challenge14" && player.tickBoughtThisInf.current >= 308) return false
   if (player.firstAmount.lte(0))return false
+  if(player.timeless.active)return false
   return canSeeTickSpeed();
 }
 
@@ -34,6 +35,7 @@ function getFinalGalaxies(offset) {
     if (player.infinityUpgrades.includes("postinfi51")) galaxies *= 1.4;
     if (player.timestudy.studies.includes(212)) galaxies *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
     if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
+	if(player.timeless.active)galaxies /= 10;
     return galaxies;
 }
 
@@ -67,6 +69,7 @@ function getPostC3Exp (){
 }
 
 function getPostC3RewardMult () {
+	if(player.timeless.active)return 1;
   let perGalaxy = 0.005;
   //if (player.challenges.length > 15) perGalaxy = -0.01+0.001*player.challenges.length
   let ret = 1.05+getFinalGalaxies(0)*perGalaxy;
@@ -121,17 +124,20 @@ function buyMaxTickSpeed() {
   var mult = getTickSpeedMultiplier()
   if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc4") player.chall2Pow = 0
   if (player.currentChallenge == "challenge5" || player.currentChallenge == "postc7" || player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2) {
-      while (player.money.gte(player.tickSpeedCost) && canBuyTickSpeed() && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || player.currentChallenge == "postc7")) {
+      var buying = 0;
+	  while (player.money.gte(player.tickSpeedCost) && canBuyTickSpeed() && (player.tickSpeedCost.lt(Number.MAX_VALUE) || player.tickSpeedMultDecrease > 2 || player.currentChallenge == "postc7")) {
           player.money = player.money.minus(player.tickSpeedCost);
           player.tickBoughtThisInf.current++;
+		  buying++;
           if (player.currentChallenge != "challenge5") player.tickSpeedCost = player.tickSpeedCost.times(player.tickspeedMultiplier);
           else multiplySameCosts(player.tickSpeedCost)
           if (costIncreaseActive(player.tickSpeedCost)) player.tickspeedMultiplier = player.tickspeedMultiplier.times(getTickSpeedCostMultiplierIncrease());
-          player.tickspeed = player.tickspeed.times(mult);
-          player.postC3Reward = player.postC3Reward.times(getPostC3RewardMult())
-          postc10Mult = new Decimal(1)
-          if (costIncreaseActive(player.tickSpeedCost)) buyMaxTickSpeed()
+          if (costIncreaseActive(player.tickSpeedCost)) break;
       }
+	  if(buying>0)postc10Mult = new Decimal(1)
+	  player.tickspeed = player.tickspeed.times(Decimal.pow(mult,buying));
+      player.postC3Reward = player.postC3Reward.times(Decimal.pow(getPostC3RewardMult(),buying));
+	  if (costIncreaseActive(player.tickSpeedCost)) buyMaxTickSpeed();
   } else {
 
       var a = Math.log10(Math.sqrt(getTickSpeedCostMultiplierIncrease()));

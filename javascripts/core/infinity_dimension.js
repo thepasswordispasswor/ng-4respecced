@@ -79,11 +79,11 @@ function DimensionPower(tier) {
   if (player.achievements.includes("r66")) mult = mult.times(Math.max(1, Math.abs(player.tickspeed.log10()) / 29))
 
   if (player.timestudy.studies.includes(72) && tier == 4) {
-      mult = mult.times(calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000"))
+      mult = mult.times(timeStudy72())
   }
 
   if (player.timestudy.studies.includes(82)) {
-      mult = mult.times(Decimal.pow(1.0000109,Math.pow(player.resets,2)))
+      mult = mult.times(timeStudy82())
   }
 
   if (player.eternityUpgrades.includes(1)) {
@@ -94,8 +94,8 @@ function DimensionPower(tier) {
 
   if (player.eternityUpgrades.includes(3)) mult = mult.times(Decimal.pow(2,300/Math.max(infchallengeTimes, player.achievements.includes("r112") ? 6.1 : 7.5)))
 
-  if (player.timestudy.studies.includes(92)) mult = mult.times(Decimal.pow(2, 600/Math.max(player.bestEternity, 20)))
-  if (player.timestudy.studies.includes(162)) mult = mult.times(1e234)
+  if (player.timestudy.studies.includes(92)) mult = mult.times(timeStudy92())
+  if (player.timestudy.studies.includes(162)) mult = mult.times(timeStudy162())
   if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(player.infinityPower.pow(4.5/(700-ECTimesCompleted("eterc2")*100)).plus(1)).times(new Decimal(player.infinityPower.plus(10).log10()).pow(1000))
   if (player.currentEternityChall == "eterc2") mult = mult.times(0)
 
@@ -129,8 +129,8 @@ function DimensionPower(tier) {
 function getReplMult () {
   let replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount,1).add(1)), Math.pow(player.galaxies, .4))
 
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, Math.pow(player.galaxies, .5)*0.05))
-  if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(timeStudy21())
+  if (player.timestudy.studies.includes(102)) replmult = replmult.times(timeStudy102())
   return replmult;
 }
 

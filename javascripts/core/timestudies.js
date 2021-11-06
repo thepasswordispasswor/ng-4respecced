@@ -149,6 +149,9 @@ function canBuyStudy(name) {
   if (name == 51) {
       if (player.timestudy.studies.includes(41) || player.timestudy.studies.includes(42)) return true; else return false
   }
+  if (name == 53) {
+      if (player.timestudy.studies.includes(43) && (player.eternities !== 0)) return true; else return false
+  }
   if (name == 61) {
       if (player.timestudy.studies.includes(51) && (player.eternities !== 0)) return true; else return false
   }
@@ -167,7 +170,7 @@ function canBuyStudy(name) {
   if (name == 181) {
       if (player.eternityChalls.eterc1 !== undefined && player.eternityChalls.eterc2 !== undefined && player.eternityChalls.eterc3 !== undefined && player.timestudy.studies.includes(171)) return true; else return false;
   }
-  if (name == 201) if(player.timestudy.studies.includes(192) && !player.dilation.upgrades.includes(8)) return true; else return false
+  if (name == 201) if(player.timestudy.studies.includes(192) && !player.timeless.upgrades.includes(8)) return true; else return false
   if (name == 211) if(player.timestudy.studies.includes(191)) return true; else return false
   if (name == 212) if(player.timestudy.studies.includes(191)) return true; else return false
   if (name == 213) if(player.timestudy.studies.includes(193)) return true; else return false
@@ -202,7 +205,7 @@ function canBuyStudy(name) {
       break;
 
       case 7:
-      if (player.dilation.upgrades.includes(8)) {
+      if (player.timeless.upgrades.includes(8)) {
         if (player.timestudy.studies.includes(61)) return true; else return false;
       } else if (!player.timestudy.studies.includes(201)) {
           if (player.timestudy.studies.includes(61) && !hasRow(row)) return true; else return false
@@ -231,8 +234,8 @@ function canBuyDilationStudy(name) {
     else return false
 }
 
-var all = [11, 21, 22, 23, 33, 31, 32, 41, 42, 43, 51, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
-var studyCosts = [1, 3, 2, 0, 2, 3, 2, 4, 6, 15, 3, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
+var all = [11, 21, 22, 23, 33, 31, 32, 41, 42, 43, 51, 53, 61, 62, 71, 72, 73, 81, 82 ,83, 91, 92, 93, 101, 102, 103, 111, 121, 122, 123, 131, 132, 133, 141, 142, 143, 151, 161, 162, 171, 181, 191, 192, 193, 201, 211, 212, 213, 214, 221, 222, 223, 224, 225, 226, 227, 228, 231, 232, 233, 234]
+var studyCosts = [1, 3, 2, 0, 2, 3, 2, 4, 6, 15, 3, 15, 3, 3, 4, 6, 5, 4, 6, 5, 4, 5, 7, 4, 6, 6, 12, 9, 9, 9, 5, 5, 5, 4, 4, 4, 8, 7, 7, 15, 200, 400, 730, 300, 900, 120, 150, 200, 120, 900, 900, 900, 900, 900, 900, 900, 900, 500, 500, 500, 500]
 function updateTimeStudyButtons() {
   for (var i=0; i<all.length; i++) {
       if (!player.timestudy.studies.includes(all[i])) {
@@ -431,5 +434,97 @@ function timeStudy11(){
     }
 	
 	let ret=tick.add(1).pow(5);
+	return ret;
+}
+
+function timeStudy21(){
+	let ret=Decimal.pow(player.replicanti.amount, Math.pow(player.galaxies, .5)*0.05);
+	return ret;
+}
+
+function timeStudy71(){
+	let ret=calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000");
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e500").pow(999));
+	return ret;
+}
+
+function timeStudy72(){
+	let ret=calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000");
+	if(player.timeless.upgrades.includes(11))ret=ret.mul(ret.min("1e500").pow(999));
+	return ret;
+}
+
+function timeStudy73(){
+	let ret=calcTotalSacrificeBoost().pow(0.005).max(1).min("1e1300");
+	if(player.timeless.upgrades.includes(15))ret=ret.mul(ret.min("1e500").pow(99));
+	return ret;
+}
+
+function timeStudy81(){
+	let ret=3;
+	if(player.timeless.upgrades.includes(7))ret=ret*1.5;
+	return ret;
+}
+
+function timeStudy82(){
+	let ret=Decimal.pow(1.0000109,Math.pow(player.resets,2));
+	if(player.timeless.upgrades.includes(11))ret=ret.mul(ret.min("1e500").pow(999));
+	return ret;
+}
+
+function timeStudy83(){
+	let ret=Decimal.pow(1.0004, player.totalTickGained);
+	if(!player.timeless.upgrades.includes(15))ret=ret.min(1e30);
+	return ret;
+}
+
+function timeStudy91(){
+	let ret=Decimal.pow(10, Math.min(player.thisEternity, 18000)/60);
+	if(player.timeless.upgrades.includes(7))ret=ret.pow(1000);
+	return ret;
+}
+
+function timeStudy92(){
+	let ret=Decimal.pow(2, 600/Math.max(player.bestEternity, 20));
+	return ret;
+}
+
+function timeStudy93(){
+	let ret=Decimal.pow(player.totalTickGained, 0.5).max(1);
+	if(player.timeless.upgrades.includes(15))ret=ret.pow(100);
+	return ret;
+}
+
+function timeStudy101(){
+	let ret=player.replicanti.amount.max(1);
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e500").pow(999));
+	return ret;
+}
+
+function timeStudy102(){
+	let ret=Decimal.pow(5, player.replicanti.galaxies);
+	if(player.timeless.upgrades.includes(11))ret=ret.pow(2);
+	return ret;
+}
+
+function timeStudy103(){
+	let ret=new Decimal(player.replicanti.galaxies).max(1);
+	if(player.timeless.upgrades.includes(15))ret=ret.pow(100);
+	return ret;
+}
+
+function timeStudy151(){
+	let ret=new Decimal(1e4);
+	if(player.timeless.upgrades.includes(5))ret=ret.mul(TLPU5());
+	return ret;
+}
+
+function timeStudy161(){
+	let ret=new Decimal("1e6660");
+	return ret;
+}
+
+function timeStudy162(){
+	let ret=new Decimal(1e234);
 	return ret;
 }

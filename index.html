@@ -120,13 +120,13 @@
                 <br>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="21" onclick="buyTimeStudy(21, 3)">Replicanti multiplier formula is better<br>Req: Unlock Replicanti or Eternitied at least once<span>Cost: 3 Time Theorems</button></td>
-                        <td><button class="timestudy" id="22" onclick="buyTimeStudy(22, 2)">Base replicanti interval limit 50ms -> 1ms<br>Req:  Eternitied at least once<span>Cost: 2 Time Theorems</button></td>
+                        <td><button class="timestudy" id="21" onclick="buyTimeStudy(21, 3)">Replicanti multiplier formula is better<span id="21desc">Req: Unlock Replicanti or Eternitied at least once</span>Cost: 3 Time Theorems</button></td>
+                        <td><button class="timestudy" id="22" onclick="buyTimeStudy(22, 2)">Base replicanti interval limit 50ms -> 1ms<span>Req:  Eternitied at least once</span>Cost: 2 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="33" onclick="buyTimeStudy(33, 2)">You keep half of your replicanti galaxies on infinity<br>Req:  Eternitied at least once<span>Cost: 2 Time Theorems</button></td>
+                        <td><button class="timestudy" id="33" onclick="buyTimeStudy(33, 2)">You keep half of your replicanti galaxies on infinity<span>Req:  Eternitied at least once</span>Cost: 2 Time Theorems</button></td>
                         <td><button class="timestudy" id="31" onclick="buyTimeStudy(31, 3)">Powers up infinity upgrades that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
                         <td><button class="timestudy" id="32" onclick="buyTimeStudy(32, 2)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
                         <td><button class="timestudylocked" id="34" style="opacity: 0;">Base replicanti interval limit 1ms -> ???<span>Cost: ??? Time Theorems</button></td>
@@ -137,21 +137,23 @@
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Each galaxy gives a 1.2x multiplier on IP gained. <span>Cost: 4 Time Theorems</button></td>
                         <td><button class="timestudy" id="42" onclick="buyTimeStudy(42, 6)">Galaxy requirement base increase is reduced by 6.<span>Cost: 6 Time Theorems</button></td>
-						<td><button class="timestudy" id="43" onclick="buyTimeStudy(43, 15)">Gain 10% of infinitied gain per second.<span>Cost: 15 Time Theorems</button></td>
+			<td><button class="timestudy" id="43" onclick="buyTimeStudy(43, 15)">Gain 1% of infinitied gain per second.<span>Cost: 15 Time Theorems</button></td>
                     </tr>
                 </table>
                 <br>
                 <table class="table" id="studytable">
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
+                        <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="timestudy" id="51" onclick="buyTimeStudy(51, 3)"><span id=51desc>You gain 1e15 times more IP</span>Cost: 3 Time Theorems</button></td>
                         <td><button class="eternitychallengestudy" id="ec5unl">Eternity Challenge 5<span>Requirement: 200 galaxies<span>Cost: 100 Time Theorems</button></td>
+                        <td><button class="timestudy" id="53" onclick="buyTimeStudy(53, 15)">Gain 0.1% of infinitied gain per second as banked infinities.<span>Cost: 15 Time Theorems</button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
-                        <td><button class="timestudy" id="61" onclick="buyTimeStudy(61, 3)">You gain 10x more EP (applied post-dilation)<br>Req:  Eternitied at least once<span>Cost: 3 Time Theorems</button></td>
+                        <td><button class="timestudy" id="61" onclick="buyTimeStudy(61, 3)">You gain 10x more EP (applied post-dilation)<span>Req:  Eternitied at least once</span>Cost: 3 Time Theorems</button></td>
                         <td><button class="timestudy" id="62" onclick="buyTimeStudy(62, 3)">You gain replicanti 3 times faster<span>Cost: 3 Time Theorems</button></td>
                     </tr>
                 </table>
@@ -163,9 +165,9 @@
                         <td><button class="timestudy timedimstudy" id="73" onclick="buyTimeStudy(73, 5)">Sacrifice affects 3rd Time Dimension with greatly reduced effect<span id="73desc">Currently: 1x</span>Cost: 5 Time Theorems</button></td>
                     </tr>
                     <tr>
-                        <td><button class="timestudy normaldimstudy" id="81" onclick="buyTimeStudy(81, 4)">Dimensional boost power is cubed<span>Cost: 4 Time Theorems</button></td>
-                        <td><button class="timestudy infdimstudy" id="82" onclick="buyTimeStudy(82, 6)">Dimensional boosts affect Infinity Dimensions<span id="82desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
-                        <td><button class="timestudy timedimstudy" id="83" onclick="buyTimeStudy(83, 5)">Dimensional boosts are 0.04% more effective for each tick upgrade gained from Time Dimensions<span>Cost: 5 Time Theorems</button></td>
+                        <td><button class="timestudy normaldimstudy" id="81" onclick="buyTimeStudy(81, 4)">Dimension boost power is raised to a power<span id="81desc">Currently: 1x</span><span>Cost: 4 Time Theorems</button></td>
+                        <td><button class="timestudy infdimstudy" id="82" onclick="buyTimeStudy(82, 6)">Dimension boosts affect Infinity Dimensions<span id="82desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
+                        <td><button class="timestudy timedimstudy" id="83" onclick="buyTimeStudy(83, 5)">Tick upgrade gained from Time Dimensions boost Dimension boosts <span id="83desc2">(applied after powerer)</span><span id="83desc">Currently: 1x</span>Cost: 5 Time Theorems</button></td>
                     </tr>
                     <tr>
                         <td><button class="timestudy normaldimstudy" id="91" onclick="buyTimeStudy(91, 4)">Normal dimensions gain a multiplier based on time spent this eternity<span id="91desc">Currently: 1x</span>Cost: 4 Time Theorems</button></td>
@@ -173,9 +175,9 @@
                         <td><button class="timestudy timedimstudy" id="93" onclick="buyTimeStudy(93, 7)">Time dimensions gain a multiplier based on tick upgrades gained<span id="93desc">Currently: 1x</span>Cost: 7 Time Theorems</button></td>
                     </tr>
                     <tr>
-                        <td><button class="timestudy normaldimstudy" id="101" onclick="buyTimeStudy(101, 4)">Replicantis give multiplier to normal dims equal to their amount.<span>Cost: 4 Time Theorems</button></td>
-                        <td><button class="timestudy infdimstudy" id="102" onclick="buyTimeStudy(102, 6)">Replicanti galaxies power replicanti multiplier<span>Cost: 6 Time Theorems</button></td>
-                        <td><button class="timestudy timedimstudy" id="103" onclick="buyTimeStudy(103, 6)">Time dimensions gain a multiplier equal to replicanti galaxy amount<span>Cost: 6 Time Theorems</p></button></td>
+                        <td><button class="timestudy normaldimstudy" id="101" onclick="buyTimeStudy(101, 4)">Normal dimensions gain a multiplier based on replicantis.<span id="101desc">Currently: 1x</span>Cost: 4 Time Theorems</button></td>
+                        <td><button class="timestudy infdimstudy" id="102" onclick="buyTimeStudy(102, 6)">Replicanti galaxies power replicanti multiplier<span id="102desc">Currently: 1x</span>Cost: 6 Time Theorems</button></td>
+                        <td><button class="timestudy timedimstudy" id="103" onclick="buyTimeStudy(103, 6)">Time dimensions gain a multiplier based on replicanti galaxy amount<span id="103desc">Currently: 1x</span>Cost: 6 Time Theorems</p></button></td>
                     </tr>
                 </table>
                 <br>
@@ -359,7 +361,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <button id="eter7" class="eternityupbtnlocked" onclick="buyEternityUpgrade(7, 1e20)">Unlock Timeless</button>
+                            <button id="eter7" class="eternityupbtnlocked" onclick="buyEternityUpgrade(7, 1e25)">Unlock Timeless</button>
                         </td>
                         <td>
                             <button id="epmult" class="eternityupbtn" onclick="buyEPMult()">You gain 5 times more EP<p>Cost: 500 EP</button>
@@ -486,6 +488,87 @@
                     </tr>
                 </table>
                 <div>
+                    <table id="footer">
+                        <tr>
+                            <td>
+                                <div style="text-align:center">
+                                    <a href="howto.html" target="_newtab">How to play  </a> |
+                                    <a href="about.html" target="_newtab" onclick="giveAchievement('A sound financial decision')">Donate   </a> |
+                                    <a href="changelog.html" target="_newtab">Changelog   </a> |
+                                    <a href="https://discord.gg/ST9NaXa" target="_newtab">Discord</a> |
+                                    <a href="https://www.reddit.com/r/AntimatterDimensions/" target="_newtab">Subreddit</a>      |    <a href="https://ivark.github.io/savefixer/index.html" target="_newtab">Savefixer</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="eternitytab" id="timeless" style="font-size: 11px">
+                <div>
+                    <p>You have <span id="TLSAmount" style="font-size:35px; color: black">0</span> timeless shards.</p>
+                </div>
+                <button id="entertimeless" class="eternityupbtn" onclick="enterTimeless()">Enter Timeless</button>
+                <p>You have <span id="TLPAmount" style="font-size:35px; color: black">0</span> timeless points <span id="TLPPerSecond" style="font-size:25px; color: black">0</span></p>
+                <p id="scTLP"></p>
+                <table>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless1" onclick="buyTimelessUpgrade(1)">Double timeless point gain.<br><span id="timeless1cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless2" onclick="buyTimelessUpgrade(2)">Double timeless shard gain.<br><span id="timeless2cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless3" onclick="buyTimelessUpgrade(3)">Gain a Time Theorem.<br><span id="timeless3cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless4" onclick="buyTimelessUpgrade(4)">Timeless Points boost EP gain.<br><span id="timeless4desc"></span><br><span id="timeless4cost"></span></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless5" onclick="buyTimelessUpgrade(5)">Boost TS151 by Timeless Points (Nerfed in Timeless)<br><span id="timeless5desc"></span><br><span id="timeless5cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless6" onclick="buyTimelessUpgrade(6)">Keep your GP in Timeless.<br><span id="timeless6cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless7" onclick="buyTimelessUpgrade(7)" ach-tooltip="TS71's effect ^1000 until 1e500000, TS81's effect is multiplied by 1.5, TS91's effect ^1000, TS101's effect ^1000 until 1e500000">ND Timestudy Path Boost (Hover to see details)<br><span id="timeless7cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless8" onclick="buyTimelessUpgrade(8)">You can buy all studies from the first 3-way split.<br><span id="timeless8cost"></span></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless9" onclick="buyTimelessUpgrade(9)">Dilation effect is reduced based on timeless shards.<br><span id="timeless9cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless10" onclick="buyTimelessUpgrade(10)">Timeless Points and GP boost each other.<br><span id="timeless10cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless11" onclick="buyTimelessUpgrade(11)" ach-tooltip="TS72's effect ^1000 until 1e500000, TS82's effect ^1000 until 1e500000, TS102's effect ^2">ID Timestudy Path Boost (Hover to see details)<br><span id="timeless11cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless12" onclick="buyTimelessUpgrade(12)">Add 1e8 infinities to g11<br><span id="timeless12cost"></span></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless13" onclick="buyTimelessUpgrade(13)">(Timeless points+1)^5 multiply second dilation threshold.<br><span id="timeless13cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless14" onclick="buyTimelessUpgrade(14)">IP Multiplier upgrade also affects GP<br><span id="timeless14cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless15" onclick="buyTimelessUpgrade(15)" ach-tooltip="TS73's effect ^100 until 1e50000, TS83's effect is uncapped and applied before powerer, TS93's effect ^100, TS103's effect ^100">TD Timestudy Path Boost (Hover to see details)<br><span id="timeless15cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless16" onclick="buyTimelessUpgrade(16)">???<br><span id="timeless16cost"></span></button>
+                        </td>
+                    </tr>
+                </table>
+				<div>
                     <table id="footer">
                         <tr>
                             <td>
@@ -1448,7 +1531,7 @@
                                 <div id="Costco sells dimboosts now" class="achievement achievementlocked" style="background-image: url(images/65.png)" ach-tooltip="Bulk buy 750 dimension boosts at once. Reward: Dimension boosts are 1% more powerful (to normal dims)."><br></div>
                             </td>
                             <td>
-                                <div id="This mile took an Eternity" class="achievement achievementlocked" style="background-image: url(images/66.png)" ach-tooltip="Get all eternity milestones."><br></div>
+                                <div id="This mile took an Eternity" class="achievement achievementlocked" style="background-image: url(images/66.png)" ach-tooltip="Get 100 eternities. Reward: Multiply your EP gain by (eternities+1) post-dilation."><br></div>
                             </td>
                             <td>
                                 <div id="This achievement doesn't exist II" class="achievement achievementlocked" style="background-image: url(images/67.png)" ach-tooltip="Reach 9.99999e999 IP. Reward: Gain more IP based on amount of antimatter you had when crunching."><br></div>
@@ -1463,10 +1546,15 @@
                                 <div id="The swarm" class="achievement achievementlocked" style="background-image: url(images/70.png)" ach-tooltip="Get 10 replicanti galaxies in 15 seconds. Reward: Multiply GP and IP gain by (10^replicanti galaxies)."><br></div>
                             </td>
                             <td>
-                                <div id="Do you really need a guide for this?" class="achievement achievementlocked" style="background-image: url(images/71.png)" ach-tooltip="Eternity with the infinitied stat under 10."><br></div>
+                                <div id="Do you really need a guide for this?" class="achievement achievementlocked" style="background-image: url(images/71.png)" ach-tooltip="Eternity with the infinitied stat under 10. Reward: Multiplier to EP based on infinities in current eternity (post-dilation)."><br></div>
                             </td>
                             <td>
-                                <div id="We could afford 9" class="achievement achievementlocked" style="background-image: url(images/72.png)" ach-tooltip="Eternity with exactly 9 replicanti."><br></div>
+                                <div id="We could afford 9" class="achievement achievementlocked" style="background-image: url(images/72.png)" ach-tooltip="Eternity with exactly 9 replicanti. Reward: Multiplier to EP based on replicanti (post-dilation)."><br></div>
+                            </td>
+                        </tr>
+                        <tr id="achRowngm4r">
+                            <td>
+                                <div id="Is time relative?" class="achievement achievementlocked" ach-tooltip="Go Timeless. Reward: TDs are not reset until eternity."><br></div>
                             </td>
                         </tr>
                         <tr id="achRow11">
@@ -1480,7 +1568,7 @@
                                 <div id="Long lasting relationship" class="achievement achievementlocked" style="background-image: url(images/75.png)" ach-tooltip="Have your Infinity power per second exceed your infinity power for 60 consecutive seconds during a single infinity."><br></div>
                             </td>
                             <td>
-                                <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: A fading sense of accomplishment."><br></div>
+                                <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: ???"><br></div>
                             </td>
                             <td>
                                 <div id="I wish I had gotten 7 eternities" class="achievement achievementlocked" style="background-image: url(images/77.png)" ach-tooltip="Start an Infinity challenge inside an Eternity challenge."><br></div>
@@ -1942,7 +2030,7 @@
                                     <button id="postcngm4r_1" class="challengesbtn" onclick="startChallenge('postcngm4r_1', new Decimal('1e1200'))">Start</button>
                                     <br>
                                     <span id="postcngm4r_1goal" >Goal: 1e550</span><br>
-                                    <span>Reward: Boost odd tiers of Normal and Time Dimensions based on GP. (GP+1)^10</span>
+                                    <span id="postcngm4r_1reward"></span>
                                 </div>
                             </div>
                         </td>
