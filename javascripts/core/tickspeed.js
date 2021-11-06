@@ -35,14 +35,18 @@ function getFinalGalaxies(offset) {
     if (player.infinityUpgrades.includes("postinfi51")) galaxies *= 1.4;
     if (player.timestudy.studies.includes(212)) galaxies *= Math.min(Math.pow(player.timeShards.max(2).log2(), 0.005), 1.1)
     if (player.timestudy.studies.includes(232)) galaxies *= Math.pow(1+player.galaxies/1000, 0.2)
+    if (player.timeless.upgrades.includes(17)) galaxies *= 1.1;
 	if(player.timeless.active)galaxies /= 10;
+    if (player.timeless.upgrades.includes(20)&&player.timeless.active) galaxies *= 2;
     return galaxies;
 }
 
 function getTickSpeedMultiplier() {
   let ret=1;
   let galaxies = getFinalGalaxies(0);
-  if(galaxies >= 1000)galaxies = Math.sqrt(galaxies*1000);
+  let sc=1000;
+  if (player.timeless.upgrades.includes(17)) sc *= 1.25;
+  if(galaxies >= sc)galaxies = Math.sqrt(galaxies*sc);
   if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,galaxies);
   if (player.currentChallenge === "challenge7")ret /= 1.001;
   if (player.currentChallenge === "postcngm3_3")ret /= 1.001;

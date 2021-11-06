@@ -661,10 +661,8 @@ if (player.version < 5) {
   updateEternityChallenges();
   updateDilationUpgradeCosts()
   let diff = new Date().getTime() - player.lastUpdate
-  if (diff > 1000*1000) {
-      simulateTime(diff/1000)
-  }
-
+  player.lastUpdate = player.lastUpdate + diff;
+  setTimeout(simulateTime.bind(null,diff/1000),100);
 }
 
 function load_cloud_save(saveId, cloudPlayer) {
@@ -895,4 +893,4 @@ function getRootSaveObject() {
 }
 
 setTimeout(drawAnimations, 100)
-setTimeout(onLoad, 100)
+//setTimeout(onLoad, 100)

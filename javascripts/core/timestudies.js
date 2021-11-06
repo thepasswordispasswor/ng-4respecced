@@ -131,7 +131,7 @@ function hasRow(row) {
 }
 
 function canBuyStudy(name) {
-	if(name==171)return false;
+	if(name==171&&!player.timeless.upgrades.includes(19))return false;
   var row = Math.floor(name/10)
   var col = name%10
   if (name == 21) {
