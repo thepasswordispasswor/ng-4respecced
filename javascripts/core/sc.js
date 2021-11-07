@@ -73,11 +73,13 @@ function getDilationPower(){
 		if(player.galacticSacrifice.upgrades.includes(55))ret=ret+0.002*Math.log10(player.replicanti.amount.max(1).add(9).log10());
 	}
 	if (player.achievements.includes("r96"))ret = ret+0.005
+	if (player.achievements.includes("ngm4r3"))ret = ret+0.005
 	if(player.timeless.upgrades.includes(9)){
 		ret=ret+0.02*(1-Math.pow(0.95,player.timeless.shards.add(1).log10()));
 	}
 	if(player.dilation.upgrades.includes(9)){
 		ret*=1.05;
 	}
+	if(ret>=0.8)giveAchievement("Are you breaking dilation?");
 	return ret;
 }

@@ -68,6 +68,8 @@ if (player.timestudy.studies.includes(83)&&player.timeless.upgrades.includes(15)
   if (player.timestudy.studies.includes(101)) multiplier = multiplier.times(timeStudy101())
   if (player.timestudy.studies.includes(161)) multiplier = multiplier.times(timeStudy161())
   if (player.timestudy.studies.includes(234) && tier == 1) multiplier = multiplier.times(calcTotalSacrificeBoost())
+	  
+  if (player.timeless.upgrades.includes(23)) multiplier = multiplier.times(player.timeShards.add(1).sqrt())
 
   multiplier = multiplier.times(player.postC3Reward)
   if (player.challenges.includes("postc10") && tier < 8 && tier > 1) multiplier = multiplier.times(mult18);
@@ -164,6 +166,7 @@ function getDimensionFinalMultiplier(tier) {
     multiplier = multiplier.times(galUpgrade12())
   }
   if (player.infinityUpgrades.includes("postinfi73")&&tier == 8) multiplier = multiplier.times(calcTotalSacrificeBoost())
+  if (player.timeless.upgrades.includes(24)&&tier != 8) multiplier = multiplier.times(calcTotalSacrificeBoost().pow(0.1*tier))
   multiplier = multiplier.times(player.achPow);
   if (multiplier.lt(1)) multiplier = new Decimal(1);
   return multiplier;

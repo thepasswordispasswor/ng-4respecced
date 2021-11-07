@@ -128,6 +128,8 @@ const allAchievements = {
   s37 : "You followed the instructions",
   s38 : "Professional bodybuilder",
   ngm4r1 : "Is time relative?",
+  ngm4r2 : "A day lost...",
+  ngm4r3 : "Are you breaking dilation?",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",

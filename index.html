@@ -242,7 +242,7 @@
                 </table>
                 <table class="table" id="studytable">
                     <tr>
-                        <td><button class="timestudy" id="181" onclick="buyTimeStudy(181, 200)">You gain 1% of your GP and IP gained on crunch each second.<span>Cost: 200 Time Theorems</button></td>
+                        <td><button class="timestudy" id="181" onclick="buyTimeStudy(181, 0)">You gain 1% of your GP and IP gained on crunch each second.<span>Cost: 0 Time Theorems</button></td>
                     </tr>
                     <tr>
                         <td><button class="eternitychallengestudy" id="ec10unl">Eternity Challenge 10<span>Requirement: 1e100 EP<span>Cost: 200 Time Theorems</button></td>
@@ -533,7 +533,7 @@
                             <button class="timestudy" id="timeless6" onclick="buyTimelessUpgrade(6)">Keep your GP in Timeless.<br><span id="timeless6cost"></span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="timeless7" onclick="buyTimelessUpgrade(7)" ach-tooltip="TS71's effect ^1000 until 1e500000, TS81's effect is multiplied by 1.5, TS91's effect ^1000, TS101's effect ^1000 until 1e500000">ND Timestudy Path Boost (Hover to see details)<br><span id="timeless7cost"></span></button>
+                            <button class="timestudy" id="timeless7" onclick="buyTimelessUpgrade(7)" ach-tooltip="TS71's effect ^1000 until 1e1000000, TS81's effect is multiplied by 1.5, TS91's effect ^1000, TS101's effect ^1000 until 1e500000">ND Timestudy Path Boost (Hover to see details)<br><span id="timeless7cost"></span></button>
                         </td>
                         <td>
                             <button class="timestudy" id="timeless8" onclick="buyTimelessUpgrade(8)">You can buy all studies from the first 3-way split.<br><span id="timeless8cost"></span></button>
@@ -579,6 +579,20 @@
                         </td>
                         <td>
                             <button class="timestudy" id="timeless20" onclick="buyTimelessUpgrade(20)">Galaxies are 2x stronger in Timeless<br><span id="timeless20cost"></span></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless21" onclick="buyTimelessUpgrade(21)">Boost TS161 by Timeless Points<br><span id="timeless21desc"></span><br><span id="timeless21cost"></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless22" onclick="buyTimelessUpgrade(22)">Dark Matter galaxy scaling is reduced by 20%<br><span id="timeless22cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless23" onclick="buyTimelessUpgrade(23)">sqrt(Timeshards+1) multiply all normal dimensions<br><span id="timeless23cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless24" onclick="buyTimelessUpgrade(24)">Dimensional sacrifice affects other normal dimensions at a reduced rate post-dilation (7th dimension ^0.7, 6th dimension ^0.6, etc.)<br><span id="timeless24cost"></span></button>
                         </td>
                     </tr>
                 </table>
@@ -1568,7 +1582,13 @@
                         </tr>
                         <tr id="achRowngm4r">
                             <td>
-                                <div id="Is time relative?" class="achievement achievementlocked" ach-tooltip="Go Timeless. Reward: TDs are not reset until eternity."><br></div>
+                                <div id="Is time relative?" class="achievement achievementlocked" ach-tooltip="Go Timeless. Reward: TDs are not reset until eternity."><br>Is time relative?</div>
+                            </td>
+                            <td>
+                                <div id="A day lost..." class="achievement achievementlocked" ach-tooltip="Reach 86400 Timeless Shards. Reward: Multiply Timeless Point gain by 24."><br>A day lost...</div>
+                            </td>
+                            <td>
+                                <div id="Are you breaking dilation?" class="achievement achievementlocked" ach-tooltip="Reach a dilation effect of ^0.8. Reward: Reduce dilation effect."><br>Are you breaking dilation?</div>
                             </td>
                         </tr>
                         <tr id="achRow11">
@@ -1585,13 +1605,13 @@
                                 <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: ???"><br></div>
                             </td>
                             <td>
-                                <div id="I wish I had gotten 7 eternities" class="achievement achievementlocked" style="background-image: url(images/77.png)" ach-tooltip="Start an Infinity challenge inside an Eternity challenge."><br></div>
+                                <div id="I wish I had gotten 7 eternities" class="achievement achievementlocked" style="background-image: url(images/77.png)" ach-tooltip="Start an Infinity challenge inside an Eternity challenge. Reward: Boost Timeless Shard gain exponent based on EC tiers completed."><br></div>
                             </td>
                             <td>
                                 <div id="Do I really need to infinity" class="achievement achievementlocked" style="background-image: url(images/78.png)" ach-tooltip="Eternity with only 1 infinity. Reward: Multiplier to IP based on infinities."><br></div>
                             </td>
                             <td>
-                                <div id="8 nobody got time for that" class="achievement achievementlocked" style="background-image: url(images/79.png)" ach-tooltip="Eternity without buying dimensions 1-7."><br></div>
+                                <div id="8 nobody got time for that" class="achievement achievementlocked" style="background-image: url(images/79.png)" ach-tooltip="Eternity without buying dimensions 1-7. Reward: Boost Timeless Shard gain based on 8th dimensions bought."><br></div>
                             </td>
                             <td>
                                 <div id="IT'S OVER 9000" class="achievement achievementlocked" style="background-image: url(images/80.png)" ach-tooltip="Get a total sacrifice multiplier of 1e9000. Reward: Sacrifice doesn't reset your dimensions."><br></div>
