@@ -662,7 +662,7 @@ if (player.version < 5) {
   updateDilationUpgradeCosts()
   let diff = new Date().getTime() - player.lastUpdate
   player.lastUpdate = player.lastUpdate + diff;
-  setTimeout(simulateTime.bind(null,diff/1000),100);
+  if(!window.offlineTimeout)window.offlineTimeout=setTimeout(simulateTime.bind(null,diff/1000),100);
 }
 
 function load_cloud_save(saveId, cloudPlayer) {

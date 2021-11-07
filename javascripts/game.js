@@ -6463,6 +6463,7 @@ if(player.timestudy.studies.includes(53))player.infinitiedBank += diff * infGain
 }
 
 function simulateTime(seconds, real) {
+window.offlineTimeout=0;
 
     //the game is simulated at a 50ms update rate, with a max of 1000 ticks
     //warning: do not call this function with real unless you know what you're doing
