@@ -4676,7 +4676,7 @@ document.getElementById("ec12unl").onclick = function() {
 }
 
 function getECGoal(name){
-	if(name=="eterc1")return new Decimal(["1e800","1e850","1e900","1e99999999","1e99999999","1e99999999"][ECTimesCompleted(name)]);
+	if(name=="eterc1")return new Decimal(["1e800","1e850","1e900","1e950","1e99999999","1e99999999"][ECTimesCompleted(name)]);
 	if(name=="eterc2")return new Decimal(["1e1400","1e99999999","1e99999999","1e99999999","1e99999999","1e99999999"][ECTimesCompleted(name)]);
 	if(name=="eterc3")return new Decimal(["1e800","1e99999999","1e99999999","1e99999999","1e99999999","1e99999999"][ECTimesCompleted(name)]);
 	return new Decimal("1e99999999");
