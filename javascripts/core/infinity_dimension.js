@@ -54,14 +54,7 @@ function DimensionProduction(tier) {
   var ret = dim.amount
   if (!(player.currentEternityChall == "eterc11"))ret = ret.times(DimensionPower(tier))
   if (player.challenges.includes("postc8")) {
-  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
-    if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-    }
-    if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
-    }
+  let tick = getDilatedTickspeed()
 	  ret = ret.times(tick)
   }
   return ret;
@@ -99,7 +92,7 @@ function DimensionPower(tier) {
   if (ECTimesCompleted("eterc2") !== 0 && tier == 1) mult = mult.times(EC2Reward())
   if (player.currentEternityChall == "eterc2") mult = mult.times(0)
 
-  if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(player.infinityPoints.pow(0.4 + ECTimesCompleted("eterc4")*0.2))
+  if (ECTimesCompleted("eterc4") !== 0) mult = mult.times(EC4Reward())
   
   
   
@@ -124,14 +117,6 @@ function DimensionPower(tier) {
   if (ECTimesCompleted("eterc9") !== 0) mult = mult.times(player.timeShards.pow(ECTimesCompleted("eterc9")*0.5).plus(1).min(new Decimal("1e4000")))
   if (player.achievements.includes("r75")) mult = mult.times(player.achPow);
   return mult
-}
-
-function getReplMult () {
-  let replmult = Decimal.pow(Decimal.log2(Decimal.max(player.replicanti.amount,1).add(1)), Math.pow(player.galaxies, .4))
-
-  if (player.timestudy.studies.includes(21)) replmult = replmult.plus(timeStudy21())
-  if (player.timestudy.studies.includes(102)) replmult = replmult.times(timeStudy102())
-  return replmult;
 }
 
 

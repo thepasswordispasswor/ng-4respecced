@@ -424,15 +424,7 @@ function studyTreeSaveButton(num) {
 }
 
 function timeStudy11(){
-  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
-    if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-    }
-    if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
-    }
-	
+  let tick = getDilatedTickspeed()
 	let ret=tick.add(1).pow(5);
 	return ret;
 }
@@ -442,19 +434,29 @@ function timeStudy21(){
 	return ret;
 }
 
+function timeStudy41(){
+	let gal = player.galaxies + player.replicanti.galaxies;
+	if(player.galacticSacrifice.upgrades.includes(72))gal = Math.pow(gal, 1.6);
+	let ret = Decimal.pow(1.2, gal);
+	return ret;
+}
+
 function timeStudy71(){
+	if(player.currentChallenge=="challenge11")return new Decimal(1);
 	let ret=calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000");
-	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e1000").pow(999));
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e2000").pow(999));
 	return ret;
 }
 
 function timeStudy72(){
+	if(player.currentChallenge=="challenge11")return new Decimal(1);
 	let ret=calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000");
 	if(player.timeless.upgrades.includes(11))ret=ret.mul(ret.min("1e500").pow(999));
 	return ret;
 }
 
 function timeStudy73(){
+	if(player.currentChallenge=="challenge11")return new Decimal(1);
 	let ret=calcTotalSacrificeBoost().pow(0.005).max(1).min("1e1300");
 	if(player.timeless.upgrades.includes(15))ret=ret.mul(ret.min("1e500").pow(99));
 	return ret;
@@ -497,7 +499,7 @@ function timeStudy93(){
 
 function timeStudy101(){
 	let ret=player.replicanti.amount.max(1);
-	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e500").pow(999));
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e2000").pow(999));
 	return ret;
 }
 
@@ -527,5 +529,6 @@ function timeStudy161(){
 
 function timeStudy162(){
 	let ret=new Decimal(1e234);
+	if(player.timeless.upgrades.includes(30))ret=ret.mul(TLPU30());
 	return ret;
 }

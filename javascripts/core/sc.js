@@ -63,6 +63,11 @@ function getDilationStart4(){
 	return ret;
 }
 
+function getDilationStart5(){
+	let ret=50000;
+	return ret;
+}
+
 function getDilationPower(){
 	let ret=0.75;
 	if(player.galacticSacrifice.upgrades.includes(44)){

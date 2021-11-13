@@ -306,7 +306,7 @@ function hasInfinityMult(tier) {
         if (player.currentChallenge == "challenge9" || player.currentChallenge == "postc4") dimMult = Math.pow(10/0.30,Math.random())*0.30
 
         if (player.infinityUpgrades.includes('dimMult')) dimMult *= infUpg12Pow() / 2;
-        dimMult += ECTimesCompleted("eterc3") * 0.8
+        dimMult = dimMult * (1+ECTimesCompleted("eterc3")**5/2)
         if (player.galacticSacrifice.upgrades.includes(33)) {
           dimMult *= galUpgrade33() / 2;
         }
@@ -713,14 +713,7 @@ function getDimensionProductionPerSecond(tier) {
     if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc4") ret = ret.times(player.chall2Pow)
 	
   dilationstart = getDilationStart();
-  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
-    if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-    }
-    if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
-    }
+  let tick = getDilatedTickspeed()
         tick = new Decimal(1000).dividedBy(tick)
         ret = Decimal.floor(player[TIER_NAMES[tier] + 'Amount']).times(getDimensionFinalMultiplier(tier)).times(1000).dividedBy(tick)
 		if (player.currentChallenge == "challenge2" || player.currentChallenge == "postc4") ret = ret.times(player.chall2Pow)

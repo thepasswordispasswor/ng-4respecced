@@ -18,7 +18,7 @@ function getPurelyGalaxies (offset) {
     if (player.timestudy.studies.includes(132)) galaxies += player.replicanti.galaxies*0.4
     if (player.timestudy.studies.includes(225)) galaxies += Math.floor(player.replicanti.amount.e / 1000)
     if (player.timestudy.studies.includes(226)) galaxies += Math.floor(player.replicanti.gal / 15)
-    galaxies += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.05 * ECTimesCompleted("eterc8"))-1, 0)
+    //galaxies += Math.min(player.replicanti.galaxies, player.replicanti.gal) * Math.max(Math.pow(Math.log10(player.infinityPower.plus(1).log10()+1), 0.05 * ECTimesCompleted("eterc8"))-1, 0)
     if (player.currentChallenge === 'challenge7' || player.currentChallenge == "postcngm3_3" || player.currentChallenge == "postcngm4r_1") galaxies = Math.min(galaxies + 20, Math.pow(galaxies, 2));
     return galaxies;
 }
@@ -46,6 +46,7 @@ function getTickSpeedMultiplier() {
   let galaxies = getFinalGalaxies(0);
   let sc=1000;
   if (player.timeless.upgrades.includes(17)) sc *= 1.25;
+  if (player.achievements.includes("r83")) sc *= 1.25;
   if(galaxies >= sc)galaxies = Math.sqrt(galaxies*sc);
   if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,galaxies);
   if (player.currentChallenge === "challenge7")ret /= 1.001;
@@ -168,19 +169,30 @@ function buyMaxTickSpeed() {
 }
 
 
-function updateTickSpeed() {
-  var exp = player.tickspeed.e;
+function getUndilatedTickspeed() {
   let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
-  let tickbeforedilation = tick
+  return tick;
+}
+
+function getDilatedTickspeed() {
+  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
   dilationstart = getDilationStart();
     if(tick.log10()>=dilationstart){
 	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
 	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
     }
-  dilationstart4 = getDilationStart4();
+if(!player.timeless.upgrades.includes(25)){
+	dilationstart4 = getDilationStart4();
     if(tick.log10()>=dilationstart4){
 	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
+}
+	return tick;
+}
+function updateTickSpeed() {
+  var exp = player.tickspeed.e;
+  let tick = getDilatedTickspeed()
+  let tickbeforedilation = getUndilatedTickspeed()
   document.getElementById("tickSpeedAmount").textContent = 'Tickrate: ' + shorten(tick) + '/s (' + shorten(tickbeforedilation) +' before dilation)';
   //if (exp > 1) {
   //    document.getElementById("tickSpeedAmount").textContent = 'Tickspeed: ' + player.tickspeed.toFixed(0);

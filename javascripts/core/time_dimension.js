@@ -30,10 +30,7 @@ function getTimeDimensionPower(tier) {
   ret = ret.times(ec10bonus)
   if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galUpgrade43())
   if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
-    var replmult = Decimal.pow(Decimal.log2(player.replicanti.amount), 2)
-
-    if (player.timestudy.studies.includes(21)) replmult = replmult.plus(Decimal.pow(player.replicanti.amount, 0.032))
-    if (player.timestudy.studies.includes(102)) replmult = replmult.times(Decimal.pow(5, player.replicanti.galaxies))
+    var replmult = getReplMult()
 
     ret = ret.times(replmult.pow(0.1))
   }
@@ -67,7 +64,10 @@ function getTimeDimensionPower(tier) {
   if (player.galacticSacrifice.upgrades.includes(35)) {
     ret=ret.times(galUpgrade35())
   }
-
+  if (player.timeless.upgrades.includes(29)) {
+    ret=ret.times(TLPU29())
+  }
+  
   if(!player.timeless.active){
 	  if(player.challenges.includes("postcngm4r_1") && tier%2==1)ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
   }
@@ -83,6 +83,10 @@ function getTimeDimensionPower(tier) {
 	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart4, getDilationPower())*dilationstart4)
     }
 	
+ dilationstart5 = getDilationStart5();
+    if(ret.log10()>=dilationstart5){
+	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart5, getDilationPower())*dilationstart5)
+    }
 if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42)) {
     ret = ret.times(galUpgrade12())
   }
@@ -106,16 +110,10 @@ function getTimeDimensionProduction(tier) {
   if (player.currentEternityChall == "eterc1") return new Decimal(0)
   if (player.timestudy.studies.includes(23)){
 	  
-  let tick = new Decimal(1000).dividedBy(new Decimal(player.tickspeed))
-    if(tick.log10()>=dilationstart){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-	  if (player.dilation.active)tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart, getDilationPower())*dilationstart)
-    }
-    if(tick.log10()>=dilationstart4){
-	  tick = Decimal.pow(10, Math.pow(tick.log10()/dilationstart4, getDilationPower())*dilationstart4)
-    }
+  let tick = getDilatedTickspeed()
 	  ret = ret.times(tick)
   }
+  if(player.currentEternityChall == "eterc7" && tier==1)ret = ret.pow(0.1);
   return ret
 }
 

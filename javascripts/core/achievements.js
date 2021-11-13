@@ -130,6 +130,7 @@ const allAchievements = {
   ngm4r1 : "Is time relative?",
   ngm4r2 : "A day lost...",
   ngm4r3 : "Are you breaking dilation?",
+  ngm4r4 : "Replicate Expertise",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",

@@ -135,7 +135,7 @@
                 <table class="table" id="studytable">
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
-                        <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Each galaxy gives a 1.2x multiplier on IP gained. <span>Cost: 4 Time Theorems</button></td>
+                        <td><button class="timestudy" id="41" onclick="buyTimeStudy(41, 4)">Boost IP gain based on normal and replicated galaxies.<span id="41desc"></span>Cost: 4 Time Theorems</button></td>
                         <td><button class="timestudy" id="42" onclick="buyTimeStudy(42, 6)">Galaxy requirement base increase is reduced by 6.<span>Cost: 6 Time Theorems</button></td>
 			<td><button class="timestudy" id="43" onclick="buyTimeStudy(43, 15)">Gain 1% of infinitied gain per second.<span>Cost: 15 Time Theorems</button></td>
                     </tr>
@@ -367,7 +367,7 @@
                             <button id="epmult" class="eternityupbtn" onclick="buyEPMult()">You gain 5 times more EP<p>Cost: 500 EP</button>
                         </td>
                         <td>
-                            <button id="eter8" class="eternityupbtnbought" style="opacity: 0"></button>
+                            <button id="eter8" class="eternityupbtnlocked" onclick="buyEternityUpgrade(8, 1e60)"></button>
                         </td>
                     </tr>
                 </table>
@@ -524,6 +524,9 @@
                         <td>
                             <button class="timestudy" id="timeless4" onclick="buyTimelessUpgrade(4)">Timeless Points boost EP gain.<br><span id="timeless4desc"></span><br><span id="timeless4cost"></span></button>
                         </td>
+                        <td>
+                            <button class="timestudy" id="timeless29" onclick="buyTimelessUpgrade(29)">Each bought Time Dimension multiply all Time Dimensions by 2.<br><span id="timeless29desc"></span><br><span id="timeless29cost"></span></button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -533,10 +536,13 @@
                             <button class="timestudy" id="timeless6" onclick="buyTimelessUpgrade(6)">Keep your GP in Timeless.<br><span id="timeless6cost"></span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="timeless7" onclick="buyTimelessUpgrade(7)" ach-tooltip="TS71's effect ^1000 until 1e1000000, TS81's effect is multiplied by 1.5, TS91's effect ^1000, TS101's effect ^1000 until 1e500000">ND Timestudy Path Boost (Hover to see details)<br><span id="timeless7cost"></span></button>
+                            <button class="timestudy" id="timeless7" onclick="buyTimelessUpgrade(7)" ach-tooltip="TS71's effect ^1000 until 1e2000000, TS81's effect is multiplied by 1.5, TS91's effect ^1000, TS101's effect ^1000 until 1e2000000">ND Timestudy Path Boost (Hover to see details)<br><span id="timeless7cost"></span></button>
                         </td>
                         <td>
                             <button class="timestudy" id="timeless8" onclick="buyTimelessUpgrade(8)">You can buy all studies from the first 3-way split.<br><span id="timeless8cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless30" onclick="buyTimelessUpgrade(30)">Boost TS162 by Timeless Points<br><span id="timeless30desc"></span><br><span id="timeless30cost"></button>
                         </td>
                     </tr>
                     <tr>
@@ -544,7 +550,7 @@
                             <button class="timestudy" id="timeless9" onclick="buyTimelessUpgrade(9)">Dilation effect is reduced based on timeless shards.<br><span id="timeless9cost"></span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="timeless10" onclick="buyTimelessUpgrade(10)">Timeless Points and GP boost each other.<br><span id="timeless10cost"></span></button>
+                            <button class="timestudy" id="timeless10" onclick="buyTimelessUpgrade(10)">Timeless Points and GP boost each other.<br><span id="timeless10desc"></span><br><span id="timeless10cost"></span></button>
                         </td>
                         <td>
                             <button class="timestudy" id="timeless11" onclick="buyTimelessUpgrade(11)" ach-tooltip="TS72's effect ^1000 until 1e500000, TS82's effect ^1000 until 1e500000, TS102's effect ^2">ID Timestudy Path Boost (Hover to see details)<br><span id="timeless11cost"></span></button>
@@ -589,10 +595,24 @@
                             <button class="timestudy" id="timeless22" onclick="buyTimelessUpgrade(22)">Dark Matter galaxy scaling is reduced by 20%<br><span id="timeless22cost"></span></button>
                         </td>
                         <td>
-                            <button class="timestudy" id="timeless23" onclick="buyTimelessUpgrade(23)">sqrt(Timeshards+1) multiply all normal dimensions<br><span id="timeless23cost"></span></button>
+                            <button class="timestudy" id="timeless23" onclick="buyTimelessUpgrade(23)">sqrt(Timeshards+1) multiply all normal dimensions<br><span id="timeless23desc"></span><br><span id="timeless23cost"></span></button>
                         </td>
                         <td>
                             <button class="timestudy" id="timeless24" onclick="buyTimelessUpgrade(24)">Dimensional sacrifice affects other normal dimensions at a reduced rate post-dilation (7th dimension ^0.7, 6th dimension ^0.6, etc.)<br><span id="timeless24cost"></span></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="timestudy" id="timeless25" onclick="buyTimelessUpgrade(25)">Tickspeed is not affected by fourth dilation effect<br><span id="timeless25cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless26" onclick="buyTimelessUpgrade(26)">Boost replicanti limit and replicate chance (replicate amount) based on timeless shards<br><span id="timeless26desc"></span><br><span id="timeless26cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless27" onclick="buyTimelessUpgrade(27)">Keep your GP and galaxy upgrades when entering EC<br><span id="timeless27cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless28" onclick="buyTimelessUpgrade(28)">Remove the nerfs to g14,g24,g35,g43 in Timeless, and unlock more galaxy upgrades<br><span id="timeless28cost"></button>
                         </td>
                     </tr>
                 </table>
@@ -990,7 +1010,7 @@
                                 </td>
                                 <td align="right" width="10%">
 								    <button id="timeMax1Antimatter" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimensionAntimatter(1)">Cost: 10</button>
-                                </td><td align="right">
+                                </td><td align="right" width="10%">
 									<button id="timeMax1" style="color:black; width:195px; height:30px" class="storebtn" align="right" onclick="buyTimeDimension(1)">Cost: 10</button>
                                 </td>
                             </tr>
@@ -1510,7 +1530,7 @@
                                 <div id="Anti-antichallenged" class="achievement achievementlocked" style="background-image: url(images/50.png)" ach-tooltip="Complete 10 Infinity Challenges. Reward: Each completed IC multiplies third dilation threshold by 100."><br></div>
                             </td>
                             <td>
-                                <div id="YOU CAN GET 50 GALAXIES!??" class="achievement achievementlocked" style="background-image: url(images/51.png)" ach-tooltip="Get 50 galaxies. Reward: Tickspeed is 5% lower per galaxy."><br></div>
+                                <div id="YOU CAN GET 50 GALAXIES!??" class="achievement achievementlocked" style="background-image: url(images/51.png)" ach-tooltip="Get 50 galaxies. Reward: Tickspeed is 5% lower per galaxy, reduce galaxy effect softcap to tickspeed. Distant, Further and Remote scaling starts 1 later."><br></div>
                             </td>
                             <td>
                                 <div id="I got a few to spare" class="achievement achievementlocked" style="background-image: url(images/52.png)" ach-tooltip="Reach 1e35000 antimatter. Reward: Dimensions are more powerful the more unspent antimatter you have."><br></div>
@@ -1590,6 +1610,9 @@
                             <td>
                                 <div id="Are you breaking dilation?" class="achievement achievementlocked" ach-tooltip="Reach a dilation effect of ^0.8. Reward: Reduce dilation effect."><br>Are you breaking dilation?</div>
                             </td>
+                            <td>
+                                <div id="Replicate Expertise" class="achievement achievementlocked" ach-tooltip="Reach 654% replicate chance. Reward: Uncap replicate chance, and replicate chance level boost replicanti limit."><br>Replicate Expertise</div>
+                            </td>
                         </tr>
                         <tr id="achRow11">
                             <td>
@@ -1602,7 +1625,7 @@
                                 <div id="Long lasting relationship" class="achievement achievementlocked" style="background-image: url(images/75.png)" ach-tooltip="Have your Infinity power per second exceed your infinity power for 60 consecutive seconds during a single infinity."><br></div>
                             </td>
                             <td>
-                                <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: ???"><br></div>
+                                <div id="You're a mistake" class="achievement achievementlocked" style="background-image: url(images/76.png)" ach-tooltip="Fail an Eternity challenge. Reward: Each completed failable EC tiers multiply your EP gain by 10 post-dilation."><br></div>
                             </td>
                             <td>
                                 <div id="I wish I had gotten 7 eternities" class="achievement achievementlocked" style="background-image: url(images/77.png)" ach-tooltip="Start an Infinity challenge inside an Eternity challenge. Reward: Boost Timeless Shard gain exponent based on EC tiers completed."><br></div>
@@ -1622,7 +1645,7 @@
                                 <div id="Can you get infinite IP?" class="achievement achievementlocked" style="background-image: url(images/81.png)" ach-tooltip="Reach 1e30008 IP."><br></div>
                             </td>
                             <td>
-                                <div id="You're already dead." class="achievement achievementlocked" style="background-image: url(images/82.png)" ach-tooltip="Eternity without buying dimensions 2-8."><br></div>
+                                <div id="You're already dead." class="achievement achievementlocked" style="background-image: url(images/82.png)" ach-tooltip="Eternity without buying dimensions 2-8. Reward: Boost Timeless Shard gain based on 1st dimensions bought."><br></div>
                             </td>
                             <td>
                                 <div id="5 more eternities until the update" class="achievement achievementlocked" style="background-image: url(images/83.png)" ach-tooltip="Complete 50 unique eternity challenge tiers."><br></div>
@@ -2350,7 +2373,7 @@
                     <tr>
                         <td>
                             <div class="eterchallengediv" id="eterc7div" style="height: 140px; display: none">
-                                <span>First Time Dimension produces Eighth Infinity Dimension, and First Infinity Dimension produces Seventh Dimensions.</span>
+                                <span>First Time Dimension produces Eighth Infinity Dimension, and First Infinity Dimension produces Seventh Dimensions. Production of First Time Dimension ^0.1</span>
                                 <br>
                                 <br>
                                 <div class="outer">
@@ -2562,6 +2585,17 @@
             </td>
             <td>
                 <button id="galaxy65" class="infinistorebtn4" onclick="buyGalaxyUpgrade(65)">Effect of Break Infinity Upgrade 'The multiplier for buying Infinity Dimensions are X' is <span id='galspan65'>?</span><br>Cost: <span id='galcost65'>1e15000</span> GP</button>
+            </td>
+				</tr>
+	<tr id="newgalrow4">
+				    <td>
+                <button id="galaxy71" class="infinistorebtn1" onclick="buyGalaxyUpgrade(71)">Timestudy 21 use multiplication instead of addition, and base replicanti effect formula is better<br>Cost: <span id='galcost71'>1e4500</span> GP</button>
+            </td>
+				    <td>
+                <button id="galaxy72" class="infinistorebtn2" onclick="buyGalaxyUpgrade(72)">Timestudy 41's formula is better<br>Cost: <span id='galcost72'>1e4500</span> GP</button>
+            </td>
+				    <td>
+                <button id="galaxy73" class="infinistorebtn3" onclick="buyGalaxyUpgrade(73)">Boost the upgrade above<br>Cost: <span id='galcost73'>1e4500</span> GP</button>
             </td>
 				</tr>
 
@@ -3274,6 +3308,7 @@
 
 
 <script type="text/javascript" src="javascripts/core/sc.js"></script>
+<script type="text/javascript" src="javascripts/core/replicanti.js"></script>
 
 <script type="text/javascript" src="javascripts/game.js?85"></script>
 

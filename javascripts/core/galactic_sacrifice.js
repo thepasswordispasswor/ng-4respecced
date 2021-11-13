@@ -141,7 +141,7 @@ let galUpgrade13 = function () {
 
 let galUpgrade14 = function () {
   let base = new Decimal(2);
-if(player.timeless.active)base = new Decimal(1.1)
+if(player.timeless.active && !player.timeless.upgrades.includes(28))base = new Decimal(1.1)
   let exp = player.tickspeedBoosts;
   return base.pow(exp);
 }
@@ -157,7 +157,7 @@ let galUpgrade23 = function () {
 }
 
 let galUpgrade24 = function () {
-	if(player.timeless.active)return Decimal.pow(productAllTotalBought(),0.01).mul(2);
+	if(player.timeless.active && !player.timeless.upgrades.includes(28))return Decimal.pow(productAllTotalBought(),0.01).mul(2);
   return Decimal.pow(productAllTotalBought(),0.1).mul(2);
 }
 
@@ -183,7 +183,7 @@ let galUpgrade35 = function () {
 		for (var d = 1; d < 9; d++) {
 			r = r.times(player["timeDimension" + d].bought + player["timeDimension" + d].boughtAntimatter + 1)
 		}
-		if(player.timeless.active)r=r.pow(0.1)
+		if(player.timeless.active && !player.timeless.upgrades.includes(28))r=r.pow(0.1)
 		if(player.challenges.includes("postcngm4r_2"))return r.pow(10)
 		return r.pow(0.1)
 }
@@ -194,7 +194,7 @@ let galUpgrade41 = function () {
 
 let galUpgrade43 = function () {
 	if(player.currentChallenge == "postcngm3_4")return new Decimal(1);
-	if(player.timeless.active)return new Decimal(player.galacticSacrifice.galaxyPoints.add(10).log10()).pow(2)
+	if(player.timeless.active && !player.timeless.upgrades.includes(28))return new Decimal(player.galacticSacrifice.galaxyPoints.add(10).log10()).pow(2)
   return new Decimal(player.galacticSacrifice.galaxyPoints.add(10).log10()).pow(50)
 }
 
@@ -233,6 +233,7 @@ let galUpgrade63 = function () {
 for(i = 1;i <= 8; i++){
 	totalbought=totalbought+player["timeDimension"+i].bought;
 }
+if(player.galacticSacrifice.upgrades.includes(73))return Decimal.pow(1e200,Math.pow(totalbought,1.2));
 return Decimal.pow(1e200,Math.pow(totalbought,0.9));
 }
 
@@ -306,6 +307,9 @@ function galacticUpgradeSpanDisplay () {
   document.getElementById("galcost64").innerHTML = shortenCosts(galUpgradeCosts[64]);
   document.getElementById("galspan65").innerHTML = formatValue(player.options.notation, Number.MAX_VALUE, 2,2);
   document.getElementById("galcost65").innerHTML = shortenCosts(galUpgradeCosts[65]);
+  document.getElementById("galcost71").innerHTML = shortenCosts(galUpgradeCosts[71]);
+  document.getElementById("galcost72").innerHTML = shortenCosts(galUpgradeCosts[72]);
+  document.getElementById("galcost73").innerHTML = shortenCosts(galUpgradeCosts[73]);
 }
 
 function newGalacticDataOnInfinity () {
@@ -357,6 +361,9 @@ let galUpgradeCosts = {
   63: new Decimal("1e400"),
   64: new Decimal("1e500"),
   65: new Decimal("1e550"),
+  71: new Decimal("1e4500"),
+  72: new Decimal("1e5200"),
+  73: new Decimal("1e6400"),
 }
 
 function canBuyGalUpgrade(num) {
@@ -366,7 +373,7 @@ function canBuyGalUpgrade(num) {
 }
 
 function galacticUpgradeButtonTypeDisplay () {
-  for (let i = 1; i <= 6; i++) {
+  for (let i = 1; i <= 7; i++) {
     for (let j = 1; j <= 5; j++) {
       let e = document.getElementById('galaxy' + i + j);
 	  if(!e)continue;
