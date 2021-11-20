@@ -96,6 +96,7 @@ function decreaseDimCosts () {
 let galUpgrade11 = function () {
   let x = player.infinitied;
   if(player.timeless.upgrades.includes(12))x=x+1e8;
+  if(player.timeless.upgrades.includes(31))x=x+player.infinitiedBank*10;
   let y;
   let z = 10
   if (player.challenges.length > 14) z -= (player.challenges.length-8)/4
@@ -240,7 +241,15 @@ return Decimal.pow(1e200,Math.pow(totalbought,0.9));
 let galUpgrade64 = function () {
   let base = new Decimal(2);
   let exp = player.tickspeedBoosts;
+if(player.galacticSacrifice.upgrades.includes(74))exp *= 3;
   return base.pow(exp);
+}
+
+let galUpgrade75 = function () {
+	if(player.currentChallenge == "postcngm3_4")return new Decimal(1);
+  let ret = player.galacticSacrifice.galaxyPoints.add(10).log10()
+  ret=Math.pow(ret,0.25);
+  return ret;
 }
 
 function galacticSacrifice() {
@@ -310,6 +319,9 @@ function galacticUpgradeSpanDisplay () {
   document.getElementById("galcost71").innerHTML = shortenCosts(galUpgradeCosts[71]);
   document.getElementById("galcost72").innerHTML = shortenCosts(galUpgradeCosts[72]);
   document.getElementById("galcost73").innerHTML = shortenCosts(galUpgradeCosts[73]);
+  document.getElementById("galcost74").innerHTML = shortenCosts(galUpgradeCosts[74]);
+  document.getElementById("galspan75").innerHTML = formatValue(player.options.notation, galUpgrade75(), 2,2);
+  document.getElementById("galcost75").innerHTML = shortenCosts(galUpgradeCosts[75]);
 }
 
 function newGalacticDataOnInfinity () {
@@ -364,6 +376,8 @@ let galUpgradeCosts = {
   71: new Decimal("1e4500"),
   72: new Decimal("1e5200"),
   73: new Decimal("1e6400"),
+  74: new Decimal("1e7200"),
+  75: new Decimal("1e12000"),
 }
 
 function canBuyGalUpgrade(num) {

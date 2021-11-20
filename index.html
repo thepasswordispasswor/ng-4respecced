@@ -129,7 +129,8 @@
                         <td><button class="timestudy" id="33" onclick="buyTimeStudy(33, 2)">You keep half of your replicanti galaxies on infinity<span>Req:  Eternitied at least once</span>Cost: 2 Time Theorems</button></td>
                         <td><button class="timestudy" id="31" onclick="buyTimeStudy(31, 3)">Powers up infinity upgrades that are based on your infinitied stat (to the power of 4)<span>Cost: 3 Time Theorems</button></td>
                         <td><button class="timestudy" id="32" onclick="buyTimeStudy(32, 2)"><span id="32desc">You gain x1 more infinitied stat (based on dimension boosts)</span>Cost: 2 Time Theorems</button></td>
-                        <td><button class="timestudylocked" id="34" style="opacity: 0;">Base replicanti interval limit 1ms -> ???<span>Cost: ??? Time Theorems</button></td>
+						
+                        <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                     </tr>
                 </table>
                 <table class="table" id="studytable">
@@ -154,7 +155,7 @@
                     <tr>
                         <td style="opacity: 0;"><button class="timestudylocked"></button></td>
                         <td><button class="timestudy" id="61" onclick="buyTimeStudy(61, 3)">You gain 10x more EP (applied post-dilation)<span>Req:  Eternitied at least once</span>Cost: 3 Time Theorems</button></td>
-                        <td><button class="timestudy" id="62" onclick="buyTimeStudy(62, 3)">You gain replicanti 3 times faster<span>Cost: 3 Time Theorems</button></td>
+                        <td><button class="timestudy" id="62" onclick="buyTimeStudy(62, 3)">You gain replicanti 3 times faster if you have TS192. If you don't have TS192, replicanti limit ^1.5<span>Cost: 3 Time Theorems</button></td>
                     </tr>
                 </table>
                 <br>
@@ -558,6 +559,9 @@
                         <td>
                             <button class="timestudy" id="timeless12" onclick="buyTimelessUpgrade(12)">Add 1e8 infinities to g11<br><span id="timeless12cost"></span></button>
                         </td>
+                        <td>
+                            <button class="timestudy" id="timeless31" onclick="buyTimelessUpgrade(31)">Banked infinities affects g11 at 10x power. <span id="timeless31cost"></button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -571,6 +575,9 @@
                         </td>
                         <td>
                             <button class="timestudy" id="timeless16" onclick="buyTimelessUpgrade(16)">Remote galaxy scaling is reduced by 20%<br><span id="timeless16cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless32" onclick="buyTimelessUpgrade(32)">You can gain Timeless Shards without exiting Timeless.<br><span id="timeless32cost"></span></button>
                         </td>
                     </tr>
                     <tr>
@@ -586,6 +593,9 @@
                         <td>
                             <button class="timestudy" id="timeless20" onclick="buyTimelessUpgrade(20)">Galaxies are 2x stronger in Timeless<br><span id="timeless20cost"></span></button>
                         </td>
+                        <td>
+                            <button class="timestudy" id="timeless33" onclick="buyTimelessUpgrade(33)">Square root the cost of 3rd Timeless buyable.<br><span id="timeless33cost"></span></button>
+                        </td>
                     </tr>
                     <tr>
                         <td>
@@ -599,6 +609,9 @@
                         </td>
                         <td>
                             <button class="timestudy" id="timeless24" onclick="buyTimelessUpgrade(24)">Dimensional sacrifice affects other normal dimensions at a reduced rate post-dilation (7th dimension ^0.7, 6th dimension ^0.6, etc.)<br><span id="timeless24cost"></span></button>
+                        </td>
+                        <td>
+                            <button class="timestudy" id="timeless34" onclick="buyTimelessUpgrade(34)">Reduce galaxy effect softcap to tickspeed.<br><span id="timeless34cost"></span></button>
                         </td>
                     </tr>
                     <tr>
@@ -2342,7 +2355,7 @@
                     <tr>
                         <td>
                             <div class="eterchallengediv" id="eterc5div" style="height: 140px; display: none">
-                                <span>Galaxy cost increase scaling starts instantly (Normally at 100 galaxies). Dimension boost costs scaling is massively increased.</span>
+                                <span>Distant, Further, Remote, and Dark Matter galaxy scaling are applied instantly, and 5x stronger. Dimension boost costs scaling is massively increased.</span>
                                 <br>
                                 <br>
                                 <div class="outer">
@@ -2596,6 +2609,12 @@
             </td>
 				    <td>
                 <button id="galaxy73" class="infinistorebtn3" onclick="buyGalaxyUpgrade(73)">Boost the upgrade above<br>Cost: <span id='galcost73'>1e4500</span> GP</button>
+            </td>
+				    <td>
+                <button id="galaxy74" class="infinistorebtn4" onclick="buyGalaxyUpgrade(74)">Effect of the upgrade above ^3, and the upgrade above affects IP gain<br>Cost: <span id='galcost74'>1e4500</span> GP</button>
+            </td>
+				    <td>
+                <button id="galaxy75" class="infinistorebtn4" onclick="buyGalaxyUpgrade(75)">GP boost Timeless shards<br>Currently: <span id='galspan75'>?</span>x<br>Cost: <span id='galcost75'>1e4500</span> GP</button>
             </td>
 				</tr>
 

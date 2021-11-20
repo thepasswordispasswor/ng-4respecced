@@ -114,7 +114,7 @@ function DimensionPower(tier) {
       mult = mult.times(replmult)
   }
   // also post-dilation
-  if (ECTimesCompleted("eterc9") !== 0) mult = mult.times(player.timeShards.pow(ECTimesCompleted("eterc9")*0.5).plus(1).min(new Decimal("1e4000")))
+  if (ECTimesCompleted("eterc9") !== 0) mult = mult.times(EC9Reward())
   if (player.achievements.includes("r75")) mult = mult.times(player.achPow);
   return mult
 }

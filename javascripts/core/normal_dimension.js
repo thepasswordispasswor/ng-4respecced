@@ -530,7 +530,7 @@ function hasInfinityMult(tier) {
                 if (player.money.lt(player[name + "Cost"].times(10))) return false
                 var x = bulk
 
-            if ((player.dimensionMultDecrease > 3 || player.currentChallenge == "postc7" || player.currentChallenge == "challenge5")) {
+            if ((player.currentChallenge == "postc7" || player.currentChallenge == "challenge5")) {
                 while (player.money.gte(player[name + "Cost"].times(10)) && x > 0) {
                         player.money = player.money.minus(player[name + "Cost"].times(10))
                         if (player.currentChallenge != "challenge5") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
@@ -545,7 +545,7 @@ function hasInfinityMult(tier) {
             } else {
                 if (!costIncreaseActive(player[name + "Cost"])) {
                     let failsafe = 0
-                    while (player.money.gt(player[name + "Cost"].times(10)) && x > 0 && player[name + "Cost"].lte(Number.MAX_VALUE) && failsafe < 150) {
+                    while (player.money.gt(player[name + "Cost"].times(10)) && x > 0 && player[name + "Cost"].lte(Number.MAX_VALUE) && failsafe < 1000) {
                         player.money = player.money.minus(player[name + "Cost"].times(10))
                         if (player.currentChallenge != "challenge5") player[name + "Cost"] = player[name + "Cost"].times(getDimensionCostMultiplier(tier))
                         else multiplySameCosts(player[name + 'Cost'])

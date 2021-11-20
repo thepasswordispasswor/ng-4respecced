@@ -444,14 +444,14 @@ function timeStudy41(){
 function timeStudy71(){
 	if(player.currentChallenge=="challenge11")return new Decimal(1);
 	let ret=calcTotalSacrificeBoost().pow(0.25).max(1).min("1e210000");
-	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e2000").pow(999));
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e5000").pow(999));
 	return ret;
 }
 
 function timeStudy72(){
 	if(player.currentChallenge=="challenge11")return new Decimal(1);
 	let ret=calcTotalSacrificeBoost().pow(0.04).max(1).min("1e30000");
-	if(player.timeless.upgrades.includes(11))ret=ret.mul(ret.min("1e500").pow(999));
+	if(player.timeless.upgrades.includes(11))ret=ret.mul(ret.min("1e1000").pow(999));
 	return ret;
 }
 
@@ -499,7 +499,7 @@ function timeStudy93(){
 
 function timeStudy101(){
 	let ret=player.replicanti.amount.max(1);
-	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e2000").pow(999));
+	if(player.timeless.upgrades.includes(7))ret=ret.mul(ret.min("1e5000").pow(999));
 	return ret;
 }
 
