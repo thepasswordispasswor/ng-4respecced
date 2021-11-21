@@ -24,10 +24,6 @@ function getTimeDimensionPower(tier) {
   if (player.timestudy.studies.includes(151)) ret = ret.times(timeStudy151())
   if (player.timestudy.studies.includes(221)) ret = ret.times(Decimal.pow(1.01, player.resets))
   if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(Math.max(Math.pow(calcTotalSacrificeBoost().log10(), 100), 1))
-  let ec10bonus = new Decimal(1)
-  if (ECTimesCompleted("eterc10") !== 0) ec10bonus = new Decimal(Math.max(Math.pow(getInfinitied(), 2) * ECTimesCompleted("eterc10") * 0.02+1, 1))
-  if (player.timestudy.studies.includes(31)) ec10bonus = ec10bonus.pow(4)
-  ret = ret.times(ec10bonus)
   if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galUpgrade43())
   if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
     var replmult = getReplMult()
@@ -92,6 +88,7 @@ if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.u
   }
   
   if (ECTimesCompleted("eterc1") !== 0) ret = ret.times(EC1Reward())
+  if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(EC10Reward())
   if (player.eternityUpgrades.includes(4)) ret = ret.times(player.achPow)
   if (player.eternityUpgrades.includes(5)) ret = ret.times(Math.max(player.timestudy.theorem, 1))
   if (player.eternityUpgrades.includes(6)) ret = ret.times(player.totalTimePlayed / 10 / 60 / 60 / 24)
@@ -206,7 +203,7 @@ if (player.firstBought < 1) {
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
 	  if(Math.pow(1.01,dim.boughtAntimatter) >= 1e100 || dim.costAntimatter.gte("0.99e9000000000000000"))dim.costAntimatter=new Decimal("0.99e9000000000000000");
   }
-  if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
   if (player.money.lt(dim.costAntimatter)) return false
 
@@ -227,7 +224,7 @@ if (player.firstBought < 1) {
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
 	  if(Math.pow(1.01,dim.boughtAntimatter) >= 1e100 || dim.costAntimatter.gte("0.99e9000000000000000"))dim.costAntimatter=new Decimal("0.99e9000000000000000");
   }
-  if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
   dim.power = dim.power.times(Math.sqrt(1.5))
   updateEternityUpgrades()
@@ -277,7 +274,7 @@ function autobuyerBuyTimeDimensions(i, bulk){
 			test2 = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,test)-1)*100).times(timeDimStartCostsAntimatter[tier])
 			if(Math.pow(1.01,test) >= 1e100 || test2.gte("0.99e9000000000000000"))test2=new Decimal("0.99e9000000000000000");
 		}
-  if (player.galacticSacrifice.upgrades.includes(11)) test2 =  test2.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81)) test2 =  test2.div(galUpgrade11())
   if (player.galacticSacrifice.upgrades.includes(63)) test2 =  test2.div(galUpgrade63())
 		if (player.money.gte(test2))realbulk += testamount
 		if(testamount==1)break;
@@ -304,7 +301,7 @@ dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], dim.boughtAnt
 	  dim.costAntimatter = Decimal.pow(timeDimCostMultsAntimatter[tier], (Math.pow(1.01,dim.boughtAntimatter)-1)*100).times(timeDimStartCostsAntimatter[tier])
 	  if(Math.pow(1.01,dim.boughtAntimatter) >= 1e100 || dim.costAntimatter.gte("0.99e9000000000000000"))dim.costAntimatter=new Decimal("0.99e9000000000000000");
   }
-  if (player.galacticSacrifice.upgrades.includes(11)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
+  if (player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade11())
   if (player.galacticSacrifice.upgrades.includes(63)) dim.costAntimatter =  dim.costAntimatter.div(galUpgrade63())
 	updateEternityUpgrades()
 }

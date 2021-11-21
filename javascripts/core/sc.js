@@ -65,6 +65,8 @@ function getDilationStart4(){
 
 function getDilationStart5(){
 	let ret=50000;
+	if (player.infinityUpgrades.includes("timeMult"))ret=ret+Math.log10(timeMultNum);
+	if (player.infinityUpgrades.includes("timeMult2"))ret=ret+Math.log10(timeMultNum2);
 	return ret;
 }
 

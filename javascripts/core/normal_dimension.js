@@ -76,9 +76,8 @@ if (player.timestudy.studies.includes(83)&&player.timeless.upgrades.includes(15)
 
   if (player.currentChallenge === 'challenge13' || player.currentChallenge === "postc4" || player.currentChallenge === "postcngm3_3" || player.challenges.includes("postcngm3_3")) multiplier = multiplier.times(productAllTotalBought());
 
-  if (player.currentEternityChall == "eterc10") multiplier = multiplier.times(ec10bonus)
-  if (player.timestudy.studies.includes(193)) multiplier = multiplier.times(Decimal.pow(1.03, player.eternities).min("1e13000"))
-  if (tier == 8 && player.timestudy.studies.includes(214)) multiplier = multiplier.times((calcTotalSacrificeBoost().pow(8)).min("1e46000").times(calcTotalSacrificeBoost().pow(1.1).min(new Decimal("1e125000"))))
+  if (player.timestudy.studies.includes(193)) multiplier = multiplier.times(timeStudy193())
+  if (tier == 8 && player.timestudy.studies.includes(214)) multiplier = multiplier.times(timeStudy214())
 
   if (player.galacticSacrifice.upgrades.includes(12) && !player.galacticSacrifice.upgrades.includes(42)) {
     multiplier = multiplier.times(galUpgrade12())
@@ -168,6 +167,10 @@ function getDimensionFinalMultiplier(tier) {
   if (player.infinityUpgrades.includes("postinfi73")&&tier == 8) multiplier = multiplier.times(calcTotalSacrificeBoost())
   if (player.timeless.upgrades.includes(24)&&tier != 8) multiplier = multiplier.times(calcTotalSacrificeBoost().pow(0.1*tier))
   multiplier = multiplier.times(player.achPow);
+  if (player.galacticSacrifice.upgrades.includes(81) && player.galacticSacrifice.upgrades.includes(11)) {
+    multiplier = multiplier.times(galUpgrade11())
+  }
+  if (player.currentEternityChall == "eterc10") multiplier = multiplier.times(ec10bonus)
   if (multiplier.lt(1)) multiplier = new Decimal(1);
   return multiplier;
 }
@@ -370,6 +373,7 @@ function hasInfinityMult(tier) {
 
     function getDimensionCostMultiplierIncrease (adjust) {
       let ret = player.dimensionMultDecrease + (adjust || 0);
+	  if(player.galacticSacrifice.upgrades.includes(81))ret = Math.pow(ret, .5);
       if (player.currentChallenge === 'postc2') {
         ret = Math.pow(ret, .5);
       } else if (player.challenges.includes('postc2')) {
@@ -568,9 +572,9 @@ function hasInfinityMult(tier) {
                     if (buying <= 0) return false
                     if (buying > bulk) buying = bulk
                     player[name+"Amount"] = Decimal.round(player[name+"Amount"].plus(10*buying))
-                    preInfBuy = Math.floor(1 + (308 - initCost[tier].log10() + (player.galacticSacrifice.upgrades.includes(11)?galUpgrade11().log10():0)) / costMults[tier].log10())
+                    preInfBuy = Math.floor(1 + (308 - initCost[tier].log10() + ((player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81))?galUpgrade11().log10():0)) / costMults[tier].log10())
                     postInfBuy = player[name + 'Bought']/10+buying - preInfBuy - 1
-                    postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy)).div(player.galacticSacrifice.upgrades.includes(11)?galUpgrade11():1)
+                    postInfInitCost = initCost[tier].times(Decimal.pow(costMults[tier], preInfBuy)).div(player.galacticSacrifice.upgrades.includes(11) && !player.galacticSacrifice.upgrades.includes(81)?galUpgrade11():1)
                     recordBought(name, 10*buying)
                     player[name + "Pow"] = player[name + "Pow"].times(Decimal.pow(getDimensionPowerMultiplier(tier), buying))
 

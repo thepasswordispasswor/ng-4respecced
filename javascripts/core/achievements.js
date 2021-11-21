@@ -131,6 +131,8 @@ const allAchievements = {
   ngm4r2 : "A day lost...",
   ngm4r3 : "Are you breaking dilation?",
   ngm4r4 : "Replicate Expertise",
+  ngm4r5 : "Faster than a cubed eternal potato",
+  ngm4r6 : "Meta-achievement",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",
