@@ -1,4 +1,4 @@
-var newGame4MinusRespeccedVersion = 2.2
+var newGame4MinusRespeccedVersion = 2.3
 /*
 var temp=Math.log10;
 Math.log10=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
