@@ -444,6 +444,7 @@ function timeStudy41(){
 function timeStudy53(){
 	let ret=0.1;
 	if(player.timestudy.studies.includes(191))ret*=timeStudy191();
+	if(player.achievements.includes("r131"))ret*=Math.pow(player.infinitiedBank+1,0.05);
 	return ret;
 }
 

@@ -524,11 +524,15 @@ function getInfinitied() {return Math.max(player.infinitied + player.infinitiedB
 function getGalaxyCostScalingStart4() {
 	if (player.currentEternityChall == "eterc5" || player.currentChallenge == "postcngm4r_4")return 0
     var n = 40 + ECTimesCompleted("eterc5")*2
+    if (player.timestudy.studies.includes(223)) n += 7
+    if (player.timestudy.studies.includes(224)) n += player.resets/2000
+	
     return n
 }
 
 function getGalaxyCostScalingStart5() {
     var n = 50
+	
     return n
 }
 
@@ -552,7 +556,7 @@ function getGalaxyCostScalingStart() {
 	if (player.currentEternityChall == "eterc5" || player.currentChallenge == "postcngm4r_4")return 0
     var n = 10 + ECTimesCompleted("eterc5")*2
     if (player.timestudy.studies.includes(223)) n += 7
-    if (player.timestudy.studies.includes(224)) n += Math.floor(player.resets/2000)
+    if (player.timestudy.studies.includes(224)) n += player.resets/2000
 	
 	if(player.challenges.includes("postc7"))n = n + 5;
 	if (player.achievements.includes("r83"))n = n + 1;
@@ -566,6 +570,9 @@ function getGalaxyCostScalingStart() {
 function getGalaxyCostScalingStart2() {
 	if (player.currentEternityChall == "eterc5" || player.currentChallenge == "postcngm4r_4")return 0
     var n = 20 + ECTimesCompleted("eterc5")*2
+    if (player.timestudy.studies.includes(223)) n += 7
+    if (player.timestudy.studies.includes(224)) n += player.resets/2000
+		
 	if (player.achievements.includes("r83"))n = n + 1;
     if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
         n -= ((player.galaxies-getGalaxyCostScalingStart4()+1) * getDarkMatterGalaxiesStrength())
@@ -576,6 +583,9 @@ function getGalaxyCostScalingStart2() {
 function getGalaxyCostScalingStart3() {
 	if (player.currentEternityChall == "eterc5" || player.currentChallenge == "postcngm4r_4")return 0
     var n = 30 + ECTimesCompleted("eterc5")*2
+    if (player.timestudy.studies.includes(223)) n += 7
+    if (player.timestudy.studies.includes(224)) n += player.resets/2000
+	
 	if (player.achievements.includes("r83"))n = n + 1;
     if (player.galaxies >= getGalaxyCostScalingStart4()) { // dark matter galaxies
         n -= ((player.galaxies-getGalaxyCostScalingStart4()+1) * getDarkMatterGalaxiesStrength())
@@ -3754,6 +3764,7 @@ function gainedTimelessShards() {
 	if(player.achievements.includes("r117"))ret=ret.times(Decimal.pow(player.eightTotalBought,0.1));
 	if(player.achievements.includes("r122"))ret=ret.times(Decimal.pow(player.firstTotalBought,0.2));
 	if(player.galacticSacrifice.upgrades.includes(75))ret=ret.mul(galUpgrade75());
+	if(player.achievements.includes("r131"))ret=ret.times(Math.pow(player.infinitiedBank+1,0.05));
 	if(player.timeless.upgrades.includes(32) && ret.gte(0)){
 		player.timeless.shards=player.timeless.shards.max(ret);
 	}
@@ -3767,6 +3778,7 @@ function nextTimelessShardAt() {
 	if(player.achievements.includes("r117"))ret=ret.div(Decimal.pow(player.eightTotalBought,0.1));
 	if(player.achievements.includes("r122"))ret=ret.div(Decimal.pow(player.firstTotalBought,0.2));
 	if(player.galacticSacrifice.upgrades.includes(75))ret=ret.div(galUpgrade75());
+	if(player.achievements.includes("r131"))ret=ret.div(Math.pow(player.infinitiedBank+1,0.05));
     return Decimal.pow("1e750",ret.times(Decimal.pow(0.5, player.timeless.rebuyables[2]||0)).pow(1/power));
 }
 
@@ -4724,6 +4736,8 @@ function getECGoal(name){
 	if(name=="eterc8")return new Decimal(["1e4400","1e5400","1e6400","1e7400","1e8400","1e9400"][ECTimesCompleted(name)]);
 	if(name=="eterc9")return new Decimal(["1e5700","1e7800","1e9900","1e12000","1e14100","1e16200"][ECTimesCompleted(name)]);
 	if(name=="eterc10")return new Decimal("1e5500");
+	if(name=="eterc11")return new Decimal(["1e5000","1e99999999"][ECTimesCompleted(name)]);
+	if(name=="eterc12")return new Decimal(["1e56000","1e99999999"][ECTimesCompleted(name)]);
 	return new Decimal("1e99999999");
 }
 
@@ -5162,9 +5176,9 @@ function unlockDilation() {
  3e14,5e14,1e15,3e15,
  1e19,1e20,3e20,1e21,
  2e22,5e22,1e23,5e23,
- 1e26,1e27,1e29,1e31,4e34,1e36,
+ 1e26,1e27,1e29,1e31,4e34,1e36,1e55,
  ]
- const TOTAL_TIMELESS_UPGS = 34
+ const TOTAL_TIMELESS_UPGS = 35
 /**
  *
  * @param {Name of the ugrade} id
@@ -5194,6 +5208,7 @@ function buyTimelessUpgrade(id, costInc) {
         let upgAmount = player.timeless.rebuyables[id] = player.timeless.rebuyables[id]||0;
         let realCost = new Decimal(TIMELESS_UPG_COSTS[id][0]).times( Decimal.pow(TIMELESS_UPG_COSTS[id][1], (upgAmount)) )
 		if(player.timeless.upgrades.includes(33) && id==3)realCost=realCost.pow(0.5);
+		if(player.timeless.upgrades.includes(35) && id==3)realCost=realCost.pow(0.5);
         if (player.timeless.points.lt(realCost)) return
 
         player.timeless.points = player.timeless.points.minus(realCost)
@@ -5238,8 +5253,10 @@ function updateDilationUpgradeButtons() {
 		if(!document.getElementById("timeless"+i))continue;
         if (i <= 3) {
             document.getElementById("timeless"+i).className = ( new Decimal(TIMELESS_UPG_COSTS[i][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[i][1],(player.timeless.rebuyables[i]||0))).gt(player.timeless.points) ) ? "timestudylocked" : "timestudy";
-			if(player.timeless.upgrades.includes(33) && i==3)document.getElementById("timeless"+i).className = ( new Decimal(TIMELESS_UPG_COSTS[i][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[i][1],(player.timeless.rebuyables[i]||0))).pow(0.5).gt(player.timeless.points) ) ? "timestudylocked" : "timestudy";
-			
+			let power=1;
+			if(player.timeless.upgrades.includes(33))power=power*0.5;
+			if(player.timeless.upgrades.includes(35))power=power*0.5;
+			if(i==3)document.getElementById("timeless"+i).className = ( new Decimal(TIMELESS_UPG_COSTS[i][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[i][1],(player.timeless.rebuyables[i]||0))).pow(power).gt(player.timeless.points) ) ? "timestudylocked" : "timestudy";
 		} else if (player.timeless.upgrades.includes(i)) {
             document.getElementById("timeless"+i).className = "timestudybought"
         } else {
@@ -5274,8 +5291,10 @@ function updateDilationUpgradeButtons() {
 function updateDilationUpgradeCosts() {
     document.getElementById("timeless1cost").textContent = "Cost: " + shortenCosts( new Decimal(TIMELESS_UPG_COSTS[1][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[1][1],(player.timeless.rebuyables[1]||0))) ) + " timeless points"
 	document.getElementById("timeless2cost").textContent = "Cost: " + shortenCosts( new Decimal(TIMELESS_UPG_COSTS[2][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[2][1],(player.timeless.rebuyables[2]||0))) ) + " timeless points"
-	document.getElementById("timeless3cost").textContent = "Cost: " + shortenCosts( new Decimal(TIMELESS_UPG_COSTS[3][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[3][1],(player.timeless.rebuyables[3]||0))) ) + " timeless points"
-	if(player.timeless.upgrades.includes(33))document.getElementById("timeless3cost").textContent = "Cost: " + shortenCosts( new Decimal(TIMELESS_UPG_COSTS[3][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[3][1],(player.timeless.rebuyables[3]||0))).pow(0.5) ) + " timeless points"
+	let power=1;
+	if(player.timeless.upgrades.includes(33))power=power*0.5;
+	if(player.timeless.upgrades.includes(35))power=power*0.5;
+	document.getElementById("timeless3cost").textContent = "Cost: " + shortenCosts( new Decimal(TIMELESS_UPG_COSTS[3][0]).times(Decimal.pow(TIMELESS_UPG_COSTS[3][1],(player.timeless.rebuyables[3]||0))).pow(power) ) + " timeless points"
 	for(var i=4;i<=TOTAL_TIMELESS_UPGS;i++)document.getElementById("timeless"+i+"cost").textContent = "Cost: " + shortenCosts(TIMELESS_UPG_COSTS[i]) + " timeless points"
 
 	document.getElementById("dil1cost").textContent = "Cost: " + shortenCosts( new Decimal(DIL_UPG_COSTS[1][0]).times(Decimal.pow(DIL_UPG_COSTS[1][1],(player.dilation.rebuyables[1]))) ) + " dilated time"

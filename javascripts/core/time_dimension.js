@@ -101,6 +101,11 @@ if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.u
 function getTimeDimensionProduction(tier) {
   if (player.currentEternityChall == "eterc10") return new Decimal(0)
   var dim = player["timeDimension"+tier]
+if (player.currentEternityChall == "eterc11"&&player.timestudy.studies.includes(23)){
+	  
+  let tick = getDilatedTickspeed()
+	  return dim.amount.times(tick)
+  }
   if (player.currentEternityChall == "eterc11") return dim.amount
   var ret = dim.amount
   ret = ret.times(getTimeDimensionPower(tier))

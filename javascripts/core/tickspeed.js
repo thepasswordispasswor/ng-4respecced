@@ -49,6 +49,7 @@ function getTickSpeedMultiplier() {
   if (player.achievements.includes("r83")) sc *= 1.25;
   if (player.timeless.upgrades.includes(34)) sc *= 1.25;
   if (player.galacticSacrifice.upgrades.includes(82)) sc *= 1.25;
+  if (player.galacticSacrifice.upgrades.includes(83)) sc *= 1.25;
   if(galaxies >= sc)galaxies = Math.sqrt(galaxies*sc);
   if (player.challenges.includes("postc3") || player.currentChallenge === "postc3") ret /= Math.pow(1.00005,galaxies);
   if (player.currentChallenge === "challenge7")ret /= 1.001;

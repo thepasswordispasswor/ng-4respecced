@@ -513,6 +513,7 @@ function getDimboostCostIncrease () {
   if (player.galacticSacrifice.upgrades.includes(43)) ret -= 1
   if (player.challenges.includes("postc9")) ret -= 1
   if (player.timestudy.studies.includes(211)) ret -= 1
+  if (player.timestudy.studies.includes(222)) ret -= 1
   return ret;
 }
 
