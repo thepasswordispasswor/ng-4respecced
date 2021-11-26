@@ -133,6 +133,7 @@ const allAchievements = {
   ngm4r4 : "Replicate Expertise",
   ngm4r5 : "Faster than a cubed eternal potato",
   ngm4r6 : "Meta-achievement",
+  ngm4r8 : "But I wanted another prestige layer again...",
 };
 const secretAchievementTooltips = {
     s11 : "Click on this achievement.",
@@ -272,7 +273,7 @@ function updateAchievements() {
   }
 
   player.achPow = Decimal.pow(5, amount)
-
+  if(player.achievements.includes("ngm4r6"))player.achPow = Decimal.pow(1.5, player.achievements.length-getSecretAchAmount());
   let temp="Normal"
   if(player.achievements.includes("r75"))temp+="/Infinity";
   if(player.eternityUpgrades.includes(4))temp+="/Time";
