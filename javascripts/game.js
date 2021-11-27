@@ -1,4 +1,4 @@
-var newGame4MinusRespeccedVersion = 2.3
+var newGame4MinusRespeccedVersion = 2.9
 /*
 var temp=Math.log10;
 Math.log10=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
@@ -5569,6 +5569,17 @@ if(player.timeless.active)document.getElementById("eternitybtn").style.display =
 
 
     if (player.eternities !== 0)document.getElementById("eternitystorebtn").style.display = "inline-block"
+    if (player.achievements.includes("r127")){
+		document.getElementById("interrealitybtn").style.display = "inline-block";
+    }else{
+		document.getElementById("interrealitybtn").style.display = "none"
+	}
+	if (player.eternityPoints.gte(Number.MAX_VALUE) && ECTimesCompleted("eterc12")>=1){
+		document.getElementById("interrealityresetbtn").style.display = "inline-block";
+    }else{
+		document.getElementById("interrealityresetbtn").style.display = "none"
+		
+	}
     for (var i=1; i <= 10; i++) {
         document.getElementById("postc"+i+"goal").textContent = "Goal: "+shortenCosts(goals[i-1])
     }
@@ -6979,6 +6990,9 @@ function init() {
     }
     document.getElementById("eternitystorebtn").onclick = function () {
         showTab('eternitystore')
+    }
+    document.getElementById("interrealitybtn").onclick = function () {
+        showTab('interrealitytab')
     }
     //show one tab during init or they'll all start hidden
     showTab('dimensions')

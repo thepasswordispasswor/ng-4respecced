@@ -387,8 +387,9 @@ button {
 
 
 .postinfcrunch {
-    background: #E0E0E0;
-    border: 2px solid #4980CC;
+    color: #FFFFFF;
+    background: #1F1F1F;
+    border: 2px solid #B67F33;
     border-radius: 4px;
     transition-duration: 0.2s;
     cursor: pointer;
@@ -409,9 +410,9 @@ button {
 }
 
 .postinfcrunch:hover {
-    color: #FFFFFF;
-    background: #4980CC;
-    border: 2px solid #4980CC;
+    color: #000000;
+    background: #B67F33;
+    border: 2px solid #B67F33;
     border-radius: 4px;
 }
 
@@ -1845,6 +1846,12 @@ screen and (max-width: 480px) {
 }
 
 
+.ghostifyPos {
+	position: absolute;
+	left: 75%;
+	top: 160px;
+}
+
 
 .QK {
 	position:absolute;
@@ -1863,4 +1870,13 @@ screen and (max-width: 480px) {
 
 #galaxyPoints2 .GPAmount {
     font-weight: bold;
+}
+
+
+#interrealityresetbtn {
+    cursor: pointer;
+    width: 210px;
+    height: 70px;
+    font-family: Typewriter;
+    font-size: 11px
 }

@@ -10,6 +10,7 @@
     <script type="text/javascript" src="javascripts/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="javascripts/notify.js"></script>
     <link rel="stylesheet" type="text/css" href="stylesheets/styles.css?3">
+    <link rel="stylesheet" type="text/css" href="stylesheets/interreality_and_timeless.css">
 </head>
 <img id="loading" src="images/Loading.png">
 <div id="snow" style="display: none; "></div>
@@ -24,6 +25,8 @@
 			<span id="sacpos" class="eterpos"><button id="sacrificebtn" class="galaxybtn"></button></span>
 		</div>
 		
+        <div style="position: relative"><button id="postInfinityButton" class="postinfcrunch infpos">Big Crunch for x Infinity Points</button></div>
+        <div style="position: relative"><button id="interrealityresetbtn" class="interreality ghostifyPos" onclick="showTab('interrealitytab')">A new rift has formed... Enter the Interreality.</button></div>
 		<div id='quantumBlock' style='height:120px'></div>
         <div id="matter"></div>
         <div id="dilationEffect1"></div>
@@ -33,7 +36,6 @@
         </div>
 
         <div style="position: relative">
-            <button id="postInfinityButton" class="postinfcrunch">Big Crunch for x Infinity Points</button>
             <button id="newDimensionButton" class="newdim" onclick="newDimension()">Get x antimatter to unlock a new Dimension.</button>
             <button id="eternitybtn" class="eternitybtn" onclick="eternity()">Other times await.. I need to become Eternal</button>
         </div>
@@ -59,12 +61,21 @@
 	          <button id="galaxybtn" style="font-family: Typewriter; font-size: 20px" class="galaxybtn">Galaxy</button>
             <button id="infinitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="infinitybtn">Infinity</button>
             <button id="eternitystorebtn" style="font-family: Typewriter; font-size: 20px; display: none" class="eternitytabbtn">Eternity</button>
+            <button id="interrealitybtn" style="font-family: Typewriter; font-size: 20px; display: none" class="interreality">Interreality</button>
             <button id="shopbtn" style="font-family: Typewriter; font-size: 20px" class="tabbtn">Shop</button>
         </div>
         <div id="emptiness" class="tab" style="font-size: 150%">
             <br> The world has collapsed on itself due to excess of antimatter.
             <br>
             <br>
+        </div>
+        <div id="interrealitytab" class="tab" style="font-size: 200%">
+            <br> Congratulations! You have beat NG-4 Respecced v2.9: Before the Interreality!
+			<br> Interreality is coming soon...
+			<br> <span style="font-size:75%">(After Interreality update in NG-2)</span>
+			<br>
+			<br>
+			<br>
         </div>
         <div id="shop" class="tab" style="font-size: 15px" >
             <div align="center">
@@ -508,7 +519,7 @@
                 <div>
                     <p>You have <span id="TLSAmount" style="font-size:35px; color: black">0</span> timeless shards.</p>
                 </div>
-                <button id="entertimeless" class="eternityupbtn" onclick="enterTimeless()">Enter Timeless</button>
+                <button id="entertimeless" class="timelessbtn" onclick="enterTimeless()">Enter Timeless</button>
                 <p>You have <span id="TLPAmount" style="font-size:35px; color: black">0</span> timeless points <span id="TLPPerSecond" style="font-size:25px; color: black">0</span></p>
                 <p id="scTLP"></p>
                 <table>
@@ -1217,7 +1228,7 @@
             </table>
             <div style="display: none;"><textarea id="exportOutput" style="color:black; width: 200px; height: 55px;"></textarea></div>
             <p>Hotkeys: 1-8 for buy 10 dimension, shift+1-8 for buy 1 dimension, T to buy max tickspeed, shift+T to buy one tickspeed, M for max all<br>S for sacrifice, D for dimension boost, G for galaxy, C for crunch, A for toggle autobuyers, R for replicanti galaxies, E for eternity.<br>You can hold shift while buying time studies to buy all up until that point, see each study's number, and save study trees.<br>Hotkeys do not work while holding control.</p>
-		<p>You are playing NG-4 Respecced v2.3: Mid-Eternity update, which is made by qq1010903229 (loader3229#3966 in discord).<br>This mod will be added into NG+3 Respecced server.</p>
+		<p>You are playing NG-4 Respecced v2.9: Before the Interreality, which is made by qq1010903229 (loader3229#3966 in discord).<br>This mod will be added into NG+3 Respecced server.</p>
             <div id="footercontainer">
                 <table id="footer">
                     <tr>
@@ -2309,7 +2320,7 @@
 
             </div>
             <div id="eternitychallenges" class="challengeTab">
-                <div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.<br>EC order tip in NG-4R: 1,2,3,4,6,7,8,5,9,10(Endgame: complete EC10x5)<br>Spoiler: Interreality is the next layer in NG-2 and NG-4R.<br>In NG-4R, Interreality is unlocked at Infinity EP, and if you want to Interreality, you need to complete EC12x1 (instead of EC10x1 in NG-2).</div>
+                <div>Complete Eternity Challenges again for a bigger reward, maximum of 5 times.<br>EC order tip in NG-4R: 1,2,3,4,6,7,8,5,9,10,11,12(Endgame: complete EC12x1 and Infinity EP)<br>Spoiler: Interreality is the next layer in NG-2 and NG-4R.<br>In NG-4R, Interreality is unlocked at Infinity EP, and if you want to Interreality, you need to complete EC12x1 (instead of EC10x1 in NG-2).</div>
                 <table  class="table" style="margin: 0 auto">
                     <tr>
                         <td>

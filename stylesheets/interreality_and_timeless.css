@@ -1,0 +1,95 @@
+/* Interreality and Timeless buttons from https://aarextiaokhiao.github.io/ng-plus-3-prestige-buttons */
+
+.interreality {
+	background: linear-gradient(90deg, #007f00, #000000, #003f7f);
+	border: 2px solid;
+	border-color: #007f00 #003f7f #003f7f #007f00;
+	border-radius: 4px;
+	box-shadow: inset 0px 0px 12px 0px #000000;
+	color: #ffffff;
+	text-shadow: 0px 0px 3px #ffffff, 0px 0px 6px #ffffff;
+	font-family: Typewriter;
+	font-weight: bold;
+	transition-duration: 0.2s;
+	cursor: pointer
+}
+
+.interreality:hover {
+	border-color: #00bf00 #005fbf #005fbf #00bf00;
+	box-shadow: inset 0px 0px 12px 0px rgba(255, 255, 255, 0.5);
+	text-shadow: 0px 0px 6px #ffffff, 0px 0px 12px #ffffff;
+}
+
+
+.timeless {
+	border: 2px solid #000000;
+	box-shadow: inset 0px 0px 12px 0px #ffffff;
+	color: #001966;
+	text-shadow: 0px 0px 3px #ffffff, 0px 0px 6px #ffffff;
+	background: radial-gradient(circle, #7f7f7f, #000000 25%, transparent 50%), linear-gradient(#ffffff, transparent 33%, transparent 67%, #ffffff 100%), linear-gradient(90deg, #e59900 0%, #b341e0 100%);
+	font-family: Typewriter;
+	font-weight: bold;
+	border-radius: 4px;
+	transition-duration: 0.2s
+}
+.timeless:hover {
+	border-color: #0033cc;
+	box-shadow: inset 0px 0px 12px 0px #0033cc;
+	text-shadow: 0px 0px 3px #0033cc, 0px 0px 6px #0033cc;
+	cursor: pointer
+}
+
+
+.eternitybtntimeless {
+
+	border: 2px solid #000000;
+	box-shadow: inset 0px 0px 12px 0px #ffffff;
+	color: #001966;
+	text-shadow: 0px 0px 3px #ffffff, 0px 0px 6px #ffffff;
+	background: radial-gradient(circle, #7f7f7f, #000000 25%, transparent 50%), linear-gradient(#ffffff, transparent 33%, transparent 67%, #ffffff 100%), linear-gradient(90deg, #e59900 0%, #b341e0 100%);
+	font-family: Typewriter;
+	font-weight: bold;
+
+    border-radius: 4px;
+    transition-duration: 0.2s;
+    cursor: pointer;
+    position: absolute;
+    right: 75%;
+    width: 210px;
+    height: 70px;
+    cursor: pointer;
+    font-size: 11px;
+}
+
+
+.eternitybtntimeless:hover {
+	border-color: #0033cc;
+	box-shadow: inset 0px 0px 12px 0px #0033cc;
+	text-shadow: 0px 0px 3px #0033cc, 0px 0px 6px #0033cc;
+	cursor: pointer
+}
+
+
+.timelessbtn {
+	border: 2px solid #000000;
+	box-shadow: inset 0px 0px 12px 0px #ffffff;
+	color: #001966;
+	text-shadow: 0px 0px 3px #ffffff, 0px 0px 6px #ffffff;
+	background: radial-gradient(circle, #7f7f7f, #000000 25%, transparent 50%), linear-gradient(#ffffff, transparent 33%, transparent 67%, #ffffff 100%), linear-gradient(90deg, #e59900 0%, #b341e0 100%);
+	font-family: Typewriter;
+	font-weight: bold;
+	border-radius: 4px;
+	transition-duration: 0.2s;
+
+    font-size: 10px;
+    width: 190px;
+    height: 90px;
+    cursor: pointer;
+}
+
+.timelessbtn:hover {
+	border-color: #0033cc;
+	box-shadow: inset 0px 0px 12px 0px #0033cc;
+	text-shadow: 0px 0px 3px #0033cc, 0px 0px 6px #0033cc;
+	cursor: pointer
+}
