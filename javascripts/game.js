@@ -1,4 +1,4 @@
-var newGame4MinusRespeccedVersion = 2.9
+var newGame4MinusRespeccedVersion = 2.91
 /*
 var temp=Math.log10;
 Math.log10=(function(a){if(a<0)debugger;b=this;return b(a);}).bind(temp);
@@ -826,11 +826,31 @@ function updateDimensions() {
             document.getElementById("infinityPoints1").innerHTML = "You have <span class=\"IPAmount1\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
             document.getElementById("infinityPoints2").innerHTML = "You have <span class=\"IPAmount2\">"+shortenDimensions(player.infinityPoints)+"</span> Infinity points."
         }
-        if (player.infinitied == 1) document.getElementById("infinitied").textContent = "You have infinitied 1 time."
-        else document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
-        if (player.infinitiedBank > 0) document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times this eternity."
-
+        
     }
+	if (player.infinitied > 0){
+		if (player.infinitied == 1) document.getElementById("infinitied").textContent = "You have infinitied 1 time."
+        else document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times."
+        if (player.eternities > 0)document.getElementById("infinitied").textContent = "You have infinitied " + player.infinitied.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " times this eternity."
+	}
+	if (player.infinitiedBank > 0) document.getElementById("infinitiedBank").textContent = "You have " + Math.floor(player.infinitiedBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " banked infinities."
+	let infGain = 1;
+        if (player.thisInfinityTime > 50 && player.achievements.includes("r87")) infGain = 250;
+        if (player.timestudy.studies.includes(32)) infGain *= Math.max(player.resets,1);
+
+	if (player.timestudy.studies.includes(43)){
+		document.getElementById("infinitiedGain1").style.display="block";
+		document.getElementById("infinitiedGain1").textContent = "Due to TS43, you are getting " + Math.floor(infGain/100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " infinities per second."
+	}else{
+		document.getElementById("infinitiedGain1").style.display="none";
+	}
+	if (player.timestudy.studies.includes(53)){
+		document.getElementById("infinitiedGain2").style.display="block";
+		document.getElementById("infinitiedGain2").textContent = "Due to TS53, you are getting " + Math.floor(infGain*timeStudy53()/100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " banked infinities per second."
+	}else{
+		document.getElementById("infinitiedGain2").style.display="none";
+	}
+	
 
     if (GSUnlocked()) {
         document.getElementById("galaxybtn").style.display = "inline-block"
@@ -5277,6 +5297,7 @@ function updateDilationUpgradeButtons() {
     }
     document.getElementById("timeless4desc").textContent = "Currently: "+shortenMoney(TLPU4())+"x"
     document.getElementById("timeless5desc").textContent = "Currently: "+shortenMoney(TLPU5())+"x"
+	document.getElementById("timeless9desc").textContent = "Currently: +^"+(0.02*(1-Math.pow(0.95,player.timeless.shards.add(1).log10()))).toFixed(4);
     document.getElementById("timeless10desc").textContent = "Currently: "+shortenMoney(player.galacticSacrifice.galaxyPoints.add(10).log10())+"x TLP, "+shortenMoney(player.timeless.points.pow(5))+"x GP"
     document.getElementById("timeless21desc").textContent = "Currently: "+shortenMoney(TLPU21())+"x"
     document.getElementById("timeless23desc").textContent = "Currently: "+shortenMoney(player.timeShards.add(1).sqrt())+"x"
@@ -7226,6 +7247,7 @@ setInterval( function() {
 	
 	document.getElementById("scND").innerHTML = "Normal dimension multipliers and tickspeed are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart2()))+". <br>Normal dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart3()))+". <br>Normal dimension multipliers "+(player.timeless.upgrades.includes(25)?"":"and tickspeed ")+"are dilated again after "+ shorten(Decimal.pow(10,getDilationStart4()))+".";
 	document.getElementById("scID").innerHTML = "Infinity dimension multipliers and Infinity Power are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +". <br>Infinity dimension multipliers are dilated again after "+ shorten(Decimal.pow(10,getDilationStart4()))+".";
+	document.getElementById("scREP").innerHTML = "Replicanti affects dilation effect at a slightly reduced rate. (+^"+((player.galacticSacrifice.upgrades.includes(55)?0.008:0.006)*Math.log10(player.replicanti.amount.max(1).add(9).log10())).toFixed(4)+")";
 	document.getElementById("scTLP").innerHTML = "Timeless Point gain is dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +".";
 	document.getElementById("scDT").innerHTML = "Dilated Time gain is dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +".";
 	//document.getElementById("scMD").innerHTML = "Meta dimension multipliers are dilated "+(player.dilation.active?"twice ":"")+"after " + shorten(Decimal.pow(10,getDilationStart())) +".";
@@ -7241,8 +7263,11 @@ setInterval( function() {
 
     
 	
-	while(player.tdBoosts < Math.min(player.eternities,5)*4){
-		player.tdBoosts++;
+	if(player.tdBoosts < Math.min(player.eternities,6)*4){
+		player.tdBoosts = Math.min(player.eternities,6)*4;
+	}
+	if(player.infinityUpgrades.includes("skipReset3") && player.tdBoosts>=7 && player.tdBoosts < Math.floor((player.timeDimension8.boughtAntimatter+player.timeDimension8.bought)/2+3)){
+		player.tdBoosts = Math.floor((player.timeDimension8.boughtAntimatter+player.timeDimension8.bought)/2+3);
 	}
 	while(player.infinityUpgrades.includes("skipReset3") && player["timeDimension"+getTimeShiftRequirement(0).tier].bought+player["timeDimension"+getTimeShiftRequirement(0).tier].boughtAntimatter >= getTimeShiftRequirement(0).amount){
 		player.tdBoosts++;

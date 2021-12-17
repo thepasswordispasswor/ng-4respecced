@@ -295,8 +295,7 @@ function galacticUpgradeSpanDisplay () {
   document.getElementById("galcost35").innerHTML = shortenCosts(galUpgradeCosts[35]);
   document.getElementById("galspan41").innerHTML = formatValue(player.options.notation, galUpgrade41(), 2,2);
   document.getElementById("galspan43").innerHTML = formatValue(player.options.notation, galUpgrade43(), 2,2);
-  document.getElementById("galspan44").innerHTML = "exponent ^"+getDilationPower().toFixed(4)+" -> ^"+(getDilationPower()+galUpgrade44()).toFixed(4);
-  if(player.galacticSacrifice.upgrades.includes(44))document.getElementById("galspan44").innerHTML = "exponent ^"+getDilationPower().toFixed(4);
+  document.getElementById("galspan44").innerHTML = "+^"+galUpgrade44().toFixed(4);
   document.getElementById("galspan45").innerHTML = formatValue(player.options.notation, galUpgrade45(), 2,2);
   document.getElementById("galcost41").innerHTML = shortenCosts(galUpgradeCosts[41]);
   document.getElementById("galcost42").innerHTML = shortenCosts(galUpgradeCosts[42]);
@@ -309,8 +308,7 @@ function galacticUpgradeSpanDisplay () {
   document.getElementById("galcost52").innerHTML = shortenCosts(galUpgradeCosts[52]);
   document.getElementById("galcost53").innerHTML = shortenCosts(galUpgradeCosts[53]);
   document.getElementById("galcost54").innerHTML = shortenCosts(galUpgradeCosts[54]);
-  document.getElementById("galspan55").innerHTML = "exponent ^"+getDilationPower().toFixed(4)+" -> ^"+(getDilationPower()+0.002*Math.log10(player.replicanti.amount.max(1).add(9).log10())).toFixed(4);
-  if(player.galacticSacrifice.upgrades.includes(55))document.getElementById("galspan55").innerHTML = "exponent ^"+getDilationPower().toFixed(4);
+  document.getElementById("galspan55").innerHTML = "+^"+(0.006*Math.log10(player.replicanti.amount.max(1).add(9).log10())).toFixed(4)+" -> +^"+(0.008*Math.log10(player.replicanti.amount.max(1).add(9).log10())).toFixed(4);
   document.getElementById("galcost55").innerHTML = shortenCosts(galUpgradeCosts[55]);
   document.getElementById("galspan61").innerHTML = formatValue(player.options.notation, galUpgrade61(), 2,2);
   document.getElementById("galcost61").innerHTML = shortenCosts(galUpgradeCosts[61]);

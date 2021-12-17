@@ -206,8 +206,8 @@ function getMoneyPerSecond() {
 function getDimensionDescription(tier) {
   var name = TIER_NAMES[tier];
 
-  let description = shortenDimensions(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
-  if (tier == 8) description = Math.round(player[name + 'Amount']) + ' (' + dimBought(tier) + ')';
+  let description = shortenDimensions(player[name + 'Amount']) + ' (' + player[name + 'Bought'] + ')';
+  if (tier == 8) description = Math.round(player[name + 'Amount']);
 
   if (tier < 8) {
       description += '  (+' + formatValue(player.options.notation, getDimensionRateOfChange(tier), 2, 2) + '%/s)';

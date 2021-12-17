@@ -554,3 +554,8 @@ function timeStudy214(){
 	let ret=Decimal.pow(calcTotalSacrificeBoost(), 500);
 	return ret;
 }
+
+function timeStudy221(){
+	let ret=Decimal.pow(1.01, player.resets);
+	return ret;
+}

@@ -4,7 +4,7 @@
 function DimensionDescription(tier) {
   var name = TIER_NAMES[tier];
 
-  let description = shortenDimensions(player['infinityDimension'+tier].amount) + ' (' + player['infinityDimension'+tier].bought + ')';
+  let description = shortenDimensions(player['infinityDimension'+tier].amount) + ' (' + player['infinityDimension'+tier].baseAmount + ')';
 
   if (ECTimesCompleted("eterc7")) {
     if (tier < 9) {

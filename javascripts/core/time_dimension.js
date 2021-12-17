@@ -22,8 +22,8 @@ function getTimeDimensionPower(tier) {
   if (player.timestudy.studies.includes(93)) ret = ret.times(timeStudy93())
   if (player.timestudy.studies.includes(103)) ret = ret.times(timeStudy103())
   if (player.timestudy.studies.includes(151)) ret = ret.times(timeStudy151())
-  if (player.timestudy.studies.includes(221)) ret = ret.times(Decimal.pow(1.01, player.resets))
-  if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(Math.max(Math.pow(calcTotalSacrificeBoost().log10(), 100), 1))
+  if (player.timestudy.studies.includes(221)) ret = ret.times(timeStudy221())
+  if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(calcTotalSacrificeBoost())
   if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galUpgrade43())
   if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
     var replmult = getReplMult()
@@ -38,7 +38,7 @@ function getTimeDimensionPower(tier) {
   
   if (player.currentChallenge != "postcngm3_3"){
 	  let base=2;
-	  if(player.challenges.includes("postcngm3_3"))base=Math.pow(base,Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1));
+	  if(player.challenges.includes("postcngm3_3"))base=Decimal.pow(base,Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1));
 	  ret = ret.mul(Decimal.pow(base,Math.max(player.tdBoosts - tier + 1,0)));
   }
   
@@ -131,8 +131,12 @@ function getTimeDimensionRateOfChange(tier) {
 function getTimeDimensionDescription(tier) {
   var name = TIER_NAMES[tier];
 
-  let description = shortenDimensions(player['timeDimension'+tier].amount);
+  let description = shortenDimensions(player['timeDimension'+tier].amount)+" ("+player['timeDimension'+tier].boughtAntimatter;
 
+  if((player.achievements.includes("r63") && tier <= Math.min(player.eternities,3) + 1) || player.dilation.studies.includes(tier-3)){
+	  description = description+" + "+player['timeDimension'+tier].bought;
+  }
+  description += ")";
   if (tier < 8) {
 	  if(player.currentChallenge != "postcngm4r_1")description += '  (+' + formatValue(player.options.notation, getTimeDimensionRateOfChange(tier), 2, 2) + '%/s)';
 	  else if(tier%2==1 && tier<7)description += '  (+' + formatValue(player.options.notation, getTimeDimensionRateOfChange(tier), 2, 2) + '%/s)';
