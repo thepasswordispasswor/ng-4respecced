@@ -1594,22 +1594,22 @@ function updateInfCosts() {
 		if (getReplicantiReplicateAmount(true) < 10){
              document.getElementById("replicantichance").innerHTML = "Replicate chance: "+Math.round((getReplicantiReplicateAmount()-1)*100)+"%<br>-> "+Math.round((getReplicantiReplicateAmount(true)-1)*100)+"% Cost: "+shortenCosts(player.replicanti.chanceCost)+" IP"
         } else {
-             document.getElementById("replicantichance").innerHTML = "Replicate amount: "+shortenMoney(getReplicantiReplicateAmount())+"x<br>-> "+shortenMoney(getReplicantiReplicateAmount(true))+"x Cost: "+shortenCosts(player.replicanti.chanceCost)+" IP"
+             document.getElementById("replicantichance").innerHTML = "Replicate amount: "+shortenMoney(getReplicantiReplicateAmount(false,true))+"x<br>-> "+shortenMoney(getReplicantiReplicateAmount(true,true))+"x Cost: "+shortenCosts(player.replicanti.chanceCost)+" IP"
         }
         if (player.replicanti.chance>=1 && !player.achievements.includes("ngm4r4"))if (getReplicantiReplicateAmount() < 10){
              document.getElementById("replicantichance").innerHTML = "Replicate chance: "+Math.round((getReplicantiReplicateAmount()-1)*100)+"%<br>(capped)"
         } else {
-             document.getElementById("replicantichance").innerHTML = "Replicate amount: "+shortenMoney(getReplicantiReplicateAmount())+"x<br>(capped)"
+             document.getElementById("replicantichance").innerHTML = "Replicate amount: "+shortenMoney(getReplicantiReplicateAmount(false,true))+"x<br>(capped)"
         }
         document.getElementById("replicantiinterval").setAttribute("ach-tooltip","Level: "+Math.round(Math.log(player.replicanti.interval/1000)/Math.log(0.9)+1));
 		let replGalOver = 0
         if (player.timestudy.studies.includes(131)) replGalOver += Math.floor(player.replicanti.gal / 2)
         if (player.timestudy.studies.includes(233)) {
-            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
-            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
+            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Cost: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
+            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Cost: "+shortenCosts(player.replicanti.galCost.dividedBy(player.replicanti.amount.pow(0.3)))+" IP"
         } else {
-            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
-            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Costs: "+shortenCosts(player.replicanti.galCost)+" IP"
+            if (replGalOver !== 0) document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"+"+replGalOver+"<br>+1 Cost: "+shortenCosts(player.replicanti.galCost)+" IP"
+            else document.getElementById("replicantimax").innerHTML = "Max Replicanti galaxies: "+player.replicanti.gal+"<br>+1 Cost: "+shortenCosts(player.replicanti.galCost)+" IP"
         }
         document.getElementById("replicantiunlock").innerHTML = "Unlock Replicantis<br>Cost: "+shortenCosts(1e75)+" IP"
         let extraGals = 0
@@ -1844,6 +1844,14 @@ function toggleReplAuto(i) {
         } else {
             player.replicanti.auto[2] = true
             document.getElementById("replauto3").textContent = "Auto: ON"
+        }
+    } else if (i == "aarex") {
+        if (player.replicanti.auto[3]) {
+            player.replicanti.auto[3] = false
+            document.getElementById("replauto4").textContent = "Aarex-style replicante amount display: OFF"
+        } else {
+            player.replicanti.auto[3] = true
+            document.getElementById("replauto4").textContent = "Aarex-style replicante amount display: ON"
         }
     }
 }

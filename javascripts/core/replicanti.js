@@ -1,8 +1,11 @@
-function getReplicantiReplicateAmount(upgraded){
+function getReplicantiReplicateAmount(upgraded,aarexstyleformat){
 	let ret=player.replicanti.chance+1;
 	if(upgraded === true)ret=ret+0.01;
 	if(player.timeless.upgrades.includes(26))ret=Math.pow(ret,TLPU26());
 	if(!upgraded && ret>=7.54)giveAchievement("Replicate Expertise");
+	if(aarexstyleformat&&player.replicanti.auto[3]){
+		ret=Math.log10(ret)/Math.log10(2);
+	}
 	return ret;
 }
 
