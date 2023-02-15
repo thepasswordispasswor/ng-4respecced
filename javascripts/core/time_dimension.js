@@ -1,100 +1,97 @@
 //time dimensions
 
 function infiniteTimeStrength(){
-	let ret=0.05;
-	if(player.galacticSacrifice.upgrades.includes(25))ret *= 1.5;
-	return ret;
+	let strength = 0.05;
+	if (player.galacticSacrifice.upgrades.includes(25)) strength *= 1.5;
+	return strength;
 }
 function getTimeDimensionPower(tier) {
-	if(tier%2==0 && player.currentChallenge == "postcngm4r_1")return new Decimal(0);
-  if (player.currentEternityChall == "eterc11") return new Decimal(1)
-  var dim = player["timeDimension"+tier]
-  var ret = dim.power.pow(2)
-
-  if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.times(timeStudy11())
-  if (player.achievements.includes("r105")){
-	  ret = ret.mul(player.postC3Reward.pow(infiniteTimeStrength()))
-  }
-
-  ret = ret.times(kongAllDimMult)
-
-  if (player.timestudy.studies.includes(73) && tier == 3) ret = ret.times(timeStudy73())
-  if (player.timestudy.studies.includes(93)) ret = ret.times(timeStudy93())
-  if (player.timestudy.studies.includes(103)) ret = ret.times(timeStudy103())
-  if (player.timestudy.studies.includes(151)) ret = ret.times(timeStudy151())
-  if (player.timestudy.studies.includes(221)) ret = ret.times(timeStudy221())
-  if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(calcTotalSacrificeBoost())
-  if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galUpgrade43())
-  if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
-    var replmult = getReplMult()
-
-    ret = ret.times(replmult.pow(0.1))
-  }
-
-  ret = ret.times(0.5)
-  if (ret.lt(0)) {
-    ret = new Decimal(0)
-  }
-  
-  if (player.currentChallenge != "postcngm3_3"){
-	  let base=2;
-	  if(player.challenges.includes("postcngm3_3"))base=Decimal.pow(base,Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3,1));
-	  ret = ret.mul(Decimal.pow(base,Math.max(player.tdBoosts - tier + 1,0)));
-  }
-  
-  if (player.galacticSacrifice.upgrades.includes(12) && !player.galacticSacrifice.upgrades.includes(42)) {
-    ret=ret.times(galUpgrade12())
-  }
-  if (player.galacticSacrifice.upgrades.includes(13)) {
-    ret=ret.times(galUpgrade13())
-  }
-  if (player.galacticSacrifice.upgrades.includes(14)) {
-    ret=ret.times(galUpgrade14())
-  }
-  if (player.galacticSacrifice.upgrades.includes(15)) {
-    ret=ret.times(galUpgrade15())
-  }
-  if (player.galacticSacrifice.upgrades.includes(24)) {
-    ret=ret.times(galUpgrade24())
-  }
-  if (player.galacticSacrifice.upgrades.includes(35)) {
-    ret=ret.times(galUpgrade35())
-  }
-  if (player.timeless.upgrades.includes(29)) {
-    ret=ret.times(TLPU29())
-  }
-  
-  if(!player.timeless.active){
-	  if(player.challenges.includes("postcngm4r_1") && tier%2==1)ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
-  }
-  if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 10)).max(1))
-
- dilationstart = getDilationStart();
-    if(ret.log10()>=dilationstart){
-	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
-	  if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
-    }
- dilationstart4 = getDilationStart4();
-    if(ret.log10()>=dilationstart4){
-	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart4, getDilationPower())*dilationstart4)
-    }
+	if (tier%2 == 0 && player.currentChallenge == "postcngm4r_1") return new Decimal(0);
+	if (player.currentEternityChall == "eterc11") return new Decimal(1);
+	var dim = player["timeDimension"+tier];
+	var ret = dim.power.pow(2)
 	
- dilationstart5 = getDilationStart5();
-    if(ret.log10()>=dilationstart5){
-	  ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart5, getDilationPower())*dilationstart5)
-    }
-if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42)) {
-    ret = ret.times(galUpgrade12())
-  }
-  
-  if (ECTimesCompleted("eterc1") !== 0) ret = ret.times(EC1Reward())
-  if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(EC10Reward())
-  if (player.eternityUpgrades.includes(4)) ret = ret.times(player.achPow)
-  if (player.eternityUpgrades.includes(5)) ret = ret.times(Math.max(player.timestudy.theorem, 1))
-  if (player.eternityUpgrades.includes(6)) ret = ret.times(player.totalTimePlayed / 10 / 60 / 60 / 24)
-  if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
-  return ret
+	if (player.timestudy.studies.includes(11) && tier == 1) ret = ret.times(timeStudy11())
+	if (player.achievements.includes("r105")){
+		ret = ret.mul(player.postC3Reward.pow(infiniteTimeStrength()))
+	}
 
+	ret = ret.times(kongAllDimMult)
+
+	if (player.timestudy.studies.includes(73) && tier == 3) ret = ret.times(timeStudy73())
+	if (player.timestudy.studies.includes(93)) ret = ret.times(timeStudy93())
+	if (player.timestudy.studies.includes(103)) ret = ret.times(timeStudy103())
+	if (player.timestudy.studies.includes(151)) ret = ret.times(timeStudy151())
+	if (player.timestudy.studies.includes(221)) ret = ret.times(timeStudy221())
+	if (player.timestudy.studies.includes(227) && tier == 4) ret = ret.times(calcTotalSacrificeBoost())
+	if (player.galacticSacrifice.upgrades.includes(43)) ret = ret.times(galUpgrade43())
+	if (player.replicanti.unl && player.replicanti.amount.gt(1) && player.dilation.upgrades.includes(5)) {
+		var replmult = getReplMult()
+
+		ret = ret.times(replmult.pow(0.1))
+	}
+
+	ret = ret.times(0.5)
+	if (ret.lt(0)) {
+		ret = new Decimal(0)
+	}
+  
+	if (player.currentChallenge != "postcngm3_3"){
+		let base=2;
+		if(player.challenges.includes("postcngm3_3")) base = Decimal.pow(base, Math.max(Math.sqrt(player.galacticSacrifice.galaxyPoints.max(1).log10()) / 3, 1));
+		ret = ret.mul(Decimal.pow(base,Math.max(player.tdBoosts - tier + 1,0)));
+	}
+  
+	if (player.galacticSacrifice.upgrades.includes(12) && !player.galacticSacrifice.upgrades.includes(42)) {
+		ret=ret.times(galUpgrade12())
+	}
+	if (player.galacticSacrifice.upgrades.includes(13)) {
+		ret=ret.times(galUpgrade13())
+	}
+	if (player.galacticSacrifice.upgrades.includes(14)) {
+		ret=ret.times(galUpgrade14())
+	}
+	if (player.galacticSacrifice.upgrades.includes(15)) {
+		ret=ret.times(galUpgrade15())
+	}
+	if (player.galacticSacrifice.upgrades.includes(24)) {
+		ret=ret.times(galUpgrade24())
+	}
+	if (player.galacticSacrifice.upgrades.includes(35)) {
+		ret=ret.times(galUpgrade35())
+	}
+	if (player.timeless.upgrades.includes(29)) {
+		ret=ret.times(TLPU29())
+	}
+	
+	if(!player.timeless.active){
+		if(player.challenges.includes("postcngm4r_1") && tier%2==1)ret = ret.times(player.galacticSacrifice.galaxyPoints.add(1).pow(10));
+	}
+	if (player.currentEternityChall == "eterc9") ret = ret.times((Decimal.pow(Math.max(player.infinityPower.log2(), 1), 10)).max(1))
+	dilationstart = getDilationStart();
+	if(ret.log10()>=dilationstart){
+		ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+		if (player.dilation.active)ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart, getDilationPower())*dilationstart)
+	}
+	dilationstart4 = getDilationStart4();
+	if(ret.log10()>=dilationstart4){
+		ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart4, getDilationPower())*dilationstart4)
+	}
+	dilationstart5 = getDilationStart5();
+	if(ret.log10()>=dilationstart5){
+		ret = Decimal.pow(10, Math.pow(ret.log10()/dilationstart5, getDilationPower())*dilationstart5)
+	}
+	if (player.galacticSacrifice.upgrades.includes(12) && player.galacticSacrifice.upgrades.includes(42)) {
+		ret = ret.times(galUpgrade12())
+	}
+  
+	if (ECTimesCompleted("eterc1") !== 0) ret = ret.times(EC1Reward())
+	if (ECTimesCompleted("eterc10") !== 0) ret = ret.times(EC10Reward())
+	if (player.eternityUpgrades.includes(4)) ret = ret.times(player.achPow)
+	if (player.eternityUpgrades.includes(5)) ret = ret.times(Math.max(player.timestudy.theorem, 1))
+	if (player.eternityUpgrades.includes(6)) ret = ret.times(player.totalTimePlayed / 10 / 60 / 60 / 24)
+  	if (player.achievements.includes("r128")) ret = ret.times(Math.max(player.timestudy.studies.length, 1))
+	return ret;
 }
 
 
